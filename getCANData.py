@@ -170,6 +170,6 @@ def main():
 				if item.byteLength > 1:
 					print("byte length is greater than 1")
 				else:
-					print(newDataPoint.description + ": " msg.data[offset])
+					print(newDataPoint.description + ": " + msg.data[offset])
 
 main()
