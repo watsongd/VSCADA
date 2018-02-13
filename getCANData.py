@@ -164,11 +164,12 @@ def main():
 				newDataPoint.system = item.system
 				newDataPoint.sampleTime = item.sampleTime
 				newDataPoint.pack = item.pack
+				offset = int(newDataPoint.offset)
 
 				# Handle the byte length on data points
 				if item.byteLength > 1:
 					print("byte length is greater than 1")
 				else:
-					print(newDataPoint.description + ": " data[newDataPoint.offset])
+					print(newDataPoint.description + ": " data[offset])
 
 main()
