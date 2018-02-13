@@ -1,6 +1,9 @@
 import can
 
-bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
+class Datapoint(object):
+    sensor_name = ""
+    data = 0
+    pack = ""
 
 listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system": "TSV", "description": "Pack 1 State"},
 					  {"address": 0x100, "offset": 1, "byteLength": 2, "system": "TSV", "description": "Pack 1 Voltage"},
@@ -11,10 +14,19 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x101, "offset": 5, "byteLength": 1, "system": "TSV", "description": "Pack 1 Cell 2 Status"},
 					  {"address": 0x101, "offset": 6, "byteLength": 1, "system": "TSV", "description": "Pack 1 Cell 3 Status"},
 					  {"address": 0x101, "offset": 7, "byteLength": 1, "system": "TSV", "description": "Pack 1 Cell 4 Status"}]
-msg = bus.recv()
-address = hex(msg.arbitration_id)
-data = msg.data
-data_length = msg.dlc
-for dictOfMeasurables in listOfViewableData:
-	print(dictOfMeasurables)
-# notifier = can.Notifier(bus, [can.Printer()])
+
+def main():
+	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
+
+	for msg in bus:
+		address = hex(msg.arbitration_id)
+		data = msg.data
+		data_length = msg.dlc
+		for item in listOfViewableData:
+			if item.address == address:
+				if item.byteLength > 1:
+					
+				else:
+					print(formattedData.description + ": " int(data[formattedData.offset], 16))
+
+main()
