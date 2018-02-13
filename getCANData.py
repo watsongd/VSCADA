@@ -164,7 +164,7 @@ def main():
 				newDataPoint.system = item.system
 				newDataPoint.sampleTime = item.sampleTime
 				newDataPoint.pack = item.pack
-				offset = int(newDataPoint.offset)
+				offset = int(item.offset)
 
 				# Handle the byte length on data points
 				if item.byteLength > 1:
