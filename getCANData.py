@@ -209,7 +209,9 @@ def parse():
 
 				if "Current" in newDataPoint.sensor_name:
 					newDataPoint.data = newDataPoint.data / 1000
-					
+
 				if "Cell" and "Temp" in newDataPoint.sensor_name:
 					newDataPoint.data = newDataPoint.data / 10
+
+				print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 parse()
