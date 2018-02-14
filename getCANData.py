@@ -157,16 +157,17 @@ def main():
 		# Iterate through the possible data points
 		for item in listOfViewableData:
 			print('INIT')
-			print(address + data + data_length)
+			print(address)
+			print(item['address'])
 			#if the data point's address equals the one of the message, make a new datapoint
-			if item['address'] == address:
+			if hex(item['address']) == address:
 
 				newDataPoint = Datapoint()
-				newDataPoint.sensor_name = item.description
-				newDataPoint.system = item.system
-				newDataPoint.sampleTime = item.sampleTime
-				newDataPoint.pack = item.pack
-				offset = int(item.offset)
+				newDataPoint.sensor_name = item['description']
+				newDataPoint.system = item['system']
+				newDataPoint.sampleTime = item['sampleTime']
+				newDataPoint.pack = item['pack']
+				offset = int(item['offset'])
 
 				# Handle the byte length on data points
 				if item.byteLength > 1:
