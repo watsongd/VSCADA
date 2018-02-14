@@ -1,4 +1,5 @@
 import can
+import struct
 
 class Datapoint(object):
 
@@ -173,10 +174,10 @@ def parse():
 				if item['byteLength'] > 1:
 
 					formattedData = data[offset]
-					unpackedData = unpack(data)
+					# unpackedData = unpack(data)
 					# for the length of byte, append to formatted data
 					for i in range(item['byteLength']):
-						unpackedData
+						print(data)
 				else:
 					print(newDataPoint.sensor_name + ": " + str(data[offset]))
 
