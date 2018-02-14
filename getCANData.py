@@ -156,6 +156,8 @@ def main():
 		data_length = msg.dlc
 		# Iterate through the possible data points
 		for item in listOfViewableData:
+			print('INIT')
+			print(address + data + data_length)
 			#if the data point's address equals the one of the message, make a new datapoint
 			if item['address'] == address:
 
