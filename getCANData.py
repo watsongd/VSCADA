@@ -157,7 +157,7 @@ def main():
 		# Iterate through the possible data points
 		for item in listOfViewableData:
 			#if the data point's address equals the one of the message, make a new datapoint
-			if item.address == address:
+			if item['address'] == address:
 
 				newDataPoint = Datapoint()
 				newDataPoint.sensor_name = item.description
@@ -170,6 +170,6 @@ def main():
 				if item.byteLength > 1:
 					print("byte length is greater than 1")
 				else:
-					print(newDataPoint.description + ": " + msg.data[offset])
+					print(newDataPoint.description + ": " + data[offset])
 
 main()
