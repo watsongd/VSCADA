@@ -203,8 +203,10 @@ def parse():
 				# Based on the description, shift the decimal point as necessary
 				if "Volatage" in newDataPoint.sensor_name:
 					if "Cell" in newDataPoint.sensor_name:
+						print("CELL VOLTAGE: " + str(newDataPoint.data))
 						newDataPoint.data = newDataPoint.data / 100
 					else:
+						print("OVERALL VOLTAGE: " + str(newDataPoint.data))
 						newDataPoint.data = newDataPoint.data / 10
 
 				if "Current" in newDataPoint.sensor_name:
@@ -214,4 +216,5 @@ def parse():
 					newDataPoint.data = newDataPoint.data / 10
 
 				print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
+
 parse()
