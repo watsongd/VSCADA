@@ -184,6 +184,7 @@ def parse():
 				# Handle the byte length on data points
 				if item['byteLength'] > 1:
 
+					print("STRING DATA OFFSET: "str(data[offset]))
 					formattedData = data[offset]
 
 					# for the length of byte, append to formatted data
@@ -201,12 +202,10 @@ def parse():
 					newDataPoint.data = data[offset]
 
 				# Based on the description, shift the decimal point as necessary
-				if "Volatage" in newDataPoint.sensor_name:
+				if "Voltage" in newDataPoint.sensor_name:
 					if "Cell" in newDataPoint.sensor_name:
-						print("CELL VOLTAGE: " + str(newDataPoint.data))
 						newDataPoint.data = newDataPoint.data / 100
 					else:
-						print("OVERALL VOLTAGE: " + str(newDataPoint.data))
 						newDataPoint.data = newDataPoint.data / 10
 
 				if "Current" in newDataPoint.sensor_name:
