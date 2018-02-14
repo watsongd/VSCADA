@@ -176,7 +176,7 @@ def parse():
 
 					# for the length of byte, append to formatted data
 					for i in range(item['byteLength']):
-
+						print("loop index = " + str(i))
 				else:
 					print(newDataPoint.sensor_name + ": " + str(data[offset]))
 
