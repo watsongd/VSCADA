@@ -156,9 +156,6 @@ def main():
 		data_length = msg.dlc
 		# Iterate through the possible data points
 		for item in listOfViewableData:
-			print('INIT')
-			print(address)
-			print(item['address'])
 			#if the data point's address equals the one of the message, make a new datapoint
 			if hex(item['address']) == address:
 
@@ -170,9 +167,9 @@ def main():
 				offset = int(item['offset'])
 
 				# Handle the byte length on data points
-				if item.byteLength > 1:
+				if item['byteLength'] > 1:
 					print("byte length is greater than 1")
 				else:
-					print(newDataPoint.description + ": " + data[offset])
+					print(newDataPoint['description'] + ": " + data[offset])
 
 main()
