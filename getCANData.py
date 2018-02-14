@@ -203,13 +203,13 @@ def parse():
 				# Based on the description, shift the decimal point as necessary
 				if "Volatage" in newDataPoint.sensor_name:
 					if "Cell" in newDataPoint.sensor_name:
-						newDataPoint.data = newDataPoint / 100
+						newDataPoint.data = newDataPoint.data / 100
 					else:
-						newDataPoint.data = newDataPoint / 10
+						newDataPoint.data = newDataPoint.data / 10
 
 				if "Current" in newDataPoint.sensor_name:
-					newDataPoint.data = newDataPoint / 1000
+					newDataPoint.data = newDataPoint.data / 1000
 					
 				if "Cell" and "Temp" in newDataPoint.sensor_name:
-					newDataPoint.data = newDataPoint / 10
+					newDataPoint.data = newDataPoint.data / 10
 parse()
