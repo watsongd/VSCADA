@@ -1,5 +1,6 @@
 import can
 import time
+import queue
 
 class Datapoint(object):
 
@@ -158,6 +159,9 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charging", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
 
+# Datapoint queue
+q = Queue()
+
 def timer():
    now = time.localtime(time.time())
    return now[5]
@@ -222,7 +226,7 @@ def parse():
 
 				# Add to the queue based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
-					print("TIMER" + str(timer()))
+					q.put(newDataPoint)
 					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 				
 parse()
