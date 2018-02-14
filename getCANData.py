@@ -156,8 +156,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0xF5, "offset": 0, "byteLength": 7, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Voltage"},
 					  {"address": 0xF6, "offset": 0, "byteLength": 8, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Current"}]
 
-def make_hex_two_digits(str hexNum):
-	newHexNum
+TSVPackState = {0: "Boot", 1: "Charging", 2: "Charging", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
 
 def parse():
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
@@ -205,7 +204,8 @@ def parse():
 				# Based on the description, shift the decimal point as necessary
 				if "Voltage" in newDataPoint.sensor_name:
 					if "Cell" in newDataPoint.sensor_name:
-						newDataPoint.data = newDataPoint.data / 100
+						# mV --> V
+						newDataPoint.data = newDataPoint.data / 1000 
 					else:
 						newDataPoint.data = newDataPoint.data / 10
 
@@ -214,6 +214,9 @@ def parse():
 
 				if "Cell" and "Temp" in newDataPoint.sensor_name:
 					newDataPoint.data = newDataPoint.data / 10
+
+				if "State" in newDataPoint.sensor_name:
+					newDataPoint.data = TSVPackState[newDataPoint.data]
 
 				print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 
