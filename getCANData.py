@@ -158,6 +158,10 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charging", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
 
+def timer():
+   now = time.localtime(time.time())
+   return now[5]
+
 def parse():
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
@@ -167,6 +171,8 @@ def parse():
 		address = hex(msg.arbitration_id)
 		data = msg.data
 		data_length = msg.dlc
+
+		print("TIMER: " + timer())
 
 		# Iterate through the possible data points
 		for item in listOfViewableData:
@@ -195,9 +201,6 @@ def parse():
 							formattedData = ((formattedData * 2**8) + data[offset + (i+1)])
 
 					newDataPoint.data = formattedData
-
-					# DOESNT WORK
-					# newDataPoint.data = formattedData * (.1)**(item['byteLength'] - 1)
 				else:
 					newDataPoint.data = data[offset]
 
@@ -210,6 +213,7 @@ def parse():
 						newDataPoint.data = newDataPoint.data / 10
 
 				if "Current" in newDataPoint.sensor_name:
+					# mA --> A
 					newDataPoint.data = newDataPoint.data / 1000
 
 				if "Cell" and "Temp" in newDataPoint.sensor_name:
