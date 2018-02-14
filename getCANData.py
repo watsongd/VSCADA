@@ -146,16 +146,19 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 
 
 
-def main():
+def parse():
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
 	for msg in bus:
+
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
 		data = msg.data
 		data_length = msg.dlc
+
 		# Iterate through the possible data points
 		for item in listOfViewableData:
+
 			#if the data point's address equals the one of the message, make a new datapoint
 			if hex(item['address']) == address:
 
@@ -168,8 +171,13 @@ def main():
 
 				# Handle the byte length on data points
 				if item['byteLength'] > 1:
-					print("byte length is greater than 1")
-				else:
-					print(newDataPoint['description'] + ": " + data[offset])
 
-main()
+					formattedData = data[offset]
+
+					# for the length of byte, append to formatted data
+					for i in range(item['byteLength']):
+
+				else:
+					print(newDataPoint.sensor_name + ": " + str(data[offset]))
+
+parse()
