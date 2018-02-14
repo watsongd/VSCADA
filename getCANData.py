@@ -156,8 +156,8 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0xF5, "offset": 0, "byteLength": 7, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Voltage"},
 					  {"address": 0xF6, "offset": 0, "byteLength": 8, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Current"}]
 
-def make_hex_two_digits():
-
+def make_hex_two_digits(str hexNum):
+	newHexNum
 
 def parse():
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
@@ -185,8 +185,6 @@ def parse():
 				# Handle the byte length on data points
 				if item['byteLength'] > 1:
 
-					print("STRING DATA OFFSET: " + str(data[offset]))
-					print("TYPE: " + str(type(hex(data[offset]))))
 					formattedData = data[offset]
 
 					# for the length of byte, append to formatted data
@@ -194,7 +192,8 @@ def parse():
 						if i == (item['byteLength'] - 1):
 							break
 						else:
-							formattedData = int(str(formattedData) + str(data[offset + (i+1)]))
+							# NUM * 2^8 --> SHIFT LEFT 8
+							formattedData = ((formattedData * 2**8) + data[offset + (i+1)])
 
 					newDataPoint.data = formattedData
 
