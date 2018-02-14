@@ -61,20 +61,20 @@ def export_csv(session):
 
     #Select all data from db
     data_all = c.execute("SELECT * FROM data")
-    #Select data from db from the most recent session
-    data_session = c.execute("SELECT * FROM data WHERE session_id={}".format(session))
 
     f = open('car_data_all.csv', 'wb')
 
-    writer = csv.writer(f,delimiter=';')
+    writer = csv.writer(f, delimiter=';')
     writer.writerows(data_all)
 
     f.close()
 
-    #g = open('car_data_session_{}.csv'.format(session), 'wb')
+    #Select data from db from the most recent session
+    data_session = c.execute("SELECT * FROM data WHERE session_id={}".format(session))
 
-    #writer = csv.writer(g,delimiter=';')
-    #first_item = next(data_session)
-    #writer.writerow(first_item)
-    #writer.writerows(data_session)
-    #g.close()
+    g = open('car_data_session_{}.csv'.format(session), 'wb')
+
+    writer = csv.writer(g, delimiter=';')
+    writer.writerows(data_session)
+
+    g.close()
