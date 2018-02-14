@@ -164,6 +164,7 @@ def timer():
 
 def parse():
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
+	timer = timer()
 
 	for msg in bus:
 
@@ -172,7 +173,7 @@ def parse():
 		data = msg.data
 		data_length = msg.dlc
 
-		print("TIMER: " + timer())
+		print("TIMER: " + str(timer))
 
 		# Iterate through the possible data points
 		for item in listOfViewableData:
@@ -222,6 +223,8 @@ def parse():
 				if "State" in newDataPoint.sensor_name:
 					newDataPoint.data = TSVPackState[newDataPoint.data]
 
-				print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
-
+				# Add to the queue based on the sample time of the object
+				if timer % item['sampleTime'] == 0:
+					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
+				
 parse()
