@@ -9,7 +9,7 @@ class Datapoint(object):
 	    data = 0
 	    system = ""
 	    sampleTime = 15
-	    pack = ""
+	    pack = None
 
 listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 1, "sampleTime": 15, "description": "State"},
 					  {"address": 0x100, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 1, "sampleTime": 15, "description": "Voltage"},
@@ -157,7 +157,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0xF5, "offset": 0, "byteLength": 7, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Voltage"},
 					  {"address": 0xF6, "offset": 0, "byteLength": 8, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Current"}]
 
-TSVPackState = {0: "Boot", 1: "Charging", 2: "Charging", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
+TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
 
 # Datapoint queue
 q = Queue()
@@ -165,6 +165,11 @@ q = Queue()
 def timer():
    now = time.localtime(time.time())
    return now[5]
+
+def send_throttle_control(throttleControl):
+	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
+	msg = msg = can.Message(arbitration_id=0x7de, data=[throttleControl], extended_id=False)
+	bus.send(msg)
 
 def parse():
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
@@ -228,5 +233,14 @@ def parse():
 				if timer() % item['sampleTime'] == 0:
 					q.put(newDataPoint)
 					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
-				
-parse()
+
+# test sending	
+def main():
+	while(1):
+		print("TIMER: " + str(timer()))
+		if timer() % 15 == 0:
+			send_throttle_control(1)
+			print("MESSAGE SENT")
+
+
+main()
