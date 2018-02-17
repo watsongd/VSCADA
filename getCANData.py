@@ -155,12 +155,13 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0xF3, "offset": 0, "byteLength": 5, "system": "TSI", "pack": None, "sampleTime": 15, "description": "Brake"},
 					  {"address": 0xF4, "offset": 0, "byteLength": 6, "system": "TSI", "pack": None, "sampleTime": 15, "description": "Throttle Position"},
 					  {"address": 0xF5, "offset": 0, "byteLength": 7, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Voltage"},
-					  {"address": 0xF6, "offset": 0, "byteLength": 8, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Current"}]
+					  {"address": 0xF6, "offset": 0, "byteLength": 8, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Current"},
+					  {"address": 0xF7, "offset": 0, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "Temperature"}]
 
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
 
 # Datapoint queue
-q = Queue()
+# q = Queue()
 
 def timer():
    now = time.localtime(time.time())
@@ -231,15 +232,15 @@ def parse():
 
 				# Add to the queue based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
-					q.put(newDataPoint)
+					# q.put(newDataPoint)
 					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 
 # test sending	
 def main():
 	while(1):
 		print("TIMER: " + str(timer()))
-		if timer() % 15 == 0:
-			send_throttle_control(1)
+		if timer() % 1 == 0:
+			send_throttle_control(0x01)
 			print("MESSAGE SENT")
 
 
