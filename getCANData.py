@@ -151,18 +151,17 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x602, "offset": 5, "byteLength": 1, "system": "DYNO", "pack": None, "sampleTime": 15, "description": "Brake Input"},
 
 
-					  {"address": 0xF2, "offset": 0, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSI State"},
-					  {"address": 0xF2, "offset": 2, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "IMD"},
-					  {"address": 0xF2, "offset": 4, "byteLength": 1, "system": "TSI", "pack": None, "sampleTime": 15, "description": "Brake"},
-					  {"address": 0xF2, "offset": 5, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "Throttle Position"},
-					  {"address": 0xF3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Voltage"},
-					  {"address": 0xF3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Current"},
-					  {"address": 0xF3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSI Temp"}]
+					  {"address": 0x0F2, "offset": 0, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSI State"},
+					  {"address": 0x0F2, "offset": 2, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "IMD"},
+					  {"address": 0x0F2, "offset": 4, "byteLength": 1, "system": "TSI", "pack": None, "sampleTime": 15, "description": "Brake"},
+					  {"address": 0x0F3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Voltage"},
+					  {"address": 0x0F3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Current"},
+					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSI Temp"}]
 
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
 
-# Datapoint queue
-q = Queue.Queue()
+# Queue of Datapoints
+q = queue.Queue()
 
 def timer():
    now = time.localtime(time.time())
@@ -182,6 +181,7 @@ def parse():
 		address = hex(msg.arbitration_id)
 		data = msg.data
 		dataLength = msg.dlc
+		print(msg)
 
 		# Iterate through the possible data points
 		for item in listOfViewableData:
@@ -229,7 +229,8 @@ def parse():
 					newDataPoint.data = newDataPoint.data / 10
 
 				if "State" in newDataPoint.sensor_name:
-					newDataPoint.data = TSVPackState[newDataPoint.data]
+					if "TSI" not in newDataPoint.sensor_name:
+						newDataPoint.data = TSVPackState[newDataPoint.data]
 
 				# Add to the queue based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
@@ -250,7 +251,7 @@ def pop_off_q():
 		return q.get()
 
 # test sending	
-def main():
+def test_sending():
 	while(1):
 		print("TIMER: " + str(timer()))
 		if timer() % 1 == 0:
