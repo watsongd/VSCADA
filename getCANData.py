@@ -151,13 +151,13 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x602, "offset": 5, "byteLength": 1, "system": "DYNO", "pack": None, "sampleTime": 15, "description": "Brake Input"},
 
 
-					  {"address": 0xF2, "offset": 0, "byteLength": 3, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSI State"},
-					  {"address": 0xF2, "offset": 3, "byteLength": 4, "system": "TSI", "pack": None, "sampleTime": 15, "description": "IMD"},
-					  {"address": 0xF3, "offset": 0, "byteLength": 5, "system": "TSI", "pack": None, "sampleTime": 15, "description": "Brake"},
-					  {"address": 0xF4, "offset": 0, "byteLength": 6, "system": "TSI", "pack": None, "sampleTime": 15, "description": "Throttle Position"},
-					  {"address": 0xF5, "offset": 0, "byteLength": 7, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Voltage"},
-					  {"address": 0xF6, "offset": 0, "byteLength": 8, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Current"},
-					  {"address": 0xF7, "offset": 0, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "Temperature"}]
+					  {"address": 0xF2, "offset": 0, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSI State"},
+					  {"address": 0xF2, "offset": 2, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "IMD"},
+					  {"address": 0xF2, "offset": 4, "byteLength": 1, "system": "TSI", "pack": None, "sampleTime": 15, "description": "Brake"},
+					  {"address": 0xF2, "offset": 5, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "Throttle Position"},
+					  {"address": 0xF3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Voltage"},
+					  {"address": 0xF3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Current"},
+					  {"address": 0xF3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSI Temp"}]
 
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
 
@@ -207,7 +207,7 @@ def parse():
 							break
 						else:
 							# NUM * 2^8 --> SHIFT LEFT 8
-							formattedData = ((formattedData * 2**8) + data[offset + (i+1)])
+							formattedData = ((formattedData * 2**8) + data[offset + (i + 1)])
 
 					newDataPoint.data = formattedData
 				else:
@@ -245,7 +245,7 @@ def is_q_empty():
 		return False
 
 # Function to pop the DataPoint of the top
-def pop_off_q();
+def pop_off_q():
 	if q.empty() is False:
 		return q.get()
 
@@ -258,4 +258,4 @@ def main():
 			print("MESSAGE SENT")
 
 
-main()
+parse()
