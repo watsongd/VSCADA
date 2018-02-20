@@ -3,6 +3,7 @@ import models
 import config
 import test
 import logging
+import getCANData
 
 #from peewee import *
 
@@ -13,16 +14,14 @@ session = 0
 
 #Data Collection
 def write_data(sensorName, data, pack, now, flag):
-
     models.Data.create(sensorName=sensorName, data=data, time=now, pack=pack, flagged=flag, session_id=(session))
-    
 
 if __name__ == "__main__":
     models.build_db()
     session = models.get_session()
     logging.basicConfig(filename='log.log', level=logging.WARNING)
     #session = models.get_session() + 1
-    print session
+    print (session)
     while True:
         #Continually check if start button is pressed
         #If start button is pressed begin data collection
@@ -30,15 +29,22 @@ if __name__ == "__main__":
             #Write data specified by config file into database
 
             #This uses test.get_data. REPLACE WHEN GEOFF IS READY
-            datapoint = test.get_data()
+            #datapoint = test.get_data()
             #####################################################
 
-            #CAN data parsed
-            data = datapoint.get_data()
-            sensor_name = datapoint.get_name()
-            pack = datapoint.get_pack()
-            #Time
-            now = datetime.datetime.now().strftime('%H:%M:%S')
+            if getCANData.is_q_empty is False:
+                datapoint = getCANData.pop_off_q()
+
+                #CAN data parsed
+                data = datapoint.get_data()
+                sensor_name = datapoint.get_name()
+                pack = datapoint.get_pack()
+                system = datapoint.get_system()
+
+                #Time
+                now = datetime.datetime.now().strftime('%H:%M:%S')
+            else:
+                sensor_name = None
 
             #Search for sensor in config file
             for sensor_info in config.sensor_thresh_list:
@@ -54,9 +60,10 @@ if __name__ == "__main__":
                         if sensor_info.drop_out == 0:
                             logging.warning('%s : %s has exceeded the given threshold. Value: %d', now, sensor_name, data)
                         if sensor_info.drop_out == 1:
+
                             logging.critical('%s : %s has exceeded the given threshold. Value: %d', now, sensor_name, data)
                     write_data(sensorName=sensor_name, data=data, pack=pack, flag=flag, now=now)
-                    start_button = False
+                    #start_button = False
 
             if start_button is False:
                 #Export
