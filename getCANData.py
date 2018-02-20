@@ -181,7 +181,6 @@ def parse():
 		address = hex(msg.arbitration_id)
 		data = msg.data
 		dataLength = msg.dlc
-		print(msg)
 
 		# Iterate through the possible data points
 		for item in listOfViewableData:
@@ -225,8 +224,11 @@ def parse():
 					# mA --> A
 					newDataPoint.data = newDataPoint.data / 1000
 
-				if "Cell" and "Temp" in newDataPoint.sensor_name:
-					newDataPoint.data = newDataPoint.data / 10
+				if "Temp" in newDataPoint.sensor_name:
+					if "Cell" in newDataPoint.sensor_name:
+						newDataPoint.data = newDataPoint.data / 10
+					if "TSI" in newDataPoint.sensor_name:
+						newDataPoint.data = newDataPoint.data * 10
 
 				if "State" in newDataPoint.sensor_name:
 					if "TSI" not in newDataPoint.sensor_name:
