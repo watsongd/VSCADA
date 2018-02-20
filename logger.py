@@ -3,7 +3,7 @@ import models
 import config
 import test
 import logging
-import getCANData
+#import getCANData
 
 #from peewee import *
 
@@ -16,11 +16,10 @@ session = 0
 def write_data(sensorName, data, pack, now, flag):
     models.Data.create(sensorName=sensorName, data=data, time=now, pack=pack, flagged=flag, session_id=(session))
 
-if __name__ == "__main__":
+def main():
     models.build_db()
     session = models.get_session()
     logging.basicConfig(filename='log.log', level=logging.WARNING)
-    #session = models.get_session() + 1
     print (session)
     while True:
         #Continually check if start button is pressed
@@ -29,9 +28,16 @@ if __name__ == "__main__":
             #Write data specified by config file into database
 
             #This uses test.get_data. REPLACE WHEN GEOFF IS READY
-            #datapoint = test.get_data()
+            datapoint = test.get_data()
             #####################################################
+            data = datapoint.get_data()
+            sensor_name = datapoint.get_name()
+            pack = datapoint.get_pack()
+            system = datapoint.get_system()
 
+            #Time
+            now = datetime.datetime.now().strftime('%H:%M:%S')
+            '''
             if getCANData.is_q_empty is False:
                 datapoint = getCANData.pop_off_q()
 
@@ -45,6 +51,7 @@ if __name__ == "__main__":
                 now = datetime.datetime.now().strftime('%H:%M:%S')
             else:
                 sensor_name = None
+            '''
 
             #Search for sensor in config file
             for sensor_info in config.sensor_thresh_list:
@@ -73,3 +80,6 @@ if __name__ == "__main__":
 
             time.sleep(1)
 
+if __name__ == "__main__":
+    main()
+    
