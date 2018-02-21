@@ -248,10 +248,10 @@ def parse():
 
 def log_data(datapoint):
 	
-	data = datapoint.get_data()
-	sensor_name = datapoint.get_name()
-	pack = datapoint.get_pack()
-	system = datapoint.get_system()
+	data = datapoint.data
+	sensor_name = datapoint.sensor_name
+	pack = datapoint.pack
+	system = datapoint.system
 
 	#Time
 	now = datetime.datetime.now().strftime('%H:%M:%S')
