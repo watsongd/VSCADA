@@ -14,7 +14,7 @@ class Data(Model):
     data       = IntegerField()
     time       = DateTimeField()
     system     = CharField(max_length = 6)
-    pack       = CharField(max_length = 6)
+    pack       = CharField(max_length = 6, NULL = True)
     flagged    = BooleanField()
     session_id = IntegerField()
 
