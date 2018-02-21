@@ -39,13 +39,12 @@ def build_db():
     try:
         Data.create_table()
     except OperationalError:
-        print "Data table already exists!"
+        print ("Data table already exists!")
 
 def get_session():
     conn = sqlite3.connect('../car_data.db')
     c = conn.cursor()
     session = c.execute("SELECT session_id FROM data WHERE session_id=(SELECT MAX(session_id) FROM data)")
-    #print session
     try:
         max_session = session.fetchone()[0]
         return max_session + 1
