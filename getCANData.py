@@ -1,6 +1,9 @@
 import can
 import time
 import queue
+import logging
+import config
+import models
 
 class Datapoint(object):
 
@@ -163,6 +166,9 @@ TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output",
 # Queue of Datapoints
 q = queue.Queue()
 
+session = 0
+record_button = True
+
 def timer():
    now = time.localtime(time.time())
    return now[5]
@@ -237,7 +243,36 @@ def parse():
 				# Add to the queue based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
 					q.put(newDataPoint)
+					log_data(newDataPoint)
 					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
+
+def log_data(datapoint):
+	
+	data = datapoint.get_data()
+	sensor_name = datapoint.get_name()
+	pack = datapoint.get_pack()
+	system = datapoint.get_system()
+
+	#Time
+	now = datetime.datetime.now().strftime('%H:%M:%S')
+	for sensor_info in config.sensor_thresh_list:
+		if sensor_info.name == sensor_name:
+			#Check thresholds
+			if data in range(sensor_info.lower_threshold, sensor_info.upper_threshold):
+				#Sensor data is within allowable range
+				flag = False
+			else:
+				#Sensor data is not within allowable range. Flag and check if drop out of drive mode needed
+				flag = True
+				#Do not need to drop out
+				if sensor_info.drop_out == 0:
+					logging.warning('%s : %s has exceeded the given threshold. Value: %d', now, sensor_name, data)
+				if sensor_info.drop_out == 1:
+					#DROP OUT CALL HERE
+					logging.critical('%s : %s has exceeded the given threshold. Value: %d', now, sensor_name, data)
+			if record_button is True:
+				models.Data.create(sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session)
+
 
 
 # Function to check if the Queue is empty
@@ -260,5 +295,23 @@ def test_sending():
 			send_throttle_control(0x01)
 			print("MESSAGE SENT")
 
+def check_record_button():
+	record_button = True
+	print(True)
+	#If record button == False
+	#session++
 
-parse()
+def main():
+	models.build_db()
+	session = models.get_session()
+	logging.basicConfig(filename='log.log', level=logging.WARNING)
+	print(session)
+
+	while (True):
+		parse()
+		#CHECK BUTTON STATE
+		check_record_button()
+
+if __name__ == "__main__":
+	main()
+    

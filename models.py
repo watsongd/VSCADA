@@ -8,26 +8,13 @@ from playhouse.dataset import DataSet
 #Connect  to sqlite3 database
 db = SqliteDatabase('../car_data.db')
 
-#Base Model class that other models will extend
-#class BaseModel(Model):
-#    class Meta:
-#        database = db
-
-#Table with sensor details
-#class SensorLookup(NewBaseModel):
-#    sensorName = CharField(unique=True)
-#    address    = IntegerField()
-#    offset     = IntegerField()
-#    byteLength = IntegerField()
-#    system     = CharField()
-#    units      = CharField()
-
 #Table for Pack1 Data
 class Data(Model):
     sensorName = CharField()
     data       = IntegerField()
     time       = DateTimeField()
-    pack       = CharField(max_length = 4)
+    system     = CharField(max_length = 6)
+    pack       = CharField(max_length = 6)
     flagged    = BooleanField()
     session_id = IntegerField()
 
