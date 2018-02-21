@@ -139,19 +139,19 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x405, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 4, "sampleTime": 15, "description": "Cell 7 Temp"},
 
 
-					  {"address": 0x601, "offset": 0, "byteLength": 2, "system": "DYNO", "pack": None, "sampleTime": 15, "description": "Motor RPM"},
-					  {"address": 0x601, "offset": 2, "byteLength": 1, "system": "DYNO", "pack": None, "sampleTime": 15, "description": "Motor Temp"},
-					  {"address": 0x601, "offset": 3, "byteLength": 1, "system": "DYNO", "pack": None, "sampleTime": 15, "description": "Controller Temp"},
-					  {"address": 0x601, "offset": 4, "byteLength": 2, "system": "DYNO", "pack": None, "sampleTime": 1, "description": "RMS Current"},
-					  {"address": 0x601, "offset": 6, "byteLength": 2, "system": "DYNO", "pack": None, "sampleTime": 15, "description": "Capacitor Voltage"},
-					  {"address": 0x602, "offset": 0, "byteLength": 2, "system": "DYNO", "pack": None, "sampleTime": 15, "description": "Stator Frequency"},
-					  {"address": 0x602, "offset": 2, "byteLength": 1, "system": "DYNO", "pack": None, "sampleTime": 15, "description": "Controller Fault Primary"},
-					  {"address": 0x602, "offset": 3, "byteLength": 1, "system": "DYNO", "pack": None, "sampleTime": 15, "description": "Controller Fault Secondary"},
-					  {"address": 0x602, "offset": 4, "byteLength": 1, "system": "DYNO", "pack": None, "sampleTime": 15, "description": "Throttle Input"},
-					  {"address": 0x602, "offset": 5, "byteLength": 1, "system": "DYNO", "pack": None, "sampleTime": 15, "description": "Brake Input"},
+					  {"address": 0x601, "offset": 0, "byteLength": 2, "system": "MC", "pack": None, "sampleTime": 15, "description": "Motor RPM"},
+					  {"address": 0x601, "offset": 2, "byteLength": 1, "system": "MC", "pack": None, "sampleTime": 15, "description": "Motor Temp"},
+					  {"address": 0x601, "offset": 3, "byteLength": 1, "system": "MC", "pack": None, "sampleTime": 15, "description": "Controller Temp"},
+					  {"address": 0x601, "offset": 4, "byteLength": 2, "system": "MC", "pack": None, "sampleTime": 1, "description": "RMS Current"},
+					  {"address": 0x601, "offset": 6, "byteLength": 2, "system": "MC", "pack": None, "sampleTime": 15, "description": "Capacitor Voltage"},
+					  {"address": 0x602, "offset": 0, "byteLength": 2, "system": "MC", "pack": None, "sampleTime": 15, "description": "Stator Frequency"},
+					  {"address": 0x602, "offset": 2, "byteLength": 1, "system": "MC", "pack": None, "sampleTime": 15, "description": "Controller Fault Primary"},
+					  {"address": 0x602, "offset": 3, "byteLength": 1, "system": "MC", "pack": None, "sampleTime": 15, "description": "Controller Fault Secondary"},
+					  {"address": 0x602, "offset": 4, "byteLength": 1, "system": "MC", "pack": None, "sampleTime": 15, "description": "Throttle Input"},
+					  {"address": 0x602, "offset": 5, "byteLength": 1, "system": "MC", "pack": None, "sampleTime": 15, "description": "Brake Input"},
 
 
-					  {"address": 0x0F2, "offset": 0, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSI State"},
+					  {"address": 0x0F2, "offset": 0, "byteLength": 1, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSI State"},
 					  {"address": 0x0F2, "offset": 2, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "IMD"},
 					  {"address": 0x0F2, "offset": 4, "byteLength": 1, "system": "TSI", "pack": None, "sampleTime": 15, "description": "Brake"},
 					  {"address": 0x0F3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSV Voltage"},
@@ -159,6 +159,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": None, "sampleTime": 15, "description": "TSI Temp"}]
 
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
+TSIPackState = {0: "Idle", 1: "Setup Drive", 2: "Drive", 3: "Setup Idle"}
 
 # Queue of Datapoints
 q = queue.Queue()
@@ -227,12 +228,13 @@ def parse():
 				if "Temp" in newDataPoint.sensor_name:
 					if "Cell" in newDataPoint.sensor_name:
 						newDataPoint.data = newDataPoint.data / 10
-					if "TSI" in newDataPoint.sensor_name:
-						newDataPoint.data = newDataPoint.data * 10
 
 				if "State" in newDataPoint.sensor_name:
-					if "TSI" not in newDataPoint.sensor_name:
+					if "TSI" in newDataPoint.sensor_name:
+						newDataPoint.data = TSIPackState[newDataPoint.data]
+					else:
 						newDataPoint.data = TSVPackState[newDataPoint.data]
+					
 
 				# Add to the queue based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
