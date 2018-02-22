@@ -11,7 +11,7 @@ db = SqliteDatabase('../car_data.db')
 #Table for Pack1 Data
 class Data(Model):
     sensorName = CharField()
-    data       = IntegerField()
+    data       = CharField()
     time       = DateTimeField()
     system     = CharField(max_length = 6)
     pack       = CharField(max_length = 6, null = True)
