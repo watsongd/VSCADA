@@ -169,7 +169,6 @@ displayDict = {"Voltage 1": 0, "Voltage 2": 0, "Voltage 3": 0, "Voltage 4": 0, "
 
 #Variables for storing
 record_button = True
-flag = None
 #Session is just an int that keeps track of when recording starts. If recording stops, the current session is exported and the session increments
 session = 0
 
