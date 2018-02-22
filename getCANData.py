@@ -246,7 +246,6 @@ def parse():
 
 				# Add to the queue based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
-					q.put(newDataPoint)
 					log_data(newDataPoint)
 					update_display_dict(newDataPoint)
 					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
