@@ -271,10 +271,11 @@ def log_data(datapoint):
 				flag = True
 				#Do not need to drop out
 				if sensor_info.drop_out == 0:
-					logging.warning('%s : %s has exceeded the given threshold. Value: %d', now, sensor_name, data)
+					logging.warning('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
 				if sensor_info.drop_out == 1:
 					#DROP OUT CALL HERE
-					logging.critical('%s : %s has exceeded the given threshold. Value: %d', now, sensor_name, data)
+					logging.critical('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
+					send_throttle_control()
 			if record_button is True:
 				models.Data.create(sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session)
 
@@ -298,10 +299,14 @@ def test_sending():
 			print("MESSAGE SENT")
 
 def check_record_button():
-	record_button = True
-	print(True)
-	#If record button == False
-	#session++
+	#set record_button
+	exported = False
+	record_button = False
+	if (record_button == False and exported == False):
+		models.export_csv(session)
+		session = session + 1
+		exported = True
+		print("Exported Data")
 
 def main():
 	models.build_db()
