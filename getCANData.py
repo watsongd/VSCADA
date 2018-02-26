@@ -192,7 +192,7 @@ def send_throttle_control(throttleControl):
 	bus.send(msg)
 
 def parse():
-	check_record_button()
+	check_record_button(session)
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
 	for msg in bus:
@@ -308,7 +308,7 @@ def test_sending():
 			send_throttle_control(0x01)
 			print("MESSAGE SENT")
 
-def check_record_button():
+def check_record_button(session):
 	#set record_button
 	exported = False
 	record_button = False
