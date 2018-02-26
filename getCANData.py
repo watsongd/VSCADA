@@ -308,7 +308,7 @@ def test_sending():
 			send_throttle_control(0x01)
 			print("MESSAGE SENT")
 
-def check_record_button(session):
+def check_record_button():
 	#set record_button
 	exported = False
 	record_button = False
