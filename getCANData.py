@@ -171,7 +171,7 @@ displayDict = {"Voltage 1": 0, "Voltage 2": 0, "Voltage 3": 0, "Voltage 4": 0, "
 #Variables for storing
 record_button = True
 #Session is just an int that keeps track of when recording starts. If recording stops, the current session is exported and the session increments
-session = 0
+global session 
 
 def main():
 	models.build_db()
@@ -192,7 +192,7 @@ def send_throttle_control(throttleControl):
 	bus.send(msg)
 
 def parse():
-	check_record_button(session)
+	check_record_button()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
 	for msg in bus:
