@@ -173,6 +173,15 @@ record_button = True
 #Session is just an int that keeps track of when recording starts. If recording stops, the current session is exported and the session increments
 session = 0
 
+def main():
+	models.build_db()
+	session = models.get_session()
+	logging.basicConfig(filename='log.log', level=logging.WARNING)
+	print(session)
+
+	while (True):
+		parse()
+		#CHECK BUTTON STATE
 def timer():
    now = time.localtime(time.time())
    return now[5]
@@ -308,16 +317,6 @@ def check_record_button():
 		session = session + 1
 		exported = True
 		print("Exported Data")
-
-def main():
-	models.build_db()
-	session = models.get_session()
-	logging.basicConfig(filename='log.log', level=logging.WARNING)
-	print(session)
-
-	while (True):
-		parse()
-		#CHECK BUTTON STATE
 
 if __name__ == "__main__":
 	main()
