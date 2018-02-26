@@ -183,6 +183,7 @@ def send_throttle_control(throttleControl):
 	bus.send(msg)
 
 def parse():
+	check_record_button()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
 	for msg in bus:
@@ -317,7 +318,6 @@ def main():
 	while (True):
 		parse()
 		#CHECK BUTTON STATE
-		check_record_button()
 
 if __name__ == "__main__":
 	main()
