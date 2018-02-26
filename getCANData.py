@@ -182,6 +182,7 @@ def main():
 	while (True):
 		parse()
 		#CHECK BUTTON STATE
+
 def timer():
    now = time.localtime(time.time())
    return now[5]
@@ -192,7 +193,7 @@ def send_throttle_control(throttleControl):
 	bus.send(msg)
 
 def parse():
-	check_record_button()
+	check_record_button(session)
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
 	for msg in bus:
@@ -308,13 +309,13 @@ def test_sending():
 			send_throttle_control(0x01)
 			print("MESSAGE SENT")
 
-def check_record_button():
+def check_record_button(session):
 	#set record_button
 	exported = False
 	record_button = False
 	if (record_button == False and exported == False):
+		print (session)
 		models.export_csv(session)
-		session = session + 1
 		exported = True
 		print("Exported Data")
 
