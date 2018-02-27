@@ -174,7 +174,7 @@ global record_button
 #Session is just an int that keeps track of when recording starts. If recording stops, the current session is exported and the session increments
 global exported
 #REMOVE WHEN BUTTONS ARE ADDED
-exported = True
+exported = False
 
 def main():
 	models.build_db()
@@ -303,7 +303,7 @@ def update_display_dict(datapoint):
 	if name in displayDict:
 		displayDict[name] = datapoint.data
 	
-	print(displayDict)
+	#print(displayDict)
 
 
 # test sending	
