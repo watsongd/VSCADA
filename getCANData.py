@@ -194,7 +194,7 @@ def parse():
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
 	for msg in bus:
-
+		print("In for loop")
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
 		data = msg.data
@@ -258,14 +258,10 @@ def parse():
 					log_data(newDataPoint, session)
 					update_display_dict(newDataPoint)
 					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
-				
-				#Check if record button has been pressed
-				check_record_button(session)
-				print ("End of Parse")
 
 #Takes data from parse() and stores in db if recording.
 def log_data(datapoint, session):
-	
+	print("In log_data")
 	data = datapoint.data
 	sensor_name = datapoint.sensor_name
 	pack = datapoint.pack
