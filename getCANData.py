@@ -316,7 +316,7 @@ def check_record_button(session):
 	record_button = False
 	if (record_button == False and exported == False):
 		print (session)
-		models.export_csv()
+		models.export_csv(session)
 		exported = True
 		print("Exported Data")
 	return record_button
