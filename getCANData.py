@@ -167,6 +167,7 @@ TSIPackState = {0: "Idle", 1: "Setup Drive", 2: "Drive", 3: "Setup Idle"}
 
 displayDict = {"Voltage 1": 0, "Voltage 2": 0, "Voltage 3": 0, "Voltage 4": 0, "Current 1": 0, "Current 2": 0, "Current 3": 0, "Current 4": 0,
 "TSI State": 0, "IMD": 0, "Brake": 0, "TSV Voltage": 0, "TSV Current": 0, "TSI Temp": 0, "Motor RPM": 0, "Motor Temp": 0}
+session = {"Session",0}
 
 #Variables for storing
 record_button = True
@@ -189,8 +190,7 @@ def send_throttle_control(throttleControl):
 	bus.send(msg)
 
 def parse():
-	print("In Parse")
-	session = models.get_session()
+	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
 	for msg in bus:
@@ -254,12 +254,12 @@ def parse():
 
 				# Add to the queue based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
-					log_data(newDataPoint, session)
+					log_data(newDataPoint)
 					update_display_dict(newDataPoint)
 					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 
 #Takes data from parse() and stores in db if recording.
-def log_data(datapoint, session):
+def log_data(datapoint):
 	print("In log_data")
 	data = datapoint.data
 	sensor_name = datapoint.sensor_name
@@ -288,9 +288,9 @@ def log_data(datapoint, session):
 					#DROP OUT CALL HERE
 					logging.critical('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
 					#send_throttle_control()
-			if check_record_button(session) is True:
+			if check_record_button() is True:
 				print("Logged")
-				models.Data.create(sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session)
+				models.Data.create(sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session["Session"])
 
 def update_display_dict(datapoint):
 	if datapoint.pack > 0:
@@ -299,7 +299,7 @@ def update_display_dict(datapoint):
 		name = datapoint.sensor_name
 	if name in displayDict:
 		displayDict[name] = datapoint.data
-
+	
 	print(displayDict)
 
 
@@ -312,15 +312,16 @@ def test_sending():
 			print("MESSAGE SENT")
 
 #Check if record button has been pressed. Export if stop button is pressed
-def check_record_button(session):
+def check_record_button():
 	#set record_button
 	exported = False
 	record_button = False
 	if (record_button == False and exported == False):
-		print (session)
-		models.export_csv(session)
+		models.export_csv(session["Session"])
 		exported = True
-		print("Exported Data")
+		print("Exported Data {}".format(session["Session"]))
+		session["Session"] = session["Session"] + 1
+		print("New session")
 	return record_button
 
 if __name__ == "__main__":
