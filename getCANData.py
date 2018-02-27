@@ -255,7 +255,7 @@ def parse():
 						newDataPoint.data = TSVPackState[newDataPoint.data]
 					
 
-				# Add to the queue based on the sample time of the object
+				# Log data based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
 					log_data(newDataPoint)
 					update_display_dict(newDataPoint)
@@ -321,7 +321,18 @@ def check_record_button():
 	global record_button
 	#THESE ARE TEMPORARY ASSIGNMENTS UNTIL BUTTONS WORK
 	record_button = False
+	'''
+	#Real Function
 	if (record_button == False and exported == False):
+		models.export_csv(session["Session"])
+		exported = True
+		print("Exported Data {}".format(session["Session"]))
+		session["Session"] = session["Session"] + 1
+		print("New session{}".format(session["Session"]))
+	'''
+	
+	#Modified function for CDR. Exports data and stops recording after 1 minute of recording 
+	if (record_button == False and exported == False and timer() % 59 == 0):
 		models.export_csv(session["Session"])
 		exported = True
 		print("Exported Data {}".format(session["Session"]))
