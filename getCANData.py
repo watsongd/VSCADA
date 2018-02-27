@@ -171,14 +171,10 @@ displayDict = {"Voltage 1": 0, "Voltage 2": 0, "Voltage 3": 0, "Voltage 4": 0, "
 #Variables for storing
 record_button = True
 #Session is just an int that keeps track of when recording starts. If recording stops, the current session is exported and the session increments
-global session 
 
 def main():
 	models.build_db()
-	session = models.get_session()
 	logging.basicConfig(filename='log.log', level=logging.WARNING)
-	print(session)
-
 	while (True):
 		parse()
 		#CHECK BUTTON STATE
@@ -193,7 +189,7 @@ def send_throttle_control(throttleControl):
 	bus.send(msg)
 
 def parse():
-	check_record_button(session)
+	session = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
 	for msg in bus:
@@ -258,11 +254,15 @@ def parse():
 
 				# Add to the queue based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
-					log_data(newDataPoint)
+					log_data(newDataPoint, session)
 					update_display_dict(newDataPoint)
 					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
+				
+				#Check if record button has been pressed
+				check_record_button(session)
 
-def log_data(datapoint):
+#Takes data from parse() and stores in db if recording.
+def log_data(datapoint, session):
 	
 	data = datapoint.data
 	sensor_name = datapoint.sensor_name
@@ -283,11 +283,13 @@ def log_data(datapoint):
 				#Do not need to drop out
 				if sensor_info.drop_out == 0:
 					logging.warning('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
+				
+				#Need to drop out
 				if sensor_info.drop_out == 1:
 					#DROP OUT CALL HERE
 					logging.critical('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
 					send_throttle_control()
-			if record_button is True:
+			if check_record_button(session) is True:
 				models.Data.create(sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session)
 
 def update_display_dict(datapoint):
@@ -309,15 +311,17 @@ def test_sending():
 			send_throttle_control(0x01)
 			print("MESSAGE SENT")
 
+#Check if record button has been pressed. Export if stop button is pressed
 def check_record_button(session):
 	#set record_button
 	exported = False
 	record_button = False
 	if (record_button == False and exported == False):
 		print (session)
-		models.export_csv(session)
+		models.export_csv()
 		exported = True
 		print("Exported Data")
+	return record_button
 
 if __name__ == "__main__":
 	main()

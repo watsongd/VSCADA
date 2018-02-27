@@ -48,7 +48,7 @@ def export_csv(session):
     #Select all data from db
     data_all = c.execute("SELECT * FROM data")
 
-    f = open('/media/pi/9BEE-5C4F/car_data_all.csv', 'w')
+    f = open('/media/pi/VSCADA-DRIV/car_data_all.csv', 'w')
 
     writer = csv.writer(f, delimiter=';')
     writer.writerows(data_all)
@@ -58,7 +58,7 @@ def export_csv(session):
     #Select data from db from the most recent session
     data_session = c.execute("SELECT * FROM data WHERE session_id={}".format(session))
 
-    g = open('/media/pi/9BEE-5C4F/car_data_session_{}.csv'.format(session), 'w')
+    g = open('/media/pi/VSCADA-DRIV/car_data_session_{}.csv'.format(session), 'w')
 
     writer = csv.writer(g, delimiter=';')
     writer.writerows(data_session)
