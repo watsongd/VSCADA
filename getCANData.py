@@ -175,6 +175,7 @@ global record_button
 global exported
 #REMOVE WHEN BUTTONS ARE ADDED
 exported = False
+record_button = True
 
 def main():
 	models.build_db()
@@ -319,20 +320,13 @@ def check_record_button():
 	#set record_button
 	global exported
 	global record_button
-	#THESE ARE TEMPORARY ASSIGNMENTS UNTIL BUTTONS WORK
-	record_button = False
-	'''
-	#Real Function
-	if (record_button == False and exported == False):
-		models.export_csv(session["Session"])
-		exported = True
-		print("Exported Data {}".format(session["Session"]))
-		session["Session"] = session["Session"] + 1
-		print("New session{}".format(session["Session"]))
-	'''
 	
-	#Modified function for CDR. Exports data and stops recording after 1 minute of recording 
-	if (record_button == False and exported == False and timer() % 59 == 0):
+	#THESE ARE TEMPORARY ASSIGNMENTS UNTIL BUTTONS WORK. USE FOR CDR ONLY.
+	if (timer() % 59 == 0):
+		record_button = False
+
+	#Exports data exactly one time after stop button is pressed
+	if (record_button == False and exported == False):
 		models.export_csv(session["Session"])
 		exported = True
 		print("Exported Data {}".format(session["Session"]))
