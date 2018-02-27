@@ -189,6 +189,7 @@ def send_throttle_control(throttleControl):
 	bus.send(msg)
 
 def parse():
+	print("In Parse")
 	session = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
@@ -260,6 +261,7 @@ def parse():
 				
 				#Check if record button has been pressed
 				check_record_button(session)
+				print ("End of Parse")
 
 #Takes data from parse() and stores in db if recording.
 def log_data(datapoint, session):
