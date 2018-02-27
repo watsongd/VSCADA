@@ -173,6 +173,8 @@ session = {"Session":0}
 global record_button
 #Session is just an int that keeps track of when recording starts. If recording stops, the current session is exported and the session increments
 global exported
+#REMOVE WHEN BUTTONS ARE ADDED
+exported = True
 
 def main():
 	models.build_db()
@@ -318,14 +320,13 @@ def check_record_button():
 	global exported
 	global record_button
 	#THESE ARE TEMPORARY ASSIGNMENTS UNTIL BUTTONS WORK
-	exported = False
 	record_button = False
 	if (record_button == False and exported == False):
 		models.export_csv(session["Session"])
 		exported = True
 		print("Exported Data {}".format(session["Session"]))
-		#session["Session"] = session["Session"] + 1
-		#print("New session")
+		session["Session"] = session["Session"] + 1
+		print("New session{}".format(session["Session"]))
 	return record_button
 
 if __name__ == "__main__":
