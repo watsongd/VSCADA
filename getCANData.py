@@ -170,8 +170,9 @@ displayDict = {"Voltage 1": 0, "Voltage 2": 0, "Voltage 3": 0, "Voltage 4": 0, "
 session = {"Session":0}
 
 #Variables for storing
-record_button = True
+global record_button
 #Session is just an int that keeps track of when recording starts. If recording stops, the current session is exported and the session increments
+global exported
 
 def main():
 	models.build_db()
@@ -314,14 +315,16 @@ def test_sending():
 #Check if record button has been pressed. Export if stop button is pressed
 def check_record_button():
 	#set record_button
-	exported = False
+	global exported
+	global record_button
+
 	record_button = False
 	if (record_button == False and exported == False):
 		models.export_csv(session["Session"])
 		exported = True
 		print("Exported Data {}".format(session["Session"]))
-		session["Session"] = session["Session"] + 1
-		print("New session")
+		#session["Session"] = session["Session"] + 1
+		#print("New session")
 	return record_button
 
 if __name__ == "__main__":
