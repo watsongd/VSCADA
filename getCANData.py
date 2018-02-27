@@ -194,7 +194,6 @@ def parse():
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
 	for msg in bus:
-		print("In for loop")
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
 		data = msg.data
@@ -272,7 +271,9 @@ def log_data(datapoint, session):
 	for sensor_info in config.sensor_thresh_list:
 		if sensor_info.name == sensor_name:
 			#Check thresholds
-			if data in range(sensor_info.lower_threshold, sensor_info.upper_threshold):
+			if (sensor_info.lower_threshold == sensor_info.upper_threshold):
+				flag = False
+			elif data in range(sensor_info.lower_threshold, sensor_info.upper_threshold):
 				#Sensor data is within allowable range
 				flag = False
 			else:
@@ -286,8 +287,9 @@ def log_data(datapoint, session):
 				if sensor_info.drop_out == 1:
 					#DROP OUT CALL HERE
 					logging.critical('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
-					send_throttle_control()
+					#send_throttle_control()
 			if check_record_button(session) is True:
+				print("Logged")
 				models.Data.create(sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session)
 
 def update_display_dict(datapoint):
