@@ -317,7 +317,8 @@ def check_record_button():
 	#set record_button
 	global exported
 	global record_button
-
+	#THESE ARE TEMPORARY ASSIGNMENTS UNTIL BUTTONS WORK
+	exported = False
 	record_button = False
 	if (record_button == False and exported == False):
 		models.export_csv(session["Session"])
