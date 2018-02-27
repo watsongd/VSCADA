@@ -6,6 +6,18 @@ import config
 import models
 import datetime
 
+import sys
+import random
+import gui
+
+
+from PyQt5 import QtCore, QtWidgets
+
+
+_pollFrequency = 3.0
+#global time counter
+_time = 0
+
 class Datapoint(object):
 
 	def __init__(self):
@@ -162,6 +174,8 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x0F3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 15, "description": "TSV Current"},
 					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 15, "description": "TSI Temp"}]
 
+
+
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
 TSIPackState = {0: "Idle", 1: "Setup Drive", 2: "Drive", 3: "Setup Idle"}
 
@@ -176,13 +190,6 @@ global exported
 #REMOVE WHEN BUTTONS ARE ADDED
 exported = False
 record_button = True
-
-def main():
-	models.build_db()
-	logging.basicConfig(filename='log.log', level=logging.WARNING)
-	while (True):
-		parse()
-		#CHECK BUTTON STATE
 
 def timer():
    now = time.localtime(time.time())
@@ -237,7 +244,7 @@ def parse():
 				if "Voltage" in newDataPoint.sensor_name:
 					if "Cell" in newDataPoint.sensor_name:
 						# mV --> V
-						newDataPoint.data = newDataPoint.data / 1000 
+						newDataPoint.data = newDataPoint.data / 1000
 					else:
 						newDataPoint.data = newDataPoint.data / 10
 
@@ -254,13 +261,14 @@ def parse():
 						newDataPoint.data = TSIPackState[newDataPoint.data]
 					else:
 						newDataPoint.data = TSVPackState[newDataPoint.data]
-					
+
 
 				# Log data based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
 					log_data(newDataPoint)
 					update_display_dict(newDataPoint)
 					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
+
 
 #Takes data from parse() and stores in db if recording.
 def log_data(datapoint):
@@ -285,7 +293,7 @@ def log_data(datapoint):
 				#Do not need to drop out
 				if sensor_info.drop_out == 0:
 					logging.warning('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
-				
+
 				#Need to drop out
 				if sensor_info.drop_out == 1:
 					#DROP OUT CALL HERE
@@ -302,11 +310,10 @@ def update_display_dict(datapoint):
 		name = datapoint.sensor_name
 	if name in displayDict:
 		displayDict[name] = datapoint.data
-	
-	#print(displayDict)
 
 
-# test sending	
+# test sending
+# test sending
 def test_sending():
 	while(1):
 		print("TIMER: " + str(timer()))
@@ -314,12 +321,14 @@ def test_sending():
 			send_throttle_control(0x01)
 			print("MESSAGE SENT")
 
+
+
 #Check if record button has been pressed. Export if stop button is pressed
 def check_record_button():
 	#set record_button
 	global exported
 	global record_button
-	
+
 	#THESE ARE TEMPORARY ASSIGNMENTS UNTIL BUTTONS WORK. USE FOR CDR ONLY.
 	if (timer() % 59 == 0):
 		record_button = False
@@ -333,6 +342,141 @@ def check_record_button():
 		print("New session{}".format(session["Session"]))
 	return record_button
 
+
+
+class CanMonitorThread(QtCore.QThread):
+	'''
+	CAN Bus Monitor Thread
+
+	This thread is responsible fro regularly polling the CAN Bus, and
+	determining if new data is available for consuption.
+	'''
+
+
+	def run(self):
+
+		models.build_db()
+		logging.basicConfig(filename='log.log', level=logging.WARNING)
+		while (True):
+			parse()
+
+class GuiUpdateThread(QtCore.QThread):
+	'''
+	GUI Update Thread
+
+	This thread is responsible for updating the UI elements at a regular
+	frequency determined by the global variable _pollFrequency. The system is
+	updated every 1/_pollFrequency seconds.
+	'''
+	trigger = QtCore.pyqtSignal()
+	def run(self):
+		global _time
+
+		while(True):
+			self.msleep(1000 / _pollFrequency)
+
+			_time += 1 / _pollFrequency
+
+
+			self.trigger.emit()
+			#self.emit(QtCore.SIGNAL('update()'))
+
+
+class Window(QtWidgets.QWidget, gui.Ui_Form):
+
+	#GUI Update Thread
+	gui_update = None
+
+	can_monitor = None
+	# Define a new signal called 'trigger' that has no arguments.
+	trigger = QtCore.pyqtSignal()
+
+	def __init__(self):
+
+		QtWidgets.QWidget.__init__(self)
+		self.setupUi(self)
+		#connect Qt signals
+		# ***************** Measurands Inputs ****************************
+		#get update
+		self.gui_update = GuiUpdateThread()
+		self.can_monitor = CanMonitorThread()
+
+		#start updating
+		self.gui_update.start()
+		self.can_monitor.start()
+
+
+		# Connect the trigger signal to a slot under gui_update
+		self.gui_update.trigger.connect(self.guiUpdate)
+
+		# Emit the trigger signal (update once)
+		self.gui_update.trigger.emit()
+
+	def guiUpdate(self):
+		_translate = QtCore.QCoreApplication.translate
+
+
+		Vpack1 = str(displayDict["Voltage 1"])
+		Vpack2 = str(displayDict["Voltage 2"])
+		Vpack3 = str(displayDict["Voltage 3"])
+		Vpack4 = str(displayDict["Voltage 4"])
+		Ipack1 = str(displayDict["Current 1"])
+		Ipack2 = str(displayDict["Current 2"])
+		Ipack3 = str(displayDict["Current 3"])
+		Ipack4 = str(displayDict["Current 4"])
+		motorTemp = str(displayDict["Motor Temp"])
+		motorRPM  = str(displayDict["Motor RPM"])
+		TSI_state = str(displayDict["TSI State"])
+		TSI_imd   = str(displayDict["IMD"])
+		TSI_temp  = str(displayDict["TSI Temp"])
+		Vtsv	  = str(displayDict["TSV Voltage"])
+		Itsv     = str(displayDict["TSV Current"])
+		Sess    = str(session["Session"])
+
+		#Set values for pack voltage and current
+		item = self.Packs.item(0, 0)
+		item.setText(_translate("Form", Vpack1))
+		item = self.Packs.item(0, 1)
+		item.setText(_translate("Form", Ipack1))
+		item = self.Packs.item(1, 0)
+		item.setText(_translate("Form", Vpack2))
+		item = self.Packs.item(1, 1)
+		item.setText(_translate("Form", Ipack2))
+		item = self.Packs.item(2, 0)
+		item.setText(_translate("Form", Vpack3))
+		item = self.Packs.item(2, 1)
+		item.setText(_translate("Form", Ipack3))
+		item = self.Packs.item(3, 0)
+		item.setText(_translate("Form", Vpack4))
+		item = self.Packs.item(3, 1)
+		item.setText(_translate("Form", Ipack4))
+		item = self.Packs.item(4, 0)
+		item.setText(_translate("Form", Vtsv))
+		item = self.Packs.item(4, 1)
+		item.setText(_translate("Form", Itsv))
+
+		#Set values for motor items
+		item = self.Motor.item(0, 0)
+		item.setText(_translate("Form", motorTemp))
+		item = self.Motor.item(1, 0)
+		item.setText(_translate("Form", motorRPM))
+
+		#Set values for TSI
+		item = self.TSI.item(0, 0)
+		item.setText(_translate("Form", TSI_state))
+		item = self.TSI.item(0, 1)
+		item.setText(_translate("Form", TSI_imd))
+		item = self.TSI.item(0, 2)
+		item.setText(_translate("Form", TSI_temp))
+
+		item = self.tableWidget.item(0, 0)
+		item.setText(_translate("Form", Sess))
+
+
+
 if __name__ == "__main__":
-	main()
-    
+	app = QtWidgets.QApplication(sys.argv)
+	window = Window()
+	window.show()
+
+	sys.exit(app.exec())
