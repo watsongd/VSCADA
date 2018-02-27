@@ -264,7 +264,6 @@ def parse():
 
 #Takes data from parse() and stores in db if recording.
 def log_data(datapoint):
-	print("In log_data")
 	data = datapoint.data
 	sensor_name = datapoint.sensor_name
 	pack = datapoint.pack
