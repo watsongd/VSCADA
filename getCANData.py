@@ -168,33 +168,36 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 
 
 					  {"address": 0x0F2, "offset": 0, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 15, "description": "TSI State"},
-					  {"address": 0x0F2, "offset": 2, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 15, "description": "IMD"},
+					  {"address": 0x0F2, "offset": 1, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 15, "description": "IMD"},
+					  #{"address": 0x0F2, "offset": 4, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 15, "description": "Brake"},
 					  {"address": 0x0F3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 15, "description": "TSV Voltage"},
 					  {"address": 0x0F3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 15, "description": "TSV Current"},
 					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 15, "description": "TSI Temp"}]
+
+
 
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
 TSIPackState = {0: "Idle", 1: "Setup Drive", 2: "Drive", 3: "Setup Idle"}
 
 displayDict = {"Voltage 1": 0, "Voltage 2": 0, "Voltage 3": 0, "Voltage 4": 0, "Current 1": 0, "Current 2": 0, "Current 3": 0, "Current 4": 0,
 "TSI State": 0, "IMD": 0, "Brake": 0, "TSV Voltage": 0, "TSV Current": 0, "TSI Temp": 0, "Motor RPM": 0, "Motor Temp": 0}
-
 session = {"Session":0}
 
 #Variables for storing
-record_button = True
+global record_button
 #Session is just an int that keeps track of when recording starts. If recording stops, the current session is exported and the session increments
-
-
-
+global exported
+#REMOVE WHEN BUTTONS ARE ADDED
+exported = False
+record_button = True
 
 def timer():
-	now = time.localtime(time.time())
-	return now[5]
+   now = time.localtime(time.time())
+   return now[5]
 
 def send_throttle_control(throttleControl):
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
-	msg = can.Message(arbitration_id=0x010, data=[throttleControl], extended_id=False)
+	msg = msg = can.Message(arbitration_id=0x010, data=[throttleControl], extended_id=False)
 	bus.send(msg)
 
 def parse():
@@ -202,7 +205,6 @@ def parse():
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
 	for msg in bus:
-
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
 		data = msg.data
@@ -261,14 +263,15 @@ def parse():
 						newDataPoint.data = TSVPackState[newDataPoint.data]
 
 
-				# Add to the queue based on the sample time of the object
+				# Log data based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
 					log_data(newDataPoint)
 					update_display_dict(newDataPoint)
 					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 
-def log_data(datapoint):
 
+#Takes data from parse() and stores in db if recording.
+def log_data(datapoint):
 	data = datapoint.data
 	sensor_name = datapoint.sensor_name
 	pack = datapoint.pack
@@ -279,7 +282,9 @@ def log_data(datapoint):
 	for sensor_info in config.sensor_thresh_list:
 		if sensor_info.name == sensor_name:
 			#Check thresholds
-			if data in range(sensor_info.lower_threshold, sensor_info.upper_threshold):
+			if (sensor_info.lower_threshold == sensor_info.upper_threshold):
+				flag = False
+			elif data in range(sensor_info.lower_threshold, sensor_info.upper_threshold):
 				#Sensor data is within allowable range
 				flag = False
 			else:
@@ -287,12 +292,16 @@ def log_data(datapoint):
 				flag = True
 				#Do not need to drop out
 				if sensor_info.drop_out == 0:
-					logging.warning('%s : %s has exceeded the given threshold. Value: %d', now, sensor_name, data)
+					logging.warning('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
+
+				#Need to drop out
 				if sensor_info.drop_out == 1:
 					#DROP OUT CALL HERE
-					logging.critical('%s : %s has exceeded the given threshold. Value: %d', now, sensor_name, data)
-			if record_button is True:
-				models.Data.create(sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session)
+					logging.critical('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
+					#send_throttle_control()
+			if check_record_button() is True:
+				print("Logged")
+				models.Data.create(sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session["Session"])
 
 def update_display_dict(datapoint):
 	if datapoint.pack > 0:
@@ -304,6 +313,7 @@ def update_display_dict(datapoint):
 
 
 # test sending
+# test sending
 def test_sending():
 	while(1):
 		print("TIMER: " + str(timer()))
@@ -311,11 +321,27 @@ def test_sending():
 			send_throttle_control(0x01)
 			print("MESSAGE SENT")
 
+
+
+#Check if record button has been pressed. Export if stop button is pressed
 def check_record_button():
-	record_button = True
-	print(True)
-	#If record button == False
-	#session++
+	#set record_button
+	global exported
+	global record_button
+
+	#THESE ARE TEMPORARY ASSIGNMENTS UNTIL BUTTONS WORK. USE FOR CDR ONLY.
+	if (timer() % 59 == 0):
+		record_button = False
+
+	#Exports data exactly one time after stop button is pressed
+	if (record_button == False and exported == False):
+		models.export_csv(session["Session"])
+		exported = True
+		print("Exported Data {}".format(session["Session"]))
+		session["Session"] = session["Session"] + 1
+		print("New session{}".format(session["Session"]))
+	return record_button
+
 
 
 class CanMonitorThread(QtCore.QThread):
@@ -330,16 +356,9 @@ class CanMonitorThread(QtCore.QThread):
 	def run(self):
 
 		models.build_db()
-		session = models.get_session()
 		logging.basicConfig(filename='log.log', level=logging.WARNING)
-		print(session)
-		while(True):
-
+		while (True):
 			parse()
-			#CHECK BUTTON STATE
-			check_record_button()
-			#receive all available frames
-
 
 class GuiUpdateThread(QtCore.QThread):
 	'''
@@ -452,6 +471,7 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 
 		item = self.tableWidget.item(0, 0)
 		item.setText(_translate("Form", Sess))
+
 
 
 if __name__ == "__main__":
