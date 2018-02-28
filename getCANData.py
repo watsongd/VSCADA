@@ -311,8 +311,6 @@ def update_display_dict(datapoint):
 	if name in displayDict:
 		displayDict[name] = datapoint.data
 
-
-# test sending
 # test sending
 def test_sending():
 	while(1):
@@ -320,8 +318,6 @@ def test_sending():
 		if timer() % 1 == 0:
 			send_throttle_control(0x01)
 			print("MESSAGE SENT")
-
-
 
 #Check if record button has been pressed. Export if stop button is pressed
 def check_record_button():
@@ -422,8 +418,8 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 		Vpack4 = str(displayDict["Voltage 4"])
 		Ipack1 = str(displayDict["Current 1"])
 		Ipack2 = str(displayDict["Current 2"])
-		Ipack3 = str(displayDict["Current 3"])
-		Ipack4 = str(displayDict["Current 4"])
+		Ipack3  = str(displayDict["Current 3"])
+		Ipack4   = str(displayDict["Current 4"])
 		motorTemp = str(displayDict["Motor Temp"])
 		motorRPM  = str(displayDict["Motor RPM"])
 		TSI_state = str(displayDict["TSI State"])
