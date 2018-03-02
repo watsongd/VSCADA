@@ -368,23 +368,15 @@ class ButtonMonitorThread(QtCore.QThread):
 
 	def run(self):
 
-		models.build_db()
-		logging.basicConfig(filename='log.log', level=logging.WARNING)
+		global record_button
 		while (True):
 			# check if button was pressed
 			readButtons = ser.read(10)
-			if readButtons == up:
-				print("up")
-			elif readButtons == down:
-				print("down")
-			elif readButtons == left:
-				print("left")
-			elif readButtons == right:
-				print("right")
 			elif readButtons == check:
-				print("check")
+				if record_button == False:
+					record_button = True
 			elif readButtons == close:
-				print("close")
+				record_button =False
 
 class GuiUpdateThread(QtCore.QThread):
 	'''
