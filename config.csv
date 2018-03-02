@@ -1,6 +1,42 @@
-TSV Current,0,100,1
-TSV Voltage,0,100,1
-TSI Temp,0,100,1
+State,0,0,0
+Voltage,0,0,0
+Current,0,0,0
+SOC,0,0,0
+Columbs,0,0,0
+Cell 1 Status,0,0,0
+Cell 2 Status,0,0,0
+Cell 3 Status,0,0,0
+Cell 4 Status,0,0,0
+Cell 5 Status,0,0,0
+Cell 6 Status,0,0,0
+Cell 7 Status,0,0,0
+Cell 1 Voltage,0,0,0
+Cell 2 Voltage,0,0,0
+Cell 3 Voltage,0,0,0
+Cell 4 Voltage,0,0,0
+Cell 5 Voltage,0,0,0
+Cell 6 Voltage,0,0,0
+Cell 7 Voltage,0,0,0
+Cell 1 Temp,0,0,0
+Cell 2 Temp,0,0,0
+Cell 3 Temp,0,0,0
+Cell 4 Temp,0,0,0
+Cell 5 Temp,0,0,0
+Cell 6 Temp,0,0,0
+Cell 7 Temp,0,0,0
+Motor RPM,0,0,0
+Motor Temp,0,0,0
+Controller Temp,0,0,0
+RMS Current,0,0,0
+Capacitor Voltage,0,0,0
+Stator Frequency,0,0,0
+Controller Fault Primary,0,0,0
+Controller Fault Secondary,0,0,0
+Throttle Input,0,0,0
+Brake Input,0,0,0
+TSV Current,0,0,0
+TSV Voltage,0,0,0
+TSI Temp,0,0,0
 Brake,0,0,0
 IMD,0,0,0
 TSI State,0,0,0
