@@ -392,10 +392,10 @@ def check_display_dict():
 					differenceDT = now - lastUpdated
 
 					# get the difference in numbers rather than a datetime timedelta object
-					differenceNUM = divmod(difference.days * 86400 + difference.seconds, 60)
+					differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
 
 					# check the difference vs the sample time
-					if difference[1] > item['sampleTime']:
+					if differenceNUM[1] > item['sampleTime']:
 						displayDict[key] = '-'
 
 # test sending
