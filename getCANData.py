@@ -395,7 +395,7 @@ def check_display_dict():
 					differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
 
 					# check the difference vs the sample time
-					if differenceNUM[1] > item['sampleTime']:
+					if differenceNUM[1] > 4 * item['sampleTime']:
 						displayDict[key] = '-'
 
 # test sending
