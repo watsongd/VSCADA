@@ -216,18 +216,12 @@ def parse():
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
-	# check if things were updated
-	check_display_dict()
-
 	for msg in bus:
 
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
 		data = msg.data
 		dataLength = msg.dlc
-
-		# check if things were updated
-		check_display_dict()
 
 		# Iterate through the possible data points
 		for item in listOfViewableData:
@@ -395,7 +389,7 @@ def check_display_dict():
 					differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
 
 					# check the difference vs the sample time
-					if differenceNUM[1] > 4 * item['sampleTime']:
+					if differenceNUM[1] > (4 * item['sampleTime']):
 						displayDict[key] = '-'
 
 # test sending
