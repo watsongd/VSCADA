@@ -373,17 +373,17 @@ class ButtonMonitorThread(QtCore.QThread):
 		while (True):
 			# check if button was pressed
 			readButtons = ser.read(10)
-			if testRead == up:
+			if readButtons == up:
 				print("up")
-			elif testRead == down:
+			elif readButtons == down:
 				print("down")
-			elif testRead == left:
+			elif readButtons == left:
 				print("left")
-			elif testRead == right:
+			elif readButtons == right:
 				print("right")
-			elif testRead == check:
+			elif readButtons == check:
 				print("check")
-			elif testRead == close:
+			elif readButtons == close:
 				print("close")
 
 class GuiUpdateThread(QtCore.QThread):
