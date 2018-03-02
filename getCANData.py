@@ -201,7 +201,6 @@ session = {"Session":0}
 
 #Variables for storing
 global record_button
-record_button = True
 
 def timer():
    now = time.localtime(time.time())
