@@ -229,6 +229,7 @@ def parse():
 			#if the data point's address equals the one of the message, make a new datapoint
 			if hex(item['address']) == address:
 
+				print("LAST UPDATED: " + str(item['updated']))
 				newDataPoint = Datapoint()
 				newDataPoint.sensor_name = item['description']
 				newDataPoint.system = item['system']
