@@ -10,9 +10,7 @@ import sys
 import random
 import gui
 
-
 from PyQt5 import QtCore, QtWidgets
-
 
 _pollFrequency = 3.0
 #global time counter
