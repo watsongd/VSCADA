@@ -286,6 +286,7 @@ def parse():
 				if timer() % item['sampleTime'] == 0:
 					log_data(newDataPoint)
 					update_display_dict(newDataPoint)
+					item['updated'] = datetime.datetime.now().strftime('%H:%M:%S')
 					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 
 
@@ -332,11 +333,6 @@ def update_display_dict(datapoint):
 		name = datapoint.sensor_name
 	if name in displayDict:
 		displayDict[name] = datapoint.data
-
-	# replace time when it was updated
-	for item in listOfViewableData:
-		if item['description'] == name:
-			item['updated'] = datetime.datetime.now().strftime('%H:%M:%S')
 
 def check_display_dict():
 	for key in displayDict.keys():
