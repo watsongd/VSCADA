@@ -272,6 +272,9 @@ def parse():
 
 #Takes data from parse() and stores in db if recording.
 def log_data(datapoint):
+	
+	global record_button
+
 	data = datapoint.data
 	sensor_name = datapoint.sensor_name
 	pack = datapoint.pack
@@ -299,7 +302,7 @@ def log_data(datapoint):
 					#DROP OUT CALL HERE
 					logging.critical('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
 					#send_throttle_control()
-			if check_record_button() is True:
+			if record_button is True:
 				print("Logged")
 				models.Data.create(sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session["Session"])
 
@@ -320,14 +323,10 @@ def test_sending():
 			print("MESSAGE SENT")
 
 #Check if record button has been pressed. Export if stop button is pressed
-def check_record_button():
+def export_data():
 	#set record_button
 	global exported
 	global record_button
-
-	#THESE ARE TEMPORARY ASSIGNMENTS UNTIL BUTTONS WORK. USE FOR CDR ONLY.
-	if (timer() % 59 == 0):
-		record_button = False
 
 	#Exports data exactly one time after stop button is pressed
 	if (record_button == False and exported == False):
@@ -336,9 +335,7 @@ def check_record_button():
 		print("Exported Data {}".format(session["Session"]))
 		session["Session"] = session["Session"] + 1
 		print("New session{}".format(session["Session"]))
-	return record_button
-
-
+	
 
 class CanMonitorThread(QtCore.QThread):
 	'''
