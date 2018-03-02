@@ -384,7 +384,7 @@ def check_display_dict():
 
 				# check the last time that dict was updated
 				now = datetime.datetime.now()
-				lastUpdated = datetime.datetime.strptime(item['updated'], '%H:%M:%S')
+				lastUpdated = datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
 
 				# get the difference in times
 				differenceDT = now - lastUpdated
