@@ -10,22 +10,8 @@ import sys
 import random
 import gui
 
-import serial
 
 from PyQt5 import QtCore, QtWidgets
-
-# initialization of serial port
-portName = '/dev/ttyACM0'
-baudRate = 115200
-ser = serial.Serial(portName, baudRate)
-
-# byte arrays output by key presses
-up    = b'\x80\x01\x01q\xc2\x80\x01\x07G\xa7'
-down  = b'\x80\x01\x02\xea\xf0\x80\x01\x08\xb0_'
-left  = b'\x80\x01\x03c\xe1\x80\x01\t9N'
-right = b'\x80\x01\x04\xdc\x95\x80\x01\n\xa2|'
-check = b'\x80\x01\x05U\x84\x80\x01\x0b+m'
-close = b'\x80\x01\x06\xce\xb6\x80\x01\x0c\x94\x19'
 
 
 _pollFrequency = 3.0
@@ -217,9 +203,8 @@ def send_throttle_control(throttleControl):
 def parse():
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
-
+	check_ca
 	for msg in bus:
-
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
 		data = msg.data
@@ -287,9 +272,6 @@ def parse():
 
 #Takes data from parse() and stores in db if recording.
 def log_data(datapoint):
-	
-	global record_button
-
 	data = datapoint.data
 	sensor_name = datapoint.sensor_name
 	pack = datapoint.pack
@@ -317,7 +299,7 @@ def log_data(datapoint):
 					#DROP OUT CALL HERE
 					logging.critical('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
 					#send_throttle_control()
-			if record_button is True:
+			if check_record_button() is True:
 				print("Logged")
 				models.Data.create(sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session["Session"])
 
@@ -338,10 +320,14 @@ def test_sending():
 			print("MESSAGE SENT")
 
 #Check if record button has been pressed. Export if stop button is pressed
-def export_data():
+def check_record_button():
 	#set record_button
 	global exported
 	global record_button
+
+	#THESE ARE TEMPORARY ASSIGNMENTS UNTIL BUTTONS WORK. USE FOR CDR ONLY.
+	if (timer() % 59 == 0):
+		record_button = False
 
 	#Exports data exactly one time after stop button is pressed
 	if (record_button == False and exported == False):
@@ -350,9 +336,18 @@ def export_data():
 		print("Exported Data {}".format(session["Session"]))
 		session["Session"] = session["Session"] + 1
 		print("New session{}".format(session["Session"]))
-	
+	return record_button
+
+
 
 class CanMonitorThread(QtCore.QThread):
+	'''
+	CAN Bus Monitor Thread
+
+	This thread is responsible fro regularly polling the CAN Bus, and
+	determining if new data is available for consuption.
+	'''
+
 
 	def run(self):
 
@@ -360,20 +355,6 @@ class CanMonitorThread(QtCore.QThread):
 		logging.basicConfig(filename='log.log', level=logging.WARNING)
 		while (True):
 			parse()
-
-class ButtonMonitorThread(QtCore.QThread):
-
-	def run(self):
-
-		global record_button
-		while (True):
-			# check if button was pressed
-			readButtons = ser.read(10)
-			elif readButtons == check:
-				if record_button == False:
-					record_button = True
-			elif readButtons == close:
-				record_button =False
 
 class GuiUpdateThread(QtCore.QThread):
 	'''
@@ -415,12 +396,11 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 		#get update
 		self.gui_update = GuiUpdateThread()
 		self.can_monitor = CanMonitorThread()
-		self.button_monitor = ButtonMonitorThread()
 
 		#start updating
 		self.gui_update.start()
 		self.can_monitor.start()
-		self.button_monitor.start()
+
 
 		# Connect the trigger signal to a slot under gui_update
 		self.gui_update.trigger.connect(self.guiUpdate)
