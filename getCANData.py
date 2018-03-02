@@ -220,10 +220,6 @@ def parse():
 
 	for msg in bus:
 
-		# check if button was pressed
-		readButtons = ser.read(10)
-		print(readButtons)
-
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
 		data = msg.data
@@ -360,13 +356,6 @@ def check_record_button():
 
 
 class CanMonitorThread(QtCore.QThread):
-	'''
-	CAN Bus Monitor Thread
-
-	This thread is responsible fro regularly polling the CAN Bus, and
-	determining if new data is available for consuption.
-	'''
-
 
 	def run(self):
 
@@ -374,6 +363,28 @@ class CanMonitorThread(QtCore.QThread):
 		logging.basicConfig(filename='log.log', level=logging.WARNING)
 		while (True):
 			parse()
+
+class ButtonMonitorThread(QtCore.QThread):
+
+	def run(self):
+
+		models.build_db()
+		logging.basicConfig(filename='log.log', level=logging.WARNING)
+		while (True):
+			# check if button was pressed
+			readButtons = ser.read(10)
+			if testRead == up:
+				print("up")
+			elif testRead == down:
+				print("down")
+			elif testRead == left:
+				print("left")
+			elif testRead == right:
+				print("right")
+			elif testRead == check:
+				print("check")
+			elif testRead == close:
+				print("close")
 
 class GuiUpdateThread(QtCore.QThread):
 	'''
@@ -415,11 +426,12 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 		#get update
 		self.gui_update = GuiUpdateThread()
 		self.can_monitor = CanMonitorThread()
+		self.button_monitor = ButtonMonitorThread()
 
 		#start updating
 		self.gui_update.start()
 		self.can_monitor.start()
-
+		self.button_monitor.start()
 
 		# Connect the trigger signal to a slot under gui_update
 		self.gui_update.trigger.connect(self.guiUpdate)
