@@ -195,14 +195,12 @@ TSIPackState = {0: "Idle", 1: "Setup Drive", 2: "Drive", 3: "Setup Idle"}
 
 displayDict = {"Voltage 1": 0, "Voltage 2": 0, "Voltage 3": 0, "Voltage 4": 0, "Current 1": 0, "Current 2": 0, "Current 3": 0, "Current 4": 0,
 "TSI State": 0, "IMD": 0, "Brake": 0, "TSV Voltage": 0, "TSV Current": 0, "TSI Temp": 0, "Motor RPM": 0, "Motor Temp": 0}
+
+#Session is just an int that keeps track of when recording starts. If recording stops, the current session is exported and the session increments
 session = {"Session":0}
 
 #Variables for storing
 global record_button
-#Session is just an int that keeps track of when recording starts. If recording stops, the current session is exported and the session increments
-global exported
-#REMOVE WHEN BUTTONS ARE ADDED
-exported = False
 record_button = True
 
 def timer():
@@ -287,6 +285,9 @@ def parse():
 
 #Takes data from parse() and stores in db if recording.
 def log_data(datapoint):
+	
+	global record_button
+
 	data = datapoint.data
 	sensor_name = datapoint.sensor_name
 	pack = datapoint.pack
@@ -314,7 +315,7 @@ def log_data(datapoint):
 					#DROP OUT CALL HERE
 					logging.critical('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
 					#send_throttle_control()
-			if check_record_button() is True:
+			if record_button is True:
 				print("Logged")
 				models.Data.create(sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session["Session"])
 
@@ -335,25 +336,13 @@ def test_sending():
 			print("MESSAGE SENT")
 
 #Check if record button has been pressed. Export if stop button is pressed
-def check_record_button():
-	#set record_button
-	global exported
-	global record_button
-
-	#THESE ARE TEMPORARY ASSIGNMENTS UNTIL BUTTONS WORK. USE FOR CDR ONLY.
-	if (timer() % 59 == 0):
-		record_button = False
-
+def export_data():
 	#Exports data exactly one time after stop button is pressed
-	if (record_button == False and exported == False):
-		models.export_csv(session["Session"])
-		exported = True
-		print("Exported Data {}".format(session["Session"]))
-		session["Session"] = session["Session"] + 1
-		print("New session{}".format(session["Session"]))
-	return record_button
-
-
+	models.export_csv(session["Session"])
+	print("Exported Data {}".format(session["Session"]))
+	session["Session"] = session["Session"] + 1
+	print("New session{}".format(session["Session"]))
+	
 
 class CanMonitorThread(QtCore.QThread):
 
@@ -372,11 +361,14 @@ class ButtonMonitorThread(QtCore.QThread):
 		while (True):
 			# check if button was pressed
 			readButtons = ser.read(10)
-			elif readButtons == check:
+			if readButtons == check:
 				if record_button == False:
 					record_button = True
 			elif readButtons == close:
-				record_button =False
+				if record_button == True:
+					record_button = False
+					export_data()
+
 
 class GuiUpdateThread(QtCore.QThread):
 	'''
