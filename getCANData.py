@@ -379,22 +379,27 @@ def check_display_dict():
 
 		# Iterate through the viewable data
 		for item in listOfViewableData:
-			# find the correct dict
-			if item['pack'] == pack and item['description'] == desc:
 
-				# check the last time that dict was updated
-				now = datetime.datetime.now()
-				lastUpdated = datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
+			# check if has ever been updated before, if not, just set to '-'
+			if item['updated'] == 0:
+				displayDict[key] = '-'
+			else:
+				# find the correct dict
+				if item['pack'] == pack and item['description'] == desc:
 
-				# get the difference in times
-				differenceDT = now - lastUpdated
+					# check the last time that dict was updated
+					now = datetime.datetime.now()
+					lastUpdated = datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
 
-				# get the difference in numbers rather than a datetime timedelta object
-				differenceNUM = divmod(difference.days * 86400 + difference.seconds, 60)
+					# get the difference in times
+					differenceDT = now - lastUpdated
 
-				# check the difference vs the sample time
-				if difference[1] > item['sampleTime']:
-					displayDict[key] = '-'
+					# get the difference in numbers rather than a datetime timedelta object
+					differenceNUM = divmod(difference.days * 86400 + difference.seconds, 60)
+
+					# check the difference vs the sample time
+					if difference[1] > item['sampleTime']:
+						displayDict[key] = '-'
 
 # test sending
 def test_sending():
