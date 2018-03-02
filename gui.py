@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'test2.ui'
+# Form implementation generated from reading ui file 'gui2.ui'
 #
 # Created by: PyQt5 UI code generator 5.10
 #
@@ -71,7 +71,7 @@ class Ui_Form(object):
         self.horizontalLayout.addWidget(self.Motor)
         self.tableWidget = QtWidgets.QTableWidget(Form)
         self.tableWidget.setMinimumSize(QtCore.QSize(102, 0))
-        self.tableWidget.setMaximumSize(QtCore.QSize(102, 53))
+        self.tableWidget.setMaximumSize(QtCore.QSize(102, 86))
         self.tableWidget.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "gridline-color: rgb(0, 0, 0);")
         self.tableWidget.setFrameShape(QtWidgets.QFrame.WinPanel)
@@ -95,10 +95,16 @@ class Ui_Form(object):
         self.tableWidget.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
         self.tableWidget.setItem(0, 0, item)
         self.tableWidget.horizontalHeader().setVisible(True)
         self.tableWidget.horizontalHeader().setHighlightSections(True)
         self.tableWidget.verticalHeader().setVisible(False)
+        self.tableWidget.verticalHeader().setStretchLastSection(True)
         self.horizontalLayout.addWidget(self.tableWidget)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.TSI = QtWidgets.QTableWidget(Form)
