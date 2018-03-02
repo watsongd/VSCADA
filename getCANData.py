@@ -493,21 +493,21 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 		_translate = QtCore.QCoreApplication.translate
 
 
-		Vpack1 = str(displayDict["Voltage 1"]) + "V"
-		Vpack2 = str(displayDict["Voltage 2"]) + "V"
-		Vpack3 = str(displayDict["Voltage 3"]) + "V"
-		Vpack4 = str(displayDict["Voltage 4"]) + "V"
-		Ipack1 = str(displayDict["Current 1"]) + "A"
-		Ipack2 = str(displayDict["Current 2"]) + "A"
-		Ipack3  = str(displayDict["Current 3"]) + "A"
-		Ipack4   = str(displayDict["Current 4"]) + "A"
-		motorTemp = str(displayDict["Motor Temp"]) + "°C"
-		motorRPM  = str(displayDict["Motor RPM"]) + "RPM"
+		Vpack1 = str(displayDict["Voltage 1"]) + " V"
+		Vpack2 = str(displayDict["Voltage 2"]) + " V"
+		Vpack3 = str(displayDict["Voltage 3"]) + " V"
+		Vpack4 = str(displayDict["Voltage 4"]) + " V"
+		Ipack1 = str(displayDict["Current 1"]) + " A"
+		Ipack2 = str(displayDict["Current 2"]) + " A"
+		Ipack3  = str(displayDict["Current 3"]) + " A"
+		Ipack4   = str(displayDict["Current 4"]) + " A"
+		motorTemp = str(displayDict["Motor Temp"]) + " °C"
+		motorRPM  = str(displayDict["Motor RPM"]) + " RPM"
 		TSI_state = str(displayDict["TSI State"])
 		TSI_imd   = str(displayDict["IMD"])
 		TSI_temp  = str(displayDict["TSI Temp"])
-		Vtsv	  = str(displayDict["TSV Voltage"]) + "V"
-		Itsv     = str(displayDict["TSV Current"]) + "A"
+		Vtsv	  = str(displayDict["TSV Voltage"]) + " V"
+		Itsv     = str(displayDict["TSV Current"]) + " A"
 		Sess    = str(session["Session"]) 
 
 		#Set values for pack voltage and current
