@@ -361,7 +361,7 @@ class ButtonMonitorThread(QtCore.QThread):
 		while (True):
 			# check if button was pressed
 			readButtons = ser.read(10)
-			elif readButtons == check:
+			if readButtons == check:
 				if record_button == False:
 					record_button = True
 			elif readButtons == close:
