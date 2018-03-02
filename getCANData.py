@@ -10,8 +10,22 @@ import sys
 import random
 import gui
 
+import serial
 
 from PyQt5 import QtCore, QtWidgets
+
+# initialization of serial port
+portName = '/dev/ttyACM0'
+baudRate = 115200
+ser = serial.Serial(portName, baudRate)
+
+# byte arrays output by key presses
+up    = b'\x80\x01\x01q\xc2\x80\x01\x07G\xa7'
+down  = b'\x80\x01\x02\xea\xf0\x80\x01\x08\xb0_'
+left  = b'\x80\x01\x03c\xe1\x80\x01\t9N'
+right = b'\x80\x01\x04\xdc\x95\x80\x01\n\xa2|'
+check = b'\x80\x01\x05U\x84\x80\x01\x0b+m'
+close = b'\x80\x01\x06\xce\xb6\x80\x01\x0c\x94\x19'
 
 
 _pollFrequency = 3.0
@@ -205,6 +219,11 @@ def parse():
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
 	for msg in bus:
+
+		# check if button was pressed
+		readButtons = ser.read(10)
+		print(readButtons)
+
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
 		data = msg.data
