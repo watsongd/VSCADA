@@ -19,14 +19,13 @@ portName = '/dev/ttyACM0'
 baudRate = 115200
 ser = serial.Serial(portName, baudRate)
 
-# byte arrays output by key presses
+# byte arrays output of dashboard display key presses
 up    = b'\x80\x01\x01q\xc2\x80\x01\x07G\xa7'
 down  = b'\x80\x01\x02\xea\xf0\x80\x01\x08\xb0_'
 left  = b'\x80\x01\x03c\xe1\x80\x01\t9N'
 right = b'\x80\x01\x04\xdc\x95\x80\x01\n\xa2|'
 check = b'\x80\x01\x05U\x84\x80\x01\x0b+m'
 close = b'\x80\x01\x06\xce\xb6\x80\x01\x0c\x94\x19'
-
 
 _pollFrequency = 3.0
 #global time counter
@@ -321,6 +320,7 @@ def log_data(datapoint):
 				print("Logged")
 				models.Data.create(sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session["Session"])
 
+# Updates the dictionary that stores data that appears on the GLV screen
 def update_display_dict(datapoint):
 	if datapoint.pack > 0:
 		name = datapoint.sensor_name + " " + str(datapoint.pack)
@@ -329,6 +329,7 @@ def update_display_dict(datapoint):
 	if name in displayDict:
 		displayDict[name] = datapoint.data
 
+# Check the frequency with which things are being updated
 def check_display_dict():
 	for key in displayDict.keys():
 
@@ -372,13 +373,13 @@ def check_display_dict():
 		# Iterate through the viewable data
 		for item in listOfViewableData:
 
-			# check if has ever been updated before, if not, just set to '-'
-			if item['updated'] == 0:
-				displayDict[key] = '-'
-			else:
-				# find the correct dict
-				if item['pack'] == pack and item['description'] == desc:
+			# Find the item with the matching description
+			if item['pack'] == pack and item['description'] == desc:
 
+				# check if has ever been updated before, if not, just set to '-'
+				if item['updated'] == 0:
+					displayDict[key] = '-'
+				else:
 					# check the last time that dict was updated
 					now = datetime.datetime.now()
 					lastUpdated = datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
