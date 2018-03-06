@@ -5,6 +5,7 @@ import logging
 import config
 import models
 import datetime
+import collections
 
 import sys
 import random
@@ -214,7 +215,7 @@ def send_throttle_control(throttleControl):
 def parse():
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
-
+	error_list = []
 	for msg in bus:
 
 		# Set the address, data, and data length for each message
@@ -279,7 +280,7 @@ def parse():
 				if timer() % item['sampleTime'] == 0:
 					now = datetime.datetime.now().strftime('%H:%M:%S')
 					if item['updated'] == now:
-						log_data(newDataPoint)
+						log_data(newDataPoint, error_list)
 						update_display_dict(newDataPoint)
 						item['updated'] = now
 						print("LAST UPDATED: " + str(item['updated']))		
@@ -287,7 +288,7 @@ def parse():
 
 
 #Takes data from parse() and stores in db if recording.
-def log_data(datapoint):
+def log_data(datapoint, error_list):
 	
 	global record_button
 
@@ -298,6 +299,7 @@ def log_data(datapoint):
 
 	#Time
 	now = datetime.datetime.now().strftime('%H:%M:%S')
+
 	for sensor_info in config.sensor_thresh_list:
 		if sensor_info.name == sensor_name:
 			#Check thresholds
@@ -309,6 +311,7 @@ def log_data(datapoint):
 			else:
 				#Sensor data is not within allowable range. Flag and check if drop out of drive mode needed
 				flag = True
+
 				#Do not need to drop out
 				if sensor_info.drop_out == 0:
 					logging.warning('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
@@ -317,6 +320,10 @@ def log_data(datapoint):
 				if sensor_info.drop_out == 1:
 					#DROP OUT CALL HERE
 					logging.critical('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
+
+					if get_num_errors(error_list, name) > 4
+						print("CONFIRM CRITICAL ERROR")
+
 					#send_throttle_control()
 			if record_button is True:
 				print("Logged")
@@ -412,6 +419,17 @@ def export_data():
 	session["Session"] = session["Session"] + 1
 	print("New session{}".format(session["Session"]))
 	
+#Scans through err_list and returns number of times we've encountered the error
+def get_num_errors(error_list, name):
+	#Named tuple for tracking sensors that exceed thresholds
+	error_Count = collections.namedtuple('error', 'name num_errors')
+	for error in error_list:
+		if error.name == name:
+			error.num_errors += 1
+			return error.num_errors
+	error = error_Count(name=name, num_errors=1)
+	error_list.append(error)
+	return 1
 
 class CanMonitorThread(QtCore.QThread):
 
