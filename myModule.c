@@ -11,16 +11,15 @@
 static PyObject* py_writeToScreen(PyObject* self, PyObject* args)
 {
 	//store the args
-	int col;
 	int row;
-	char *message;
+	char *message[20];
 
 	//get the args
 	PyArg_ParseTuple(args, "iis", &col, &row, &message);
 
     //Send line 1 to the 635 using command 31
     outgoing_response.command = 31;
-    outgoing_response.data[0]=col; //col
+    outgoing_response.data[0]=0; //col
     outgoing_response.data[1]=row; //row
     memcpy(&outgoing_response.data[2], message, 20);
     outgoing_response.data_length = 22;  //the col & row position + the 20 char data length
