@@ -277,11 +277,13 @@ def parse():
 
 				# Log data based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
-					log_data(newDataPoint)
-					update_display_dict(newDataPoint)
-					item['updated'] = datetime.datetime.now().strftime('%H:%M:%S')
-					print("LAST UPDATED: " + str(item['updated']))		
-					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
+					now = datetime.datetime.now().strftime('%H:%M:%S')
+					if item['updated'] == now:
+						log_data(newDataPoint)
+						update_display_dict(newDataPoint)
+						item['updated'] = now
+						print("LAST UPDATED: " + str(item['updated']))		
+						print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 
 
 #Takes data from parse() and stores in db if recording.
