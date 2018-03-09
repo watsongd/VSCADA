@@ -6,15 +6,25 @@ from peewee import *
 from playhouse.dataset import DataSet
 
 #Connect  to sqlite3 database
-db = SqliteDatabase('../car_data.db')
+db = SqliteDatabase('../refactored_car_data.db')
 
 #Table for Pack1 Data
-class Data(Model):
+class Sensor_List(Model):
     sensorName = CharField()
-    data       = CharField()
-    time       = DateTimeField()
     system     = CharField(max_length = 6)
     pack       = CharField(max_length = 6, null = True)
+    address    = IntegerField()
+    offset     = IntegerField()
+    byteLength = IntegerField()
+
+    class Meta:
+        database = db
+        table_name = 'Sensor_List'
+
+class Data(Model):
+    sensor_id  = ForeignKeyField(Sensor_List, backref='data')
+    data       = CharField()
+    time       = DateTimeField()
     flagged    = BooleanField()
     session_id = IntegerField()
 

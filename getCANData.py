@@ -321,8 +321,9 @@ def log_data(datapoint, error_list):
 					#DROP OUT CALL HERE
 					logging.critical('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
 
-					if get_num_errors(error_list, name) > 4
+					if get_num_errors(error_list, name) > 4:
 						print("CONFIRM CRITICAL ERROR")
+						logging.critical("DROPPING OUT OF DRIVE MODE")
 
 					#send_throttle_control()
 			if record_button is True:
