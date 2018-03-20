@@ -42,6 +42,13 @@ class Datapoint(object):
 		sampleTime = 15
 		pack = None
 
+class Error(object):
+
+	def __init__(self, name, num_errors):
+		self.name = name
+		self.num_errors = num_errors
+	
+
 listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 1, "sampleTime": 15, "updated": 0, "id":1, "description": "State"},
 					  {"address": 0x100, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 1, "sampleTime": 15, "updated": 0, "id":2, "description": "Voltage"},
 					  {"address": 0x100, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 1, "sampleTime": 1,  "updated": 0, "id":3, "description": "Current"},
@@ -425,16 +432,16 @@ def export_data():
 #Scans through err_list and returns number of times we've encountered the error
 def get_num_errors(error_list, name):
 	#Named tuple for tracking sensors that exceed thresholds
-	error_Count = collections.namedtuple('error', 'name num_errors')
 	
 	#Possibly add an updated time to the tuple and compare to current time
 	#If the time elapsed has exceeded 2 minutes, reset
 	
 	for error in error_list:
 		if error.name == name:
-			error.num_errors += 1
+			error.num_errors = error.num_errors + 1
+			print (error.num_errors)
 			return error.num_errors
-	error = error_Count(name=name, num_errors=1)
+	error = Error(name=name, num_errors=1)
 	error_list.append(error)
 	return 1
 
