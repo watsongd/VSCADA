@@ -44,9 +44,9 @@ class Datapoint(object):
 
 class Error(object):
 
-	def __init__(self):
-		name = ""
-		num_errors = 0
+	def __init__(self, name, num_errors):
+		self.name = name
+		self.num_errors = num_errors
 	
 
 listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 1, "sampleTime": 15, "updated": 0, "id":1, "description": "State"},
