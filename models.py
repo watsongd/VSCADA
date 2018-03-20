@@ -10,6 +10,7 @@ db = SqliteDatabase('../car_data.db')
 
 #Table for Pack1 Data
 class Data(Model):
+    sensor_id  = IntegerField()
     sensorName = CharField()
     data       = CharField()
     time       = DateTimeField()
