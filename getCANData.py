@@ -31,17 +31,17 @@ close = b'\x80\x01\x06\xce\xb6\x80\x01\x0c\x94\x19'
 _pollFrequency = 3.0
 #global time counter
 _time = 0
-
+'''
 class Datapoint(object):
 
 	def __init__(self):
+		sensor_id = 0
 	    sensor_name = ""
 	    data = 0
 	    system = ""
 	    sampleTime = 15
 	    pack = None
-		sensor_id = 0
-
+'''
 listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 1, "sampleTime": 15, "updated": 0, "id":1, "description": "State"},
 					  {"address": 0x100, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 1, "sampleTime": 15, "updated": 0, "id":2, "description": "Voltage"},
 					  {"address": 0x100, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 1, "sampleTime": 1,  "updated": 0, "id":3, "description": "Current"},
@@ -425,6 +425,10 @@ def export_data():
 def get_num_errors(error_list, name):
 	#Named tuple for tracking sensors that exceed thresholds
 	error_Count = collections.namedtuple('error', 'name num_errors')
+	
+	#Possibly add an updated time to the tuple and compare to current time
+	#If the time elapsed has exceeded 2 minutes, reset
+	
 	for error in error_list:
 		if error.name == name:
 			error.num_errors += 1

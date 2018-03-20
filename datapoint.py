@@ -4,8 +4,10 @@ class Datapoint(object):
     system = ""
     sampleTime = 15
     pack = None
+    sensor_id = 0
 
-    def __init__(self, sensor_name, data, system, sampleTime, pack):
+    def __init__(self,sensor_id, sensor_name, data, system, sampleTime, pack):
+        self.sensor_id = sensor_id
         self.sensor_name = sensor_name
         self.data = data
         self.system = system
