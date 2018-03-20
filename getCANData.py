@@ -333,8 +333,7 @@ def log_data(datapoint, error_list):
 
 					if get_num_errors(error_list, sensor_name) > 4:
 						print("CONFIRM CRITICAL ERROR")
-
-					#send_throttle_control()
+						send_throttle_control()
 			if record_button is True:
 				print("Logged")
 				models.Data.create(sensor_id=sensor_id,sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session["Session"])
