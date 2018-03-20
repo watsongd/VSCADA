@@ -321,7 +321,7 @@ def log_data(datapoint, error_list):
 			else:
 				#Sensor data is not within allowable range. Flag and check if drop out of drive mode needed
 				flag = True
-
+				print (sensor_info.lower_threshold + ',' + sensor_info.upper_threshold + ',' + data)
 				#Do not need to drop out
 				if sensor_info.drop_out == 0:
 					logging.warning('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
