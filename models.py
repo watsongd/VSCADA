@@ -42,7 +42,10 @@ def get_session():
 #Exports data from db to two csv files
 #One file has all data from db. The other has only the data from the most recent session
 def export_csv(session):
-    '''
+    
+    #Search for text file on fash drive. Get path
+    flash_drive_path = search_flash_drive()
+    
     #Connect to database
     conn = sqlite3.connect('../car_data.db')
     c = conn.cursor()
@@ -50,7 +53,7 @@ def export_csv(session):
     #Select all data from db
     data_all = c.execute("SELECT sensor_id,time,data,flagged,session_id FROM data")
 
-    f = open('/media/pi/VSCADA-DRIV6/car_data_all.csv', 'w')
+    f = open(flash_drive_path + '/car_data_all.csv', 'w')
 
     writer = csv.writer(f, delimiter=';')
     writer.writerows(data_all)
@@ -60,14 +63,13 @@ def export_csv(session):
     #Select data from db from the most recent session
     data_session = c.execute("SELECT sensor_id,time,data,flagged FROM data WHERE session_id={}".format(session))
 
-    g = open('/media/pi/VSCADA-DRIV6/car_data_session_{}.csv'.format(session), 'w')
+    g = open(flash_drive_path + '/car_data_session_{}.csv'.format(session), 'w')
 
     writer = csv.writer(g, delimiter=';')
     writer.writerows(data_session)
 
     g.close()
-    '''
-    search_flash_drive()
+    
 
 #Searches for a USB flash drive that contains the correct text file
 def search_flash_drive():
@@ -77,6 +79,5 @@ def search_flash_drive():
     for root, dirs, files in os.walk("/media/pi"):
         for file in files:
             if file.startswith("lafayetteSCADA"):
-                print(file)
                 print(root)
-                print(os.path.join(root, file))
+                return root
