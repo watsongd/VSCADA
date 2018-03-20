@@ -45,7 +45,7 @@ def export_csv(session):
     
     #Search for text file on fash drive. Get path
     flash_drive_path = search_flash_drive()
-    if flash_drive_path == " ":
+    if flash_drive_path == "":
         flash_drive_path = "../VSCADA_CSV_FILES/"
     
     #Connect to database
