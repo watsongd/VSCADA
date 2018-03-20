@@ -280,7 +280,7 @@ def parse():
 				# Log data based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
 					now = datetime.datetime.now().strftime('%H:%M:%S')
-					if item['updated'] == now:
+					if item['updated'] != now:
 						log_data(newDataPoint, error_list)
 						update_display_dict(newDataPoint)
 						item['updated'] = now
