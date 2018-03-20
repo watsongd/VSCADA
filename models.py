@@ -76,6 +76,6 @@ def search_flash_drive():
     #    print(os.path.join("/media/pi", file))
     for root, dirs, files in os.walk("/media/pi"):
         for file in files:
-            if file.endswith(".txt"):
+            if file.startswith("lafayetteSCADA"):
                 print(file)
                 print(os.path.join(root, file))
