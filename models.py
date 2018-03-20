@@ -78,4 +78,5 @@ def search_flash_drive():
         for file in files:
             if file.startswith("lafayetteSCADA"):
                 print(file)
+                print(root)
                 print(os.path.join(root, file))
