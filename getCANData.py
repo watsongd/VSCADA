@@ -404,9 +404,11 @@ def check_display_dict():
 
 					# get the difference in times
 					differenceDT = now - lastUpdated
+					print ("Difference in times:" + differenceDT)
 
 					# get the difference in numbers rather than a datetime timedelta object
 					differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
+					print ("Difference in numbers:" + differenceNUM)
 
 					# check the difference vs the sample time
 					if differenceNUM[1] > (4 * item['sampleTime']):
