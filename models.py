@@ -42,6 +42,7 @@ def get_session():
 #Exports data from db to two csv files
 #One file has all data from db. The other has only the data from the most recent session
 def export_csv(session):
+    '''
     #Connect to database
     conn = sqlite3.connect('../car_data.db')
     c = conn.cursor()
@@ -65,10 +66,11 @@ def export_csv(session):
     writer.writerows(data_session)
 
     g.close()
+    '''
+    search_flash_drive()
 
 #Searches for a USB flash drive that contains the correct text file
 def search_flash_drive():
     for file in os.listdir("/media/pi"):
         #if file.endswith(".txt"):
         print(os.path.join("/media/pi", file))
-        

@@ -199,7 +199,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 
 
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
-TSIPackState = {0: "Idle", 1: "Setup Drive", 2: "Drive", 3: "Setup Idle"}
+TSIPackState = {0: "Idle", 1: "Setup Drive", 2: "Drive", 3: "Setup Idle", 4:"OverCurrent"}
 
 displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4": '-', "Current 1": '-', "Current 2": '-', "Current 3": '-', "Current 4": '-',
 "TSI State": '-', "IMD": '-', "Brake": '-', "TSV Voltage": '-', "TSV Current": '-', "TSI Temp": '-', "Motor RPM": '-', "Motor Temp": '-'}
