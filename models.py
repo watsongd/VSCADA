@@ -1,5 +1,5 @@
 import datetime #For sensor readings
-import csv, sys, sqlite3
+import csv, sys, sqlite3, os
 
 # Import from peewee
 from peewee import *
@@ -10,6 +10,7 @@ db = SqliteDatabase('../car_data.db')
 
 #Table for Pack1 Data
 class Data(Model):
+    sensor_id  = IntegerField()
     sensorName = CharField()
     data       = CharField()
     time       = DateTimeField()
@@ -46,7 +47,7 @@ def export_csv(session):
     c = conn.cursor()
 
     #Select all data from db
-    data_all = c.execute("SELECT * FROM data")
+    data_all = c.execute("SELECT sensor_id,time,data,flagged,session_id FROM data")
 
     f = open('/media/pi/VSCADA-DRIV6/car_data_all.csv', 'w')
 
@@ -56,7 +57,7 @@ def export_csv(session):
     f.close()
 
     #Select data from db from the most recent session
-    data_session = c.execute("SELECT * FROM data WHERE session_id={}".format(session))
+    data_session = c.execute("SELECT sensor_id,time,data,flagged FROM data WHERE session_id={}".format(session))
 
     g = open('/media/pi/VSCADA-DRIV6/car_data_session_{}.csv'.format(session), 'w')
 
@@ -64,3 +65,10 @@ def export_csv(session):
     writer.writerows(data_session)
 
     g.close()
+
+#Searches for a USB flash drive that contains the correct text file
+def search_flash_drive():
+    for file in os.listdir("/media/pi"):
+        #if file.endswith(".txt"):
+        print(os.path.join("/media/pi", file))
+        

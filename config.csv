@@ -24,8 +24,8 @@ Cell 4 Temp,0,0,0
 Cell 5 Temp,0,0,0
 Cell 6 Temp,0,0,0
 Cell 7 Temp,0,0,0
-Motor RPM,0,0,0
-Motor Temp,0,0,0
+Motor RPM,0,10,1
+Motor Temp,0,10,1
 Controller Temp,0,0,0
 RMS Current,0,0,0
 Capacitor Voltage,0,0,0
