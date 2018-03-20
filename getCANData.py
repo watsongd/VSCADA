@@ -431,7 +431,8 @@ def get_num_errors(error_list, name):
 	
 	for error in error_list:
 		if error.name == name:
-			error.num_errors += 1
+			error.num_errors = error.num_errors + 1
+			print error.num_errors
 			return error.num_errors
 	error = error_Count(name=name, num_errors=1)
 	error_list.append(error)
