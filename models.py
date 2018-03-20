@@ -45,9 +45,10 @@ def export_csv(session):
     
     #Search for text file on fash drive. Get path
     flash_drive_path = search_flash_drive()
-    if flash_drive_path == "":
+    if not os.path.exists("../VSCADA_CSV_FILES/"):
+        os.makedirs("../VSCADA_CSV_FILES/")
         flash_drive_path = "../VSCADA_CSV_FILES/"
-    
+
     #Connect to database
     conn = sqlite3.connect('../car_data.db')
     c = conn.cursor()
