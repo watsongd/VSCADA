@@ -315,7 +315,7 @@ def log_data(datapoint, error_list):
 			#Check thresholds
 			if (sensor_info.lower_threshold == sensor_info.upper_threshold):
 				flag = False
-			elif data in range(sensor_info.lower_threshold, sensor_info.upper_threshold):
+			elif data > sensor_info.lower_threshold and data < sensor_info.upper_threshold:
 				#Sensor data is within allowable range
 				flag = False
 			else:
