@@ -74,7 +74,7 @@ def search_flash_drive():
     #for file in os.listdir("/media/pi"):
     #    #if file.endswith(".txt"):
     #    print(os.path.join("/media/pi", file))
-    for root, dirs, files in os.walk("/mydir"):
+    for root, dirs, files in os.walk("/media/pi"):
         for file in files:
             if file.endswith(".txt"):
                 print(file)
