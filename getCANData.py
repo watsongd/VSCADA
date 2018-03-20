@@ -331,9 +331,9 @@ def log_data(datapoint, error_list):
 					#DROP OUT CALL HERE
 					logging.critical('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
 
-					if get_num_errors(error_list, sensor_name) > 1:
+					if get_num_errors(error_list, sensor_name) >= 1:
 						print("CONFIRM CRITICAL ERROR")
-						send_throttle_control(1)
+						#send_throttle_control(1)
 			if record_button is True:
 				print("Logged")
 				models.Data.create(sensor_id=sensor_id,sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session["Session"])
