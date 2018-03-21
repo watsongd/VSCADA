@@ -379,7 +379,7 @@ def update_dashboard_dict(datapoint):
 		elif "SOC" in name:
 			writeToScreen(2, makeMessageTwentyChars(name, displayDict[name]))
 		elif "TSV Current" in name:
-			writeToScreen(2, makeMessageTwentyChars(name, displayDict[name]))
+			writeToScreen(3, makeMessageTwentyChars(name, displayDict[name]))
 
 # Check the frequency with which things are being updated
 def check_display_dict():
