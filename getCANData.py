@@ -495,6 +495,7 @@ class CanMonitorThread(QtCore.QThread):
 		logging.basicConfig(filename='log.log', level=logging.WARNING)
 		while (True):
 			parse()
+			print("PLEASE TELL ME THIS IS LOOPING")
 
 class ButtonMonitorThread(QtCore.QThread):
 
