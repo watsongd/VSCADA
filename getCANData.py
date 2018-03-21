@@ -226,9 +226,10 @@ def parse():
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 	error_list = []
+	print("AT TOP OF PARSE LOOP")
 	check_display_dict()
 	for msg in bus:
-
+		print("IN FOR LOOP")
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
 		data = msg.data
