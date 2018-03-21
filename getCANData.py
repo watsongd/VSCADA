@@ -360,12 +360,13 @@ def makeMessageTwentyChars(sensorName, data)
 
 # Updates the dashboard dictionary that stores data that appears for the driver
 def update_dashboard_dict(datapoint):
-	if datapoint.pack > 0:
 	name = datapoint.sensor_name
 	if name in dashboardDict:
 		# for state of charge, we want to display the charge of the pack with the lowest value
 		if "SOC" in name:
 			currentLowest = displayDict["SOC"]
+			if currentLowest == "-":
+				curentLowest = 100
 			if datapoint.data < currentLowest:
 				displayDict["SOC"] = datapoint.data
 			else:
