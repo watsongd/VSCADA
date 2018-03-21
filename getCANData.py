@@ -35,6 +35,7 @@ _pollFrequency = 3.0
 #global time counter
 _time = 0
 
+testNow = datetime.datetime.now().strftime('%H:%M:%S')
 class Datapoint(object):
 
 	def __init__(self):
@@ -180,7 +181,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 
 
 					  {"address": 0x601, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 1,  "updated": 0, "id":110, "description": "Motor RPM"},
-					  {"address": 0x601, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "sampleTime": 15, "updated": 0, "id":111, "description": "Motor Temp"},
+					  {"address": 0x601, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "sampleTime": 15, "updated": testNow, "id":111, "description": "Motor Temp"},
 					  {"address": 0x601, "offset": 3, "byteLength": 1, "system": "MC", "pack": 0, "sampleTime": 15, "updated": 0, "id":112, "description": "Controller Temp"},
 					  {"address": 0x601, "offset": 4, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 1,  "updated": 0, "id":113, "description": "RMS Current"},
 					  {"address": 0x601, "offset": 6, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 15, "updated": 0, "id":114, "description": "Capacitor Voltage"},
@@ -479,7 +480,7 @@ def get_num_errors(error_list, name):
 	#Named tuple for tracking sensors that exceed thresholds
 	
 	#Possibly add an updated time to the tuple and compare to current time
-	#If the time elapsed has exceeded 2 minutes, reset
+	#If the time elapsed has exceeded 2 minutes, resets
 	
 	for error in error_list:
 		if error.name == name:
