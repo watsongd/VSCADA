@@ -383,13 +383,13 @@ def update_dashboard_dict(datapoint):
 		else:
 			displayDict[name] = datapoint.data
 		# Once the data is updated, we need to write to the dashboard display, on the correct row
-		if "Motor RPM" in name:
+		if "IMD" in name:
 			writeToScreen(0, makeMessageTwentyChars(name, displayDict[name]))
-		elif "Motor Temp" in name:
+		elif "Throttle Voltage" in name:
 			writeToScreen(1, makeMessageTwentyChars(name, displayDict[name]))
-		elif "SOC" in name:
+		elif "TSI Temp" in name:
 			writeToScreen(2, makeMessageTwentyChars(name, displayDict[name]))
-		elif "TSV Current" in name:
+		elif "TSV Voltage" in name:
 			writeToScreen(3, makeMessageTwentyChars(name, displayDict[name]))
 
 # Check the frequency with which things are being updated
