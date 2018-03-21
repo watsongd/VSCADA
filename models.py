@@ -74,15 +74,12 @@ def export_csv(session):
     g.close()
     
 
-#Searches for a USB flash drive that contains the correct text file
+#Searches for a USB flash drive that contains the correct text file. If it doesnt return empty str
 def search_flash_drive():
-    #for file in os.listdir("/media/pi"):
-    #    #if file.endswith(".txt"):
-    #    print(os.path.join("/media/pi", file))
     for root, dirs, files in os.walk("/media/pi"):
         for file in files:
             if file.startswith("lafayetteSCADA"):
-                print(root)
+                #print(root)
                 return root
     else:
         return ""
