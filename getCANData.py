@@ -226,6 +226,7 @@ def parse():
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 	error_list = []
+	check_display_dict()
 	for msg in bus:
 
 		# Set the address, data, and data length for each message
@@ -293,11 +294,14 @@ def parse():
 					if item['updated'] != now:
 						log_data(newDataPoint, error_list)
 						update_display_dict(newDataPoint)
-						check_display_dict()
 						# update_dashboard_dict(newDataPoint)
 						item['updated'] = now
 						print("LAST UPDATED: " + str(item['updated']))		
 						print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
+				
+				#Check if displays need to be updated with a '-'
+				if timer() % 5 == 0:
+					check_display_dict()
 
 
 #Takes data from parse() and stores in db if recording.
