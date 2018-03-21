@@ -230,7 +230,6 @@ def parse():
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 	error_list = []
 	for msg in bus:
-		print("IN FOR LOOP")
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
 		data = msg.data
@@ -446,11 +445,11 @@ def check_display_dict():
 
 					# get the difference in times
 					differenceDT = now - lastUpdated
-					print ("Difference in times:" + str(differenceDT))
+					#print ("Difference in times:" + str(differenceDT))
 
 					# get the difference in numbers rather than a datetime timedelta object
 					differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
-					print ("Difference in numbers:" + str(differenceNUM))
+					#print ("Difference in numbers:" + str(differenceNUM))
 
 					# check the difference vs the sample time
 					if differenceNUM[1] > (4 * item['sampleTime']):
