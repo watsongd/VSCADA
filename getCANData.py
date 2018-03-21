@@ -229,8 +229,10 @@ def parse():
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 	error_list = []
+	print("AT TOP OF PARSE LOOP")
+	check_display_dict()
 	for msg in bus:
-
+		print("IN FOR LOOP")
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
 		data = msg.data
@@ -300,6 +302,10 @@ def parse():
 						item['updated'] = now
 						print("LAST UPDATED: " + str(item['updated']))		
 						print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
+				
+				#Check if displays need to be updated with a '-'
+				if timer() % 5 == 0:
+					check_display_dict()
 
 
 #Takes data from parse() and stores in db if recording.
@@ -442,11 +448,11 @@ def check_display_dict():
 
 					# get the difference in times
 					differenceDT = now - lastUpdated
-					print ("Difference in times:" + differenceDT)
+					print ("Difference in times:" + str(differenceDT))
 
 					# get the difference in numbers rather than a datetime timedelta object
 					differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
-					print ("Difference in numbers:" + differenceNUM)
+					print ("Difference in numbers:" + str(differenceNUM))
 
 					# check the difference vs the sample time
 					if differenceNUM[1] > (4 * item['sampleTime']):
@@ -492,6 +498,7 @@ class CanMonitorThread(QtCore.QThread):
 		logging.basicConfig(filename='log.log', level=logging.WARNING)
 		while (True):
 			parse()
+			print("PLEASE TELL ME THIS IS LOOPING")
 
 class ButtonMonitorThread(QtCore.QThread):
 
