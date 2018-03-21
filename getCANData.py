@@ -205,7 +205,7 @@ TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output",
 TSIPackState = {0: "Idle", 1: "Setup Drive", 2: "Drive", 3: "Setup Idle", 4:"OverCurrent"}
 
 displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4": '-', "Current 1": '-', "Current 2": '-', "Current 3": '-', "Current 4": '-',
-"TSI State": '-', "IMD": '-', "Brake": '-', "TSV Voltage": '-', "TSV Current": '-', "TSI Temp": '-', "Motor RPM": '-', "Motor Temp": '-'}
+"TSI State": '-', "IMD": '-', "Brake": '-', "TSV Voltage": '-', "TSV Current": '-', "TSI Temp": '-', "Motor RPM": '-', "Motor Temp": '0'}
 
 dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC": "-"}
 
@@ -229,8 +229,6 @@ def parse():
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 	error_list = []
-	print("AT TOP OF PARSE LOOP")
-	check_display_dict()
 	for msg in bus:
 		print("IN FOR LOOP")
 		# Set the address, data, and data length for each message
