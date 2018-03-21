@@ -294,6 +294,7 @@ def parse():
 					if item['updated'] != now:
 						log_data(newDataPoint, error_list)
 						update_display_dict(newDataPoint)
+						update_dashboard_dict(newDataPoint)
 						item['updated'] = now
 						print("LAST UPDATED: " + str(item['updated']))		
 						print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
