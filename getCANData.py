@@ -563,7 +563,7 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 		#start updating
 		self.gui_update.start()
 		self.can_monitor.start()
-		self.button_monitor.start()
+		# self.button_monitor.start()
 
 		# Connect the trigger signal to a slot under gui_update
 		self.gui_update.trigger.connect(self.guiUpdate)
