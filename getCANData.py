@@ -352,7 +352,7 @@ def update_display_dict(datapoint):
 		displayDict[name] = datapoint.data
 
 # In order to write to the dashboard display, the message needs to be 20 chars, so this funct will handle that
-def makeMessageTwentyChars(sensorName, data)
+def makeMessageTwentyChars(sensorName, data):
 	twentyChars = "" + sensorName + ": " +str(data)
 	while len(twentyChars) < 20:
 		twentyChars = twentyChars + " "
