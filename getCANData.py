@@ -14,6 +14,7 @@ import gui
 import serial
 
 from PyQt5 import QtCore, QtWidgets
+from screenwrite import *
 
 # initialization of serial port
 portName = '/dev/ttyACM0'
@@ -204,6 +205,8 @@ TSIPackState = {0: "Idle", 1: "Setup Drive", 2: "Drive", 3: "Setup Idle", 4:"Ove
 displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4": '-', "Current 1": '-', "Current 2": '-', "Current 3": '-', "Current 4": '-',
 "TSI State": '-', "IMD": '-', "Brake": '-', "TSV Voltage": '-', "TSV Current": '-', "TSI Temp": '-', "Motor RPM": '-', "Motor Temp": '-'}
 
+dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC", "-"}
+
 #Session is just an int that keeps track of when recording starts. If recording stops, the current session is exported and the session increments
 session = {"Session":0}
 
@@ -338,7 +341,7 @@ def log_data(datapoint, error_list):
 				print("Logged")
 				models.Data.create(sensor_id=sensor_id,sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session["Session"])
 
-# Updates the dictionary that stores data that appears on the GLV screen
+# Updates the display dictionary that stores data that appears on the GLV screen
 def update_display_dict(datapoint):
 	if datapoint.pack > 0:
 		name = datapoint.sensor_name + " " + str(datapoint.pack)
@@ -346,6 +349,37 @@ def update_display_dict(datapoint):
 		name = datapoint.sensor_name
 	if name in displayDict:
 		displayDict[name] = datapoint.data
+
+# In order to write to the dashboard display, the message needs to be 20 chars, so this funct will handle that
+def makeMessageTwentyChars(sensorName, data)
+	twentyChars = "" + sensorName + ": " +str(data)
+	while len(twentyChars) < 20:
+		twentyChars = twentyChars + " "
+	return twentyChars
+
+# Updates the dashboard dictionary that stores data that appears for the driver
+def update_dashboard_dict(datapoint):
+	if datapoint.pack > 0:
+	name = datapoint.sensor_name
+	if name in dashboardDict:
+		# for state of charge, we want to display the charge of the pack with the lowest value
+		if "SOC" in name:
+			currentLowest = displayDict["SOC"]
+			if datapoint.data < currentLowest:
+				displayDict["SOC"] = datapoint.data
+			else:
+				displayDict["SOC"] = currentLowest
+		else:
+			displayDict[name] = datapoint.data
+		# Once the data is updated, we need to write to the dashboard display, on the correct row
+		if "Motor RPM" in name:
+			writeToScreen(0, makeMessageTwentyChars(name, displayDict[name]))
+		elif "Motor Temp" in name:
+			writeToScreen(1, makeMessageTwentyChars(name, displayDict[name]))
+		elif "SOC" in name:
+			writeToScreen(2, makeMessageTwentyChars(name, displayDict[name]))
+		elif "TSV Current" in name:
+			writeToScreen(2, makeMessageTwentyChars(name, displayDict[name]))
 
 # Check the frequency with which things are being updated
 def check_display_dict():
