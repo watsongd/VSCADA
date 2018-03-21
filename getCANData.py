@@ -299,7 +299,7 @@ def parse():
 					if item['updated'] != now:
 						log_data(newDataPoint, error_list)
 						update_display_dict(newDataPoint)
-						# update_dashboard_dict(newDataPoint)
+						update_dashboard_dict(newDataPoint)
 						item['updated'] = now
 						print("LAST UPDATED: " + str(item['updated']))		
 						print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
@@ -456,7 +456,7 @@ def check_display_dict():
 					print ("Difference in numbers:" + str(differenceNUM))
 
 					# check the difference vs the sample time
-					if differenceNUM[1] > (4 * item['sampleTime']):
+					if differenceNUM[1] > (3 * item['sampleTime']):
 						displayDict[key] = '-'
 
 # test sending
