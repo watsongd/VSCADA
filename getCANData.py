@@ -19,7 +19,6 @@ from screenwrite import *
 # initialization of serial port
 portName = '/dev/ttyACM0'
 baudRate = 115200
-ser = serial.Serial(portName, baudRate)
 
 # byte arrays output of dashboard display key presses
 up    = b'\x80\x01\x01q\xc2\x80\x01\x07G\xa7'
@@ -497,6 +496,10 @@ class ButtonMonitorThread(QtCore.QThread):
 
 		global record_button
 		while (True):
+
+			# Open Serial connection
+			ser = serial.Serial(portName, baudRate)
+
 			# check if button was pressed
 			readButtons = ser.read(10)
 			if readButtons == check:
@@ -508,6 +511,9 @@ class ButtonMonitorThread(QtCore.QThread):
 				if record_button == True:
 					record_button = False
 					export_data()
+
+			#Close Connection
+			ser.close()
 
 
 class GuiUpdateThread(QtCore.QThread):
