@@ -36,6 +36,7 @@ _pollFrequency = 3.0
 _time = 0
 
 testNow = datetime.datetime.now().strftime('%H:%M:%S')
+
 class Datapoint(object):
 
 	def __init__(self):
