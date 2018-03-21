@@ -35,6 +35,8 @@ _pollFrequency = 3.0
 #global time counter
 _time = 0
 
+testNow = datetime.datetime.now().strftime('%H:%M:%S')
+
 class Datapoint(object):
 
 	def __init__(self):
@@ -180,7 +182,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 
 
 					  {"address": 0x601, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 1,  "updated": 0, "id":110, "description": "Motor RPM"},
-					  {"address": 0x601, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "sampleTime": 15, "updated": 0, "id":111, "description": "Motor Temp"},
+					  {"address": 0x601, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "sampleTime": 15, "updated": testNow, "id":111, "description": "Motor Temp"},
 					  {"address": 0x601, "offset": 3, "byteLength": 1, "system": "MC", "pack": 0, "sampleTime": 15, "updated": 0, "id":112, "description": "Controller Temp"},
 					  {"address": 0x601, "offset": 4, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 1,  "updated": 0, "id":113, "description": "RMS Current"},
 					  {"address": 0x601, "offset": 6, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 15, "updated": 0, "id":114, "description": "Capacitor Voltage"},
@@ -207,7 +209,8 @@ TSIPackState = {0: "Idle", 1: "Setup Drive", 2: "Drive", 3: "Setup Idle", 4:"Ove
 displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4": '-', "Current 1": '-', "Current 2": '-', "Current 3": '-', "Current 4": '-',
 "TSI State": '-', "IMD": '-', "Brake": '-', "TSV Voltage": '-', "TSV Current": '-', "TSI Temp": '-', "Motor RPM": '-', "Motor Temp": '0'}
 
-dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC": "-"}
+# dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC": "-"}
+dashboardDict = {"IMD": "-", "Throttle Voltage": "-", "TSV Voltage": "-", "TSI Temp": "-"}
 
 #Session is just an int that keeps track of when recording starts. If recording stops, the current session is exported and the session increments
 session = {"Session":0}
@@ -295,7 +298,7 @@ def parse():
 					if item['updated'] != now:
 						log_data(newDataPoint, error_list)
 						update_display_dict(newDataPoint)
-						# update_dashboard_dict(newDataPoint)
+						update_dashboard_dict(newDataPoint)
 						item['updated'] = now
 						print("LAST UPDATED: " + str(item['updated']))		
 						print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
@@ -379,13 +382,13 @@ def update_dashboard_dict(datapoint):
 		else:
 			displayDict[name] = datapoint.data
 		# Once the data is updated, we need to write to the dashboard display, on the correct row
-		if "Motor RPM" in name:
+		if "IMD" in name:
 			writeToScreen(0, makeMessageTwentyChars(name, displayDict[name]))
-		elif "Motor Temp" in name:
+		elif "Throttle Voltage" in name:
 			writeToScreen(1, makeMessageTwentyChars(name, displayDict[name]))
-		elif "SOC" in name:
+		elif "TSI Temp" in name:
 			writeToScreen(2, makeMessageTwentyChars(name, displayDict[name]))
-		elif "TSV Current" in name:
+		elif "TSV Voltage" in name:
 			writeToScreen(3, makeMessageTwentyChars(name, displayDict[name]))
 
 # Check the frequency with which things are being updated
@@ -452,16 +455,9 @@ def check_display_dict():
 					#print ("Difference in numbers:" + str(differenceNUM))
 
 					# check the difference vs the sample time
-					if differenceNUM[1] > (4 * item['sampleTime']):
+					if differenceNUM[1] > (3 * item['sampleTime']):
 						displayDict[key] = '-'
 
-# test sending
-def test_sending():
-	while(1):
-		print("TIMER: " + str(timer()))
-		if timer() % 1 == 0:
-			send_throttle_control(0x01)
-			print("MESSAGE SENT")
 
 #Check if record button has been pressed. Export if stop button is pressed
 def export_data():
@@ -476,7 +472,7 @@ def get_num_errors(error_list, name):
 	#Named tuple for tracking sensors that exceed thresholds
 	
 	#Possibly add an updated time to the tuple and compare to current time
-	#If the time elapsed has exceeded 2 minutes, reset
+	#If the time elapsed has exceeded 2 minutes, resets
 	
 	for error in error_list:
 		if error.name == name:
@@ -562,7 +558,7 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 		#get update
 		self.gui_update = GuiUpdateThread()
 		self.can_monitor = CanMonitorThread()
-		self.button_monitor = ButtonMonitorThread()
+		# self.button_monitor = ButtonMonitorThread()
 
 		#start updating
 		self.gui_update.start()
