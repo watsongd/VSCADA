@@ -12,14 +12,12 @@
 void writeToScreen(int row, char *message)
 {
 	//Connect to the display
-	if(Serial_Init("/dev/ttyACM0",115200))
-    {
-	    printf("Could not open port \"%s\" at \"%d\" baud.\n","/dev/ttyACM0",115200);
-    }
-  	else
-    printf("\"%s\" opened at \"%d\" baud.\n\n","/dev/ttyACM0",115200);
-    printf("message: %c\n", message);
-    printf("row: %i\n", row);
+	// if(Serial_Init("/dev/ttyACM0",115200))
+ //    {
+	//     printf("Could not open port \"%s\" at \"%d\" baud.\n","/dev/ttyACM0",115200);
+ //    }
+ //  	else
+ //    printf("\"%s\" opened at \"%d\" baud.\n\n","/dev/ttyACM0",115200);
 
     //Send line 1 to the 635 using command 31
     outgoing_response.command = 31;
@@ -47,7 +45,7 @@ void writeToScreen(int row, char *message)
 	printf("Timed out waiting for a response.\n");
 	
 	//Disconnect from the display
-	Uninit_Serial();
+	// Uninit_Serial();
 
 }
 
