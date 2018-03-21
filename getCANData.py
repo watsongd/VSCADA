@@ -208,7 +208,8 @@ TSIPackState = {0: "Idle", 1: "Setup Drive", 2: "Drive", 3: "Setup Idle", 4:"Ove
 displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4": '-', "Current 1": '-', "Current 2": '-', "Current 3": '-', "Current 4": '-',
 "TSI State": '-', "IMD": '-', "Brake": '-', "TSV Voltage": '-', "TSV Current": '-', "TSI Temp": '-', "Motor RPM": '-', "Motor Temp": '-'}
 
-dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC": "-"}
+# dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC": "-"}
+dashboardDict = {"IMD": "-", "Throttle Voltage": "-", "TSV Voltage": "-", "TSI Temp": "-"}
 
 #Session is just an int that keeps track of when recording starts. If recording stops, the current session is exported and the session increments
 session = {"Session":0}
