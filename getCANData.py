@@ -459,13 +459,6 @@ def check_display_dict():
 					if differenceNUM[1] > (3 * item['sampleTime']):
 						displayDict[key] = '-'
 
-# test sending
-def test_sending():
-	while(1):
-		print("TIMER: " + str(timer()))
-		if timer() % 1 == 0:
-			send_throttle_control(0x01)
-			print("MESSAGE SENT")
 
 #Check if record button has been pressed. Export if stop button is pressed
 def export_data():
@@ -566,7 +559,7 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 		#get update
 		self.gui_update = GuiUpdateThread()
 		self.can_monitor = CanMonitorThread()
-		self.button_monitor = ButtonMonitorThread()
+		# self.button_monitor = ButtonMonitorThread()
 
 		#start updating
 		self.gui_update.start()
