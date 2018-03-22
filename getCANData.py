@@ -571,13 +571,13 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 		self.gui_update = GuiUpdateThread()
 		self.can_monitor = CanMonitorThread()
 		self.button_monitor = ButtonMonitorThread()
-		self.write_screen = WriteToDashThread()
+		# self.write_screen = WriteToDashThread()
 
 		#start updating
 		self.gui_update.start()
 		self.can_monitor.start()
 		self.button_monitor.start()
-		self.write_screen.start()
+		# self.write_screen.start()
 
 		# Connect the trigger signal to a slot under gui_update
 		self.gui_update.trigger.connect(self.guiUpdate)
