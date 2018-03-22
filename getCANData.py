@@ -384,6 +384,7 @@ def update_dashboard_dict(datapoint):
 		else:
 			displayDict[name] = datapoint.data
 			write_screen = True
+			print("WRITE TO SCREEN IN UPDATE: " + str(write_screen) + "\n")
 
 # Check the frequency with which things are being updated
 def check_display_dict():
@@ -512,8 +513,11 @@ class ButtonMonitorThread(QtCore.QThread):
 			#Close Connection
 			ser.close()
 
+			print("WRITE TO SCREEN IN THREAD: " + str(write_screen) + "\n")
+
 			# Write to the dashboard if a new value has been seen
 			if write_screen:
+				print("INSIDE IF STATEMENT\n")
 				for key in dashboardDict.keys():
 					if "IMD" in key:
 						writeToScreen(0, makeMessageTwentyChars(key, dashboardDict[key]))
