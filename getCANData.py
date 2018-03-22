@@ -378,15 +378,6 @@ def update_dashboard_dict(datapoint):
 				displayDict["SOC"] = currentLowest
 		else:
 			displayDict[name] = datapoint.data
-		# Once the data is updated, we need to write to the dashboard display, on the correct row
-		if "IMD" in name:
-			writeToScreen(0, makeMessageTwentyChars(name, displayDict[name]))
-		elif "Throttle Voltage" in name:
-			writeToScreen(1, makeMessageTwentyChars(name, displayDict[name]))
-		elif "TSI Temp" in name:
-			writeToScreen(2, makeMessageTwentyChars(name, displayDict[name]))
-		elif "TSV Voltage" in name:
-			writeToScreen(3, makeMessageTwentyChars(name, displayDict[name]))
 
 # Check the frequency with which things are being updated
 def check_display_dict():
@@ -517,6 +508,24 @@ class ButtonMonitorThread(QtCore.QThread):
 			if timer() % 5 == 0:
 				check_display_dict()
 
+class WriteToDashThread(QtCore.QThread):
+
+	def run(self):
+
+		while (True):
+
+			# Every 2 seconds we update the Driver dash
+			if timer() % 2 == 0:
+				for key in dashboardDict.keys():
+					if "IMD" in key:
+						writeToScreen(0, makeMessageTwentyChars(key, dashboardDict[key]))
+					elif "Throttle Voltage" in key:
+						writeToScreen(1, makeMessageTwentyChars(key, dashboardDict[key]))
+					elif "TSI Temp" in key:
+						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key]))
+					elif "TSV Voltage" in key:
+						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key]))
+
 
 class GuiUpdateThread(QtCore.QThread):
 	'''
@@ -561,12 +570,14 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 		#get update
 		self.gui_update = GuiUpdateThread()
 		self.can_monitor = CanMonitorThread()
-		# self.button_monitor = ButtonMonitorThread()
+		self.button_monitor = ButtonMonitorThread()
+		self.write_screen = WriteToDashThread()
 
 		#start updating
 		self.gui_update.start()
 		self.can_monitor.start()
-		# self.button_monitor.start()
+		self.button_monitor.start()
+		self.write_screen.start()
 
 		# Connect the trigger signal to a slot under gui_update
 		self.gui_update.trigger.connect(self.guiUpdate)
