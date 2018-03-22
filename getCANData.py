@@ -358,6 +358,7 @@ def update_display_dict(datapoint):
 	if name in displayDict:
 		displayDict[name] = datapoint.data
 
+
 # In order to write to the dashboard display, the message needs to be 20 chars, so this funct will handle that
 def makeMessageTwentyChars(sensorName, data):
 	twentyChars = "" + sensorName + ": " +str(data)
@@ -367,6 +368,8 @@ def makeMessageTwentyChars(sensorName, data):
 
 # Updates the dashboard dictionary that stores data that appears for the driver
 def update_dashboard_dict(datapoint):
+	global write_screen
+
 	name = datapoint.sensor_name
 	if name in dashboardDict:
 		# for state of charge, we want to display the charge of the pack with the lowest value
@@ -380,6 +383,7 @@ def update_dashboard_dict(datapoint):
 				displayDict["SOC"] = currentLowest
 		else:
 			displayDict[name] = datapoint.data
+			write_screen = True
 
 # Check the frequency with which things are being updated
 def check_display_dict():
@@ -487,6 +491,7 @@ class ButtonMonitorThread(QtCore.QThread):
 	def run(self):
 
 		global record_button
+		global write_screen
 		while (True):
 
 			# Open Serial connection
@@ -506,6 +511,19 @@ class ButtonMonitorThread(QtCore.QThread):
 
 			#Close Connection
 			ser.close()
+
+			# Write to the dashboard if a new value has been seen
+			if write_screen:
+				for key in dashboardDict.keys():
+					if "IMD" in key:
+						writeToScreen(0, makeMessageTwentyChars(key, dashboardDict[key]))
+					elif "Throttle Voltage" in key:
+						writeToScreen(1, makeMessageTwentyChars(key, dashboardDict[key]))
+					elif "TSI Temp" in key:
+						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key]))
+					elif "TSV Voltage" in key:
+						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key]))
+				write_screen = False
 
 			if timer() % 5 == 0:
 				check_display_dict()
@@ -573,13 +591,13 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 		self.gui_update = GuiUpdateThread()
 		self.can_monitor = CanMonitorThread()
 		self.button_monitor = ButtonMonitorThread()
-		self.write_screen = WriteToDashThread()
+		# self.write_screen = WriteToDashThread()
 
 		#start updating
 		self.gui_update.start()
 		self.can_monitor.start()
 		self.button_monitor.start()
-		self.write_screen.start()
+		# self.write_screen.start()
 
 		# Connect the trigger signal to a slot under gui_update
 		self.gui_update.trigger.connect(self.guiUpdate)
