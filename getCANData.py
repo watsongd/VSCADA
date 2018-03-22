@@ -32,7 +32,7 @@ _pollFrequency = 3.0
 #global time counter
 _time = 0
 
-testNow = datetime.datetime.now().strftime('%H:%M:%S')
+# testNow = datetime.datetime.now().strftime('%H:%M:%S')
 
 class Datapoint(object):
 
@@ -179,7 +179,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 
 
 					  {"address": 0x601, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 1,  "updated": 0, "id":110, "description": "Motor RPM"},
-					  {"address": 0x601, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "sampleTime": 15, "updated": testNow, "id":111, "description": "Motor Temp"},
+					  {"address": 0x601, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "sampleTime": 15, "updated": 0, "id":111, "description": "Motor Temp"},
 					  {"address": 0x601, "offset": 3, "byteLength": 1, "system": "MC", "pack": 0, "sampleTime": 15, "updated": 0, "id":112, "description": "Controller Temp"},
 					  {"address": 0x601, "offset": 4, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 1,  "updated": 0, "id":113, "description": "RMS Current"},
 					  {"address": 0x601, "offset": 6, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 15, "updated": 0, "id":114, "description": "Capacitor Voltage"},
@@ -214,7 +214,9 @@ session = {"Session":0}
 
 #Variables for storing
 global record_button
+global write_screen
 record_button = False
+write_screen = False
 
 def timer():
    now = time.localtime(time.time())
@@ -571,13 +573,13 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 		self.gui_update = GuiUpdateThread()
 		self.can_monitor = CanMonitorThread()
 		self.button_monitor = ButtonMonitorThread()
-		# self.write_screen = WriteToDashThread()
+		self.write_screen = WriteToDashThread()
 
 		#start updating
 		self.gui_update.start()
 		self.can_monitor.start()
 		self.button_monitor.start()
-		# self.write_screen.start()
+		self.write_screen.start()
 
 		# Connect the trigger signal to a slot under gui_update
 		self.gui_update.trigger.connect(self.guiUpdate)
