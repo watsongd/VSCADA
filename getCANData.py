@@ -520,6 +520,10 @@ def check_display_dict():
 			else:
 				desc = key
 
+		# Values for keeping track of the last time the Min Cell Voltage and Max Cell Temp were updated
+		oldestUpdateMCV = 0
+		oldestUpdateMCT = 0
+
 		# Iterate through the viewable data
 		for item in listOfViewableData:
 
@@ -536,11 +540,64 @@ def check_display_dict():
 
 					# get the difference in times
 					differenceDT = now - lastUpdated
-					#print ("Difference in times:" + str(differenceDT))
 
 					# get the difference in numbers rather than a datetime timedelta object
 					differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
-					#print ("Difference in numbers:" + str(differenceNUM))
+
+					# check the difference vs the sample time
+					if differenceNUM[1] > (3 * item['sampleTime']):
+						displayDict[key] = '-'
+
+			# For the ones without a matching description, we need to check every cell for the oldest update time
+			else:
+				if "Min Cell Volt" in desc:
+
+					# Look through every cell in the pack to find the most recent update time
+					for i in range(7):
+						if item['pack'] == pack and item['description'] == "Cell " + (i+1) " Voltage":
+							# check if has ever been updated before, if not, just set to '-'
+							if item['updated'] == 0 && oldestUpdateMCV = 0:
+								pass
+							else:
+								cellUpdated= datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
+
+								if oldestUpdateMCV > cellUpdated:
+									oldestUpdateMCV = cellUpdated
+
+					# check the last time that dict was updated
+					now = datetime.datetime.now()
+
+					# get the difference in times
+					differenceDT = now - oldestUpdateMCV
+
+					# get the difference in numbers rather than a datetime timedelta object
+					differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
+
+					# check the difference vs the sample time
+					if differenceNUM[1] > (3 * item['sampleTime']):
+						displayDict[key] = '-'
+				elif "Temp" in desc:
+
+					# Look through every cell in the pack to find the most recent update time
+					for i in range(7):
+						if item['pack'] == pack and item['description'] == "Cell " + (i+1) " Temp":
+							# check if has ever been updated before, if not, just set to '-'
+							if item['updated'] == 0 && oldestUpdateMCT = 0:
+								pass
+							else:
+								cellUpdated= datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
+
+								if oldestUpdateMCT > cellUpdated:
+									oldestUpdateMCT = cellUpdated
+
+					# check the last time that dict was updated
+					now = datetime.datetime.now()
+
+					# get the difference in times
+					differenceDT = now - oldestUpdateMCT
+
+					# get the difference in numbers rather than a datetime timedelta object
+					differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
 
 					# check the difference vs the sample time
 					if differenceNUM[1] > (3 * item['sampleTime']):
