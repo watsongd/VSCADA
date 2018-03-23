@@ -374,15 +374,15 @@ def update_dashboard_dict(datapoint):
 	if name in dashboardDict:
 		# for state of charge, we want to display the charge of the pack with the lowest value
 		if "SOC" in name:
-			currentLowest = displayDict["SOC"]
+			currentLowest = dashboardDict["SOC"]
 			if currentLowest == "-":
 				curentLowest = 100
 			if datapoint.data < currentLowest:
-				displayDict["SOC"] = datapoint.data
+				dashboardDict["SOC"] = datapoint.data
 			else:
-				displayDict["SOC"] = currentLowest
+				dashboardDict["SOC"] = currentLowest
 		else:
-			displayDict[name] = datapoint.data
+			dashboardDict[name] = datapoint.data
 			write_screen = True
 			print("WRITE TO SCREEN IN UPDATE: " + str(write_screen) + "\n")
 
