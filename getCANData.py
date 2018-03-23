@@ -384,7 +384,6 @@ def update_dashboard_dict(datapoint):
 		else:
 			dashboardDict[name] = datapoint.data
 			write_screen = True
-			print("WRITE TO SCREEN IN UPDATE: " + str(write_screen) + "\n")
 
 # Check the frequency with which things are being updated
 def check_display_dict():
@@ -495,7 +494,21 @@ class ButtonMonitorThread(QtCore.QThread):
 		global write_screen
 		while (True):
 
-			# Open Serial connection
+			# Write to the dashboard if a new value has been seen
+			if write_screen:
+				print("INSIDE IF STATEMENT\n")
+				for key in dashboardDict.keys():
+					if "IMD" in key:
+						writeToScreen(0, makeMessageTwentyChars(key, dashboardDict[key]))
+					elif "Throttle Voltage" in key:
+						writeToScreen(1, makeMessageTwentyChars(key, dashboardDict[key]))
+					elif "TSI Temp" in key:
+						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key]))
+					elif "TSV Voltage" in key:
+						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key]))
+				write_screen = False
+
+			# Open Serial connection for reading
 			ser = serial.Serial(portName, baudRate)
 
 			# check if button was pressed
@@ -512,22 +525,6 @@ class ButtonMonitorThread(QtCore.QThread):
 
 			#Close Connection
 			ser.close()
-
-			print("WRITE TO SCREEN IN THREAD: " + str(write_screen) + "\n")
-
-			# Write to the dashboard if a new value has been seen
-			if write_screen:
-				print("INSIDE IF STATEMENT\n")
-				for key in dashboardDict.keys():
-					if "IMD" in key:
-						writeToScreen(0, makeMessageTwentyChars(key, dashboardDict[key]))
-					elif "Throttle Voltage" in key:
-						writeToScreen(1, makeMessageTwentyChars(key, dashboardDict[key]))
-					elif "TSI Temp" in key:
-						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key]))
-					elif "TSV Voltage" in key:
-						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key]))
-				write_screen = False
 
 			if timer() % 5 == 0:
 				check_display_dict()
