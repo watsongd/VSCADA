@@ -277,27 +277,27 @@ def parse():
 					newDataPoint.data = data[offset]
 
 				# Based on the description, shift the decimal point as necessary
-				if "Voltage" in newDataPoint.sensor_name:
-					if "Cell" in newDataPoint.sensor_name:
-						# mV --> V
+				if datapoint.pack > 0:
+					if "Voltage" in newDataPoint.sensor_name:
+						if "Cell" in newDataPoint.sensor_name:
+							# mV --> V
+							newDataPoint.data = newDataPoint.data / 1000
+						else:
+							newDataPoint.data = newDataPoint.data / 10
+
+					elif "Current" in newDataPoint.sensor_name:
+						# mA --> A
 						newDataPoint.data = newDataPoint.data / 1000
-					else:
-						newDataPoint.data = newDataPoint.data / 10
 
-				if "Current" in newDataPoint.sensor_name:
-					# mA --> A
-					newDataPoint.data = newDataPoint.data / 1000
-
-				if "Temp" in newDataPoint.sensor_name:
-					if "Cell" in newDataPoint.sensor_name:
-						newDataPoint.data = newDataPoint.data / 10
+					elif "Temp" in newDataPoint.sensor_name:
+						if "Cell" in newDataPoint.sensor_name:
+							newDataPoint.data = newDataPoint.data / 10
 
 				if "State" in newDataPoint.sensor_name:
 					if "TSI" in newDataPoint.sensor_name:
 						newDataPoint.data = TSIPackState[newDataPoint.data]
 					else:
 						newDataPoint.data = TSVPackState[newDataPoint.data]
-
 
 				# Log data based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
