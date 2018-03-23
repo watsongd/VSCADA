@@ -492,11 +492,11 @@ class ButtonMonitorThread(QtCore.QThread):
 
 		global record_button
 		global write_screen
+
 		while (True):
 
 			# Write to the dashboard if a new value has been seen
 			if write_screen:
-				print("INSIDE IF STATEMENT\n")
 				for key in dashboardDict.keys():
 					if "IMD" in key:
 						writeToScreen(0, makeMessageTwentyChars(key, dashboardDict[key]))
@@ -509,10 +509,11 @@ class ButtonMonitorThread(QtCore.QThread):
 				write_screen = False
 
 			# Open Serial connection for reading
-			ser = serial.Serial(portName, baudRate)
+			ser = serial.Serial(portName, baudRate, timeout=1)
 
 			# check if button was pressed
 			readButtons = ser.read(10)
+			
 			if readButtons == check:
 				print("Check")
 				if record_button == False:
