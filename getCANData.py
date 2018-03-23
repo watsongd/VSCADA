@@ -193,20 +193,26 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x0F2, "offset": 0, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":120, "description": "TSI State"},
 					  {"address": 0x0F2, "offset": 1, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":121, "description": "IMD"},
 					  {"address": 0x0F2, "offset": 3, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":122, "description": "Throttle Voltage"},
-					  #{"address": 0x0F2, "offset": 5, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":122, "description": "Brake"},
-					  #{"address": 0x0F2, "offset": 4, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 15, "updated": 0, "id":1, "description": "Brake"},
 					  {"address": 0x0F3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":123, "description": "TSV Voltage"},
 					  {"address": 0x0F3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 1, "updated": 0, "id":124, "description": "TSV Current"},
-					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":125, "description": "TSI Temp"}]
-					  #{"address": 0x0F2, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":126, "description": "Throttle Plausibility"}
+					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":125, "description": "TSI Temp"},
+					  {"address": 0x0F3, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":126, "description": "Throttle Plausibility"}]
 
 
 
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
 TSIPackState = {0: "Idle", 1: "Setup Drive", 2: "Drive", 3: "Setup Idle", 4:"OverCurrent"}
 
-displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4": '-', "Current 1": '-', "Current 2": '-', "Current 3": '-', "Current 4": '-',
-"TSI State": '-', "IMD": '-', "Brake": '-', "TSV Voltage": '-', "TSV Current": '-', "TSI Temp": '-', "Motor RPM": '-', "Motor Temp": '0'}
+displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4": '-', 
+			   "Temp 1": '-', "Temp 2": '-', "Temp 3": '-', "Temp 4": '-',
+			   "State 1": '-', "State 2": '-', "State 3": '-', "State 4": '-',
+			   "SOC 1": '-', "SOC 2": '-', "SOC 3": '-', "SOC 4": '-',
+			   "Min Cell Volt 1": '-', "Min Cell Volt 2": '-', "Min Cell Volt 3": '-', "Min Cell Volt 4": '-',
+			   "MC Voltage": '-', "MC Temp": '-', "MC State": '-',
+			   "TS Voltage": '-', "TS Temp": '-', "TS State": '-',
+			   "Motor RPM": '-', "Motor Temp" '-', "MC Throt Input": '-',
+			   "TSI IMD": '-', "TSI Current": '-', "TSI Throt Volt": '-', 
+			   "VS State": '-', "VS Session": '-', "VS Time": '-'}
 
 # dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC": "-"}
 dashboardDict = {"IMD": "-", "Throttle Voltage": "-", "TSV Voltage": "-", "TSI Temp": "-"}
@@ -353,12 +359,83 @@ def log_data(datapoint, error_list):
 
 # Updates the display dictionary that stores data that appears on the GLV screen
 def update_display_dict(datapoint):
+	# Handle data from the packs
 	if datapoint.pack > 0:
-		name = datapoint.sensor_name + " " + str(datapoint.pack)
+
+		if "Cell" and "Voltage" in datapoint.sensor_name:
+			name = "Min Cell Volt " + str(datapoint.pack)
+
+		elif "Cell" and "Temp" in datapoint.sensor_name:
+			name = "Temp " + str(datapoint.pack)
+
+		else:
+			name = datapoint.sensor_name + " " + str(datapoint.pack)
+
+	# Handle data from other subsystems
 	else:
-		name = datapoint.sensor_name
+
+		########## TSI TABLE ###########
+		if "IMD" in datapoint.sensor_name:
+			name = "TSI " + datapoint.sensor_name
+		elif "TSV" and "Current" in datapoint.sensor_name:
+			name = "TSI Current"
+		elif "Throttle Voltage" in datapoint.sensor_name:
+			name = "TSI Throt Volt"
+
+		########## MC TABLE ##########
+		elif "Motor RPM" in datapoint.sensor_name:
+			name = datapoint.sensor_name
+		elif "Motor Temp" in datapoint.sensor_name:
+			name = datapoint.sensor_name
+		elif "Throttle Input" in datapoint.sensor_name:
+			name = "MC Throt Input"
+
+		########## "L" TABLE ##########
+		elif "Capacitor Voltage" in datapoint.sensor_name:
+			name = "MC Voltage"
+		elif "Controller Temp" in datapoint.sensor_name:
+			name = "MC Temp"
+		elif "Controller Fault Primary" in datapoint.sensor_name:
+			name = "MC State"
+		elif "TSV Voltage" in datapoint.sensor_name:
+			name = "TS Voltage"
+		elif "TSI Temp" in datapoint.sensor_name:
+			name = "TS Temp"
+		elif "TSI State" in datapoint.sensor_name:
+			name = "TS State"
+
+	# If the name is in the display dictionary, update the value
 	if name in displayDict:
-		displayDict[name] = datapoint.data
+
+		# If the name is max temp or min volt of cell, make comparisons
+		if "Min Cell Volt" in name:
+			lowestCellVolt = displayDict[name]
+
+			# If its the first entry, directly input
+			if lowestCellVolt == '-':
+				displayDict[name] = datapoint.data
+
+			# Otherwise, take the lowest
+			elif lowestCellVolt > datapoint.data:
+				displayDict[name] = datapoint.data
+
+			else:
+				displayDict[name] = displayDict[name]
+		elif "Temp " in name:
+			maxTemp = displayDict[name]
+
+			# If its the first entry, directly input
+			if maxTemp == '-':
+				displayDict[name] = datapoint.data
+
+			# Otherwise, take the highest
+			elif maxTemp < datapoint.data:
+				displayDict[name] = datapoint.data
+
+			else:
+				displayDict[name] = displayDict[name]
+		else:
+			displayDict[name] = datapoint.data
 
 
 # In order to write to the dashboard display, the message needs to be 20 chars, so this funct will handle that
@@ -532,24 +609,6 @@ class ButtonMonitorThread(QtCore.QThread):
 			if timer() % 5 == 0:
 				check_display_dict()
 
-class WriteToDashThread(QtCore.QThread):
-
-	def run(self):
-
-		while (True):
-
-			# Every 2 seconds we update the Driver dash
-			if timer() % 2 == 0:
-				for key in dashboardDict.keys():
-					if "IMD" in key:
-						writeToScreen(0, makeMessageTwentyChars(key, dashboardDict[key]))
-					elif "Throttle Voltage" in key:
-						writeToScreen(1, makeMessageTwentyChars(key, dashboardDict[key]))
-					elif "TSI Temp" in key:
-						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key]))
-					elif "TSV Voltage" in key:
-						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key]))
-
 
 class GuiUpdateThread(QtCore.QThread):
 	'''
@@ -595,13 +654,11 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 		self.gui_update = GuiUpdateThread()
 		self.can_monitor = CanMonitorThread()
 		self.button_monitor = ButtonMonitorThread()
-		# self.write_screen = WriteToDashThread()
 
 		#start updating
 		self.gui_update.start()
 		self.can_monitor.start()
 		self.button_monitor.start()
-		# self.write_screen.start()
 
 		# Connect the trigger signal to a slot under gui_update
 		self.gui_update.trigger.connect(self.guiUpdate)
