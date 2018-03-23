@@ -56,6 +56,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x100, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 1, "sampleTime": 1,  "updated": 0, "id":3, "description": "Current"},
 					  {"address": 0x100, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 1, "sampleTime": 15, "updated": 0, "id":4, "description": "SOC"},
 					  {"address": 0x101, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 1, "sampleTime": 15, "updated": 0, "id":5, "description": "Columbs"},
+
 					  {"address": 0x101, "offset": 4, "byteLength": 1, "system": "TSV", "pack": 1, "sampleTime": 15, "updated": 0, "id":6, "description": "Cell 1 Status"},
 					  {"address": 0x101, "offset": 5, "byteLength": 1, "system": "TSV", "pack": 1, "sampleTime": 15, "updated": 0, "id":7, "description": "Cell 2 Status"},
 					  {"address": 0x101, "offset": 6, "byteLength": 1, "system": "TSV", "pack": 1, "sampleTime": 15, "updated": 0, "id":8, "description": "Cell 3 Status"},
@@ -368,10 +369,8 @@ def update_display_dict(datapoint):
 
 		if "Cell" and "Voltage" in datapoint.sensor_name:
 			name = "Min Cell Volt " + str(datapoint.pack)
-
 		elif "Cell" and "Temp" in datapoint.sensor_name:
 			name = "Temp " + str(datapoint.pack)
-
 		else:
 			name = datapoint.sensor_name + " " + str(datapoint.pack)
 
@@ -489,42 +488,36 @@ def update_dashboard_dict(datapoint):
 def check_display_dict():
 	for key in displayDict.keys():
 
-		# find the corresponding dict to the display dict
-		if "1" in key:
-			pack = 1
+		#get the last character in the key
+		lastChar = key[-1:]
+
+		# check if the last character in the key is a number or not
+		if lastChar.isalpha() == False:
+			pack = int(lastChar)
 			if "Voltage" in key:
 				desc = "Voltage"
-			elif "Current" in key:
-				desc = "Current"
-			else:
-				desc = "SOMETHINGBROKE"
-		elif "2" in key:
-			pack = 2
-			if "Voltage" in key:
-				desc = "Voltage"
-			elif "Current" in key:
-				desc = "Current"
-			else:
-				desc = "SOMETHINGBROKE"
-		elif "3" in key:
-			pack = 3
-			if "Voltage" in key:
-				desc = "Voltage"
-			elif "Current" in key:
-				desc = "Current"
-			else:
-				desc = "SOMETHINGBROKE"
-		elif "4" in key:
-			pack = 4
-			if "Voltage" in key:
-				desc = "Voltage"
-			elif "Current" in key:
-				desc = "Current"
-			else:
-				desc = "SOMETHINGBROKE"
+			elif "Temp" in key:
+				desc = "Temp"
+			elif "State" in key:
+				desc = "State"
+			elif "SOC" in key:
+				desc = "Temp"
+			elif "Min Cell Volt" in key:
+				desc = "Min Cell Volt"
 		else:
 			pack = 0
-			desc = key
+			if "MC Voltage" in key:
+				desc = "Capacitor Voltage"
+			elif "MC Temp" in key:
+				desc = "Controller Temp"
+			elif "MC Throt Input" in key:
+				desc = "Throttle Input"
+			elif "IMD" in key:
+				desc = "IMD"
+			elif "TSI Throt Volt" in key:
+				desc = "Throttle Voltage"
+			else:
+				desc = key
 
 		# Iterate through the viewable data
 		for item in listOfViewableData:
