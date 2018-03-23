@@ -197,8 +197,8 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  #{"address": 0x0F2, "offset": 4, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 15, "updated": 0, "id":1, "description": "Brake"},
 					  {"address": 0x0F3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":123, "description": "TSV Voltage"},
 					  {"address": 0x0F3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 1, "updated": 0, "id":124, "description": "TSV Current"},
-					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":125, "description": "TSI Temp"},
-					  {"address": 0x0F2, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":126, "description": "Throttle Plausibility"}]
+					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":125, "description": "TSI Temp"}]
+					  #{"address": 0x0F2, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":126, "description": "Throttle Plausibility"}
 
 
 
