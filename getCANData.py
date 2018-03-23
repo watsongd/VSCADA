@@ -223,6 +223,7 @@ session = {"Session":0}
 #Variables for storing
 global record_button
 global write_screen
+global session_timestamp
 record_button = False
 write_screen = False
 
@@ -359,6 +360,9 @@ def log_data(datapoint, error_list):
 
 # Updates the display dictionary that stores data that appears on the GLV screen
 def update_display_dict(datapoint):
+	global record_button
+	global session_timestamp
+
 	# Handle data from the packs
 	if datapoint.pack > 0:
 
@@ -436,6 +440,23 @@ def update_display_dict(datapoint):
 				displayDict[name] = displayDict[name]
 		else:
 			displayDict[name] = datapoint.data
+
+	########## VSCADA TABLE ##########
+	displayDict["VS Session"] = session["Session"]
+
+	# check if we are recording
+	if record_button == True:
+		displayDict["VS State"] = "REC"
+	else:
+		displayDict["VS State"] = "IDLE"
+
+	# check the timestamp value
+	if session_timestamp == 0:
+		displayDict["VS Time"] = 0
+	else:
+		now = datetime.datetime.now()
+		differenceDT = now - session_timestamp
+		displayDict["VS Time"] = differenceDT.strftime('%M:%S')
 
 
 # In order to write to the dashboard display, the message needs to be 20 chars, so this funct will handle that
@@ -571,6 +592,7 @@ class ButtonMonitorThread(QtCore.QThread):
 
 		global record_button
 		global write_screen
+		global session_timestamp
 
 		while (True):
 
@@ -597,10 +619,12 @@ class ButtonMonitorThread(QtCore.QThread):
 				print("Check")
 				if record_button == False:
 					record_button = True
+				session_timestamp = datetime.datetime.now()
 			elif readButtons == close:
 				print("Close")
 				if record_button == True:
 					record_button = False
+					session_timestamp = 0
 					export_data()
 
 			#Close Connection
@@ -669,63 +693,119 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 	def guiUpdate(self):
 		_translate = QtCore.QCoreApplication.translate
 
-
 		Vpack1 = str(displayDict["Voltage 1"]) + " V"
 		Vpack2 = str(displayDict["Voltage 2"]) + " V"
 		Vpack3 = str(displayDict["Voltage 3"]) + " V"
 		Vpack4 = str(displayDict["Voltage 4"]) + " V"
-		Ipack1 = str(displayDict["Current 1"]) + " A"
-		Ipack2 = str(displayDict["Current 2"]) + " A"
-		Ipack3  = str(displayDict["Current 3"]) + " A"
-		Ipack4   = str(displayDict["Current 4"]) + " A"
+		Tpack1 = str(displayDict["Temp 1"]) + " °C"
+		Tpack2 = str(displayDict["Temp 2"]) + " °C"
+		Tpack3 = str(displayDict["Temp 3"]) + " °C"
+		Tpack4 = str(displayDict["Temp 4"]) + " °C"
+		Spack1 = str(displayDict["State 1"])
+		Spack2 = str(displayDict["State 2"]) 
+		Spack3 = str(displayDict["State 3"])
+		Spack4  = str(displayDict["State 4"])
+		SOCpack1 = str(displayDict["SOC 1"]) + "%"
+		SOCpack2 = str(displayDict["SOC 2"]) + "%" 
+		SOCpack3 = str(displayDict["SOC 3"]) + "%"
+		SOCpack4 = str(displayDict["SOC 4"]) + "%"
+		MCVpack1 = str(displayDict["Min Cell Volt 1"]) + " V"
+		MCVpack2 = str(displayDict["Min Cell Volt 2"]) + " V"
+		MCVpack3 = str(displayDict["Min Cell Volt 3"]) + " V"
+		MCVpack4 = str(displayDict["Min Cell Volt 4"]) + " V"
+		MCV     = str(displayDict["MC Voltage"]) + " V"
+		MCT    = str(displayDict["MC Temp"]) + " °C"
+		MCS    = str(displayDict["MC State"])
+		TSV    = str(displayDict["TS Voltage"]) + " V"
+		TST     = str(displayDict["TS Temp"]) + " °F"
+		TSS      = str(displayDict["TS State"])
 		motorTemp = str(displayDict["Motor Temp"]) + " °C"
 		motorRPM  = str(displayDict["Motor RPM"]) + " RPM"
-		TSI_state = str(displayDict["TSI State"])
-		TSI_imd   = str(displayDict["IMD"])
-		TSI_temp  = str(displayDict["TSI Temp"])
-		Vtsv	  = str(displayDict["TSV Voltage"]) + " V"
-		Itsv     = str(displayDict["TSV Current"]) + " A"
-		Sess    = str(session["Session"])
+		MCTI      = str(displayDict["MC Throt Input"]) + " RPM"
+		TSI_curr  = str(displayDict["TSI Current"]) + " A"
+		TSI_imd   = str(displayDict["TSI IMD"])
+		TSI_throt = str(displayDict["TSI Throt Volt"]) + " V"
+		VSState	 = str(displayDict["VS State"])
+		VSSess  = str(displayDict["VS Session"])
+		VSTim  = str(session["VS Time"])
 
-		#Set values for pack voltage and current
-		item = self.Packs.item(0, 0)
+		#Set values for L table
+		item = self.LTable.item(0, 0)
 		item.setText(_translate("Form", Vpack1))
-		item = self.Packs.item(0, 1)
-		item.setText(_translate("Form", Ipack1))
-		item = self.Packs.item(1, 0)
+		item = self.LTable.item(0, 1)
+		item.setText(_translate("Form", Tpack1))
+		item = self.LTable.item(0, 2)
+		item.setText(_translate("Form", Spack1))
+		item = self.LTable.item(0, 3)
+		item.setText(_translate("Form", SOCpack1))
+		item = self.LTable.item(0, 4)
+		item.setText(_translate("Form", MCVpack1))
+		item = self.LTable.item(1, 0)
 		item.setText(_translate("Form", Vpack2))
-		item = self.Packs.item(1, 1)
-		item.setText(_translate("Form", Ipack2))
-		item = self.Packs.item(2, 0)
+		item = self.LTable.item(1, 1)
+		item.setText(_translate("Form", Tpack2))
+		item = self.LTable.item(1, 2)
+		item.setText(_translate("Form", Spack2))
+		item = self.LTable.item(1, 3)
+		item.setText(_translate("Form", SOCpack2))
+		item = self.LTable.item(1, 4)
+		item.setText(_translate("Form", MCVpack2))
+		item = self.LTable.item(2, 0)
 		item.setText(_translate("Form", Vpack3))
-		item = self.Packs.item(2, 1)
-		item.setText(_translate("Form", Ipack3))
-		item = self.Packs.item(3, 0)
+		item = self.LTable.item(2, 1)
+		item.setText(_translate("Form", Tpack3))
+		item = self.LTable.item(2, 2)
+		item.setText(_translate("Form", Spack3))
+		item = self.LTable.item(2, 3)
+		item.setText(_translate("Form", SOCpack3))
+		item = self.LTable.item(2, 4)
+		item.setText(_translate("Form", MCVpack3))
+		item = self.LTable.item(3, 0)
 		item.setText(_translate("Form", Vpack4))
-		item = self.Packs.item(3, 1)
-		item.setText(_translate("Form", Ipack4))
-		item = self.Packs.item(4, 0)
-		item.setText(_translate("Form", Vtsv))
+		item = self.LTable.item(3, 1)
+		item.setText(_translate("Form", Tpack4))
+		item = self.LTable.item(3, 2)
+		item.setText(_translate("Form", Spack4))
+		item = self.LTable.item(3, 3)
+		item.setText(_translate("Form", SOCpack4))
+		item = self.LTable.item(3, 4)
+		item.setText(_translate("Form", MCVpack4))
+		item = self.LTable.item(4, 0)
+		item.setText(_translate("Form", MCV))
 		item = self.Packs.item(4, 1)
-		item.setText(_translate("Form", Itsv))
+		item.setText(_translate("Form", MCT))
+		item = self.Packs.item(4, 2)
+		item.setText(_translate("Form", MCS))
+		item = self.Packs.item(5, 0)
+		item.setText(_translate("Form", TSV))
+		item = self.Packs.item(5, 1)
+		item.setText(_translate("Form", TST))
+		item = self.Packs.item(5, 2)
+		item.setText(_translate("Form", TSS))
 
-		#Set values for motor items
+		#Set values for motor table
 		item = self.Motor.item(0, 0)
-		item.setText(_translate("Form", motorTemp))
-		item = self.Motor.item(1, 0)
 		item.setText(_translate("Form", motorRPM))
+		item = self.Motor.item(1, 0)
+		item.setText(_translate("Form", motorTemp))
+		item = self.Motor.item(2, 0)
+		item.setText(_translate("Form", MCTI))
 
-		#Set values for TSI
+		#Set values for TSI table
 		item = self.TSI.item(0, 0)
-		item.setText(_translate("Form", TSI_state))
-		item = self.TSI.item(0, 1)
 		item.setText(_translate("Form", TSI_imd))
+		item = self.TSI.item(0, 1)
+		item.setText(_translate("Form", TSI_throt))
 		item = self.TSI.item(0, 2)
-		item.setText(_translate("Form", TSI_temp))
+		item.setText(_translate("Form", TSI_curr))
 
-		item = self.tableWidget.item(0, 0)
-		item.setText(_translate("Form", Sess))
-
+		#Set values for VSCADA table
+		item = self.VS.item(0, 0)
+		item.setText(_translate("Form", VSState))
+		item = self.VS.item(0, 1)
+		item.setText(_translate("Form", VSSess))
+		item = self.VS.item(0, 2)
+		item.setText(_translate("Form", VSTime))
 
 
 if __name__ == "__main__":
