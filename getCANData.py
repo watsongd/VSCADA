@@ -211,7 +211,7 @@ displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4"
 			   "Min Cell Volt 1": '-', "Min Cell Volt 2": '-', "Min Cell Volt 3": '-', "Min Cell Volt 4": '-',
 			   "MC Voltage": '-', "MC Temp": '-', "MC State": '-',
 			   "TS Voltage": '-', "TS Temp": '-', "TS State": '-',
-			   "Motor RPM": '-', "Motor Temp" '-', "MC Throt Input": '-',
+			   "Motor RPM": '-', "Motor Temp": '-', "MC Throt Input": '-',
 			   "TSI IMD": '-', "TSI Current": '-', "TSI Throt Volt": '-', 
 			   "VS State": '-', "VS Session": '-', "VS Time": '-'}
 
@@ -554,9 +554,9 @@ def check_display_dict():
 
 					# Look through every cell in the pack to find the most recent update time
 					for i in range(7):
-						if item['pack'] == pack and item['description'] == "Cell " + (i+1) " Voltage":
+						if item['pack'] == pack and item['description'] == "Cell " + str(i + 1) + " Voltage":
 							# check if has ever been updated before, if not, just set to '-'
-							if item['updated'] == 0 && oldestUpdateMCV = 0:
+							if item['updated'] == 0 and oldestUpdateMCV == 0:
 								pass
 							else:
 								cellUpdated= datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
@@ -580,9 +580,9 @@ def check_display_dict():
 
 					# Look through every cell in the pack to find the most recent update time
 					for i in range(7):
-						if item['pack'] == pack and item['description'] == "Cell " + (i+1) " Temp":
+						if item['pack'] == pack and item['description'] == "Cell " + str(i + 1) + " Temp":
 							# check if has ever been updated before, if not, just set to '-'
-							if item['updated'] == 0 && oldestUpdateMCT = 0:
+							if item['updated'] == 0 and oldestUpdateMCT == 0:
 								pass
 							else:
 								cellUpdated= datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
