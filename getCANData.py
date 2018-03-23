@@ -227,6 +227,7 @@ global write_screen
 global session_timestamp
 record_button = False
 write_screen = False
+session_timestamp = 0
 
 def timer():
    now = time.localtime(time.time())
@@ -589,6 +590,7 @@ class ButtonMonitorThread(QtCore.QThread):
 
 		while (True):
 
+			######################## WRITE TO SCREEN ########################
 			# Write to the dashboard if a new value has been seen
 			if write_screen:
 				for key in dashboardDict.keys():
@@ -602,6 +604,7 @@ class ButtonMonitorThread(QtCore.QThread):
 						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key]))
 				write_screen = False
 
+			######################## READ FROM BUTTONS ########################
 			# Open Serial connection for reading
 			ser = serial.Serial(portName, baudRate, timeout=1)
 
@@ -612,12 +615,11 @@ class ButtonMonitorThread(QtCore.QThread):
 				print("Check")
 				if record_button == False:
 					record_button = True
-				session_timestamp = datetime.datetime.now()
+					session_timestamp = datetime.datetime.now()
 			elif readButtons == close:
 				print("Close")
 				if record_button == True:
 					record_button = False
-					session_timestamp = 0
 					export_data()
 
 			#Close Connection
@@ -765,15 +767,15 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 		item.setText(_translate("Form", MCVpack4))
 		item = self.LTable.item(4, 0)
 		item.setText(_translate("Form", MCV))
-		item = self.Packs.item(4, 1)
+		item = self.LTable.item(4, 1)
 		item.setText(_translate("Form", MCT))
-		item = self.Packs.item(4, 2)
+		item = self.LTable.item(4, 2)
 		item.setText(_translate("Form", MCS))
-		item = self.Packs.item(5, 0)
+		item = self.LTable.item(5, 0)
 		item.setText(_translate("Form", TSV))
-		item = self.Packs.item(5, 1)
+		item = self.LTable.item(5, 1)
 		item.setText(_translate("Form", TST))
-		item = self.Packs.item(5, 2)
+		item = self.LTable.item(5, 2)
 		item.setText(_translate("Form", TSS))
 
 		#Set values for motor table
