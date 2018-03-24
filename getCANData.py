@@ -280,7 +280,7 @@ def parse():
 					newDataPoint.data = data[offset]
 
 				# Based on the description, shift the decimal point as necessary
-				if datapoint.pack > 0:
+				if newDataPoint.pack > 0:
 					if "Voltage" in newDataPoint.sensor_name:
 						if "Cell" in newDataPoint.sensor_name:
 							# mV --> V
