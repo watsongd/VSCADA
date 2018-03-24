@@ -686,13 +686,13 @@ class ButtonMonitorThread(QtCore.QThread):
 			# Write to the dashboard if a new value has been seen
 			if write_screen:
 				for key in dashboardDict.keys():
-					if "IMD" in key:
+					if "Motor RPM" in key:
 						writeToScreen(0, makeMessageTwentyChars(key, dashboardDict[key]))
-					elif "Throttle Voltage" in key:
-						writeToScreen(1, makeMessageTwentyChars("Throt Volt", dashboardDict[key]))
-					elif "TSI Temp" in key:
+					elif "Current" in key:
+						writeToScreen(1, makeMessageTwentyChars("Current", dashboardDict[key]))
+					elif "Motor Temp" in key:
 						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key]))
-					elif "TSV Voltage" in key:
+					elif "SOC" in key:
 						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key]))
 				write_screen = False
 
