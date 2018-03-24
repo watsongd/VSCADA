@@ -717,7 +717,7 @@ class GuiUpdateThread(QtCore.QThread):
 			#self.emit(QtCore.SIGNAL('update()'))
 class pyQTLogHandler(logging.Handler):
 	widget_list = None
-	def __init__(self, _level=logging.DEBUG):
+	def __init__(self, _widget_list=None,_level=logging.DEBUG):
 		"""
 		Comment Here...
 		"""
