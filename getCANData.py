@@ -320,6 +320,7 @@ def parse():
 def log_data(datapoint, error_list):
 
 	global record_button
+	global session_timestamp
 
 	data = datapoint.data
 	sensor_name = datapoint.sensor_name
@@ -328,7 +329,12 @@ def log_data(datapoint, error_list):
 	sensor_id = datapoint.sensor_id
 
 	#Time
-	now = datetime.datetime.now().strftime('%H:%M:%S')
+	#now = datetime.datetime.now().strftime('%H:%M:%S')
+	now = datetime.datetime.now()
+	differenceDT = now - session_timestamp
+	differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
+	datetimeDiff = datetime.datetime.strptime(str(differenceNUM), '(%M, %S)')
+	elapsed_time = datetimeDiff.strftime('%M:%S')
 
 	for sensor_info in config.sensor_thresh_list:
 		if sensor_info.name == sensor_name:
@@ -344,7 +350,7 @@ def log_data(datapoint, error_list):
 				print (str(sensor_info.lower_threshold) + ',' + str(sensor_info.upper_threshold) + ',' + str(data))
 				#Do not need to drop out
 				if sensor_info.drop_out == 0:
-					logging.warning('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
+					logging.warning('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s', session["Session"], elapsed_time, sensor_name, data)
 
 				#Need to drop out
 				if sensor_info.drop_out == 1:
@@ -352,16 +358,16 @@ def log_data(datapoint, error_list):
 					#Need to see value over threshold four times before dropping out
 					if error_list.get_num_errors(sensor_name) >= 4:
 						print("CONFIRM CRITICAL ERROR")
-						logging.critical('%s : %s has exceeded the given threshold. Value: %s. Droppping out of Drive Mode', now, sensor_name, data)
+						logging.critical('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s. Droppping out of Drive Mode', session["Session"], elapsed_time, sensor_name, data)
 						#Drop out call
-						#send_throttle_control(1)
+						send_throttle_control(1)
 						error_list.reset_num_errors(sensor_name)
 					else:
-						logging.critical('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
+						logging.critical('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s', session["Session"], elapsed_time, sensor_name, data)
 			
 			if record_button is True:
 				print("Logged")
-				models.Data.create(sensor_id=sensor_id,sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session["Session"])
+				models.Data.create(sensor_id=sensor_id,sensorName=sensor_name, data=data, time=elapsed_time, system=system, pack=pack, flagged=flag, session_id=session["Session"])
 
 # Updates the display dictionary that stores data that appears on the GLV screen
 def update_display_dict(datapoint):
@@ -669,7 +675,7 @@ class CanMonitorThread(QtCore.QThread):
 	def run(self):
 
 		models.build_db()
-		logging.basicConfig(filename='log.log', level=logging.WARNING)
+		logging.basicConfig(filename='/home/pi/Desktop/VSCADA/log.log', level=logging.WARNING)
 		while (True):
 			parse()
 
