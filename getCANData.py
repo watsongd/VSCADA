@@ -45,13 +45,6 @@ class Datapoint(object):
 		sampleTime = 15
 		pack = None
 
-class Error(object):
-
-	def __init__(self, name, num_errors):
-		self.name = name
-		self.num_errors = num_errors
-
-
 listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 1, "sampleTime": 15, "updated": 0, "id":1, "description": "State"},
 					  {"address": 0x100, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 1, "sampleTime": 15, "updated": 0, "id":2, "description": "Voltage"},
 					  {"address": 0x100, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 1, "sampleTime": 1,  "updated": 0, "id":3, "description": "Current"},
@@ -242,7 +235,7 @@ def send_throttle_control(throttleControl):
 def parse():
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
-	error_list = []
+	error_list = errorList()
 	for msg in bus:
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
@@ -354,11 +347,16 @@ def log_data(datapoint, error_list):
 				#Need to drop out
 				if sensor_info.drop_out == 1:
 					#DROP OUT CALL HERE
-					logging.critical('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
-
-					if get_num_errors(error_list, sensor_name) >= 1:
+					#Need to see value over threshold four times before dropping out
+					if error_list.get_num_errors(sensor_name) >= 4:
 						print("CONFIRM CRITICAL ERROR")
+						logging.critical('%s : %s has exceeded the given threshold. Value: %s. Droppping out of Drive Mode', now, sensor_name, data)
+						#Drop out call
 						#send_throttle_control(1)
+						error_list.reset_num_errors(sensor_name)
+					else:
+						logging.critical('%s : %s has exceeded the given threshold. Value: %s', now, sensor_name, data)
+			
 			if record_button is True:
 				print("Logged")
 				models.Data.create(sensor_id=sensor_id,sensorName=sensor_name, data=data, time=now, system=system, pack=pack, flagged=flag, session_id=session["Session"])
@@ -620,9 +618,12 @@ def export_data():
 	#Exports data exactly one time after stop button is pressed
 	models.export_csv(session["Session"])
 	print("Exported Data {}".format(session["Session"]))
+
+	#Increment session
 	session["Session"] = session["Session"] + 1
 	print("New session{}".format(session["Session"]))
 
+'''
 #Scans through err_list and returns number of times we've encountered the error
 def get_num_errors(error_list, name):
 	#Named tuple for tracking sensors that exceed thresholds
@@ -638,6 +639,24 @@ def get_num_errors(error_list, name):
 	error = Error(name=name, num_errors=1)
 	error_list.append(error)
 	return 1
+
+#Removes 
+def get_num_errors(error_list, name):
+	#Named tuple for tracking sensors that exceed thresholds
+
+	#Possibly add an updated time to the tuple and compare to current time
+	#If the time elapsed has exceeded 2 minutes, resets
+
+	for error in error_list:
+		if error.name == name:
+			error.num_errors = error.num_errors + 1
+			print (error.num_errors)
+			return error.num_errors
+	error = Error(name=name, num_errors=1)
+	error_list.append(error)
+	return 1
+
+'''
 
 class CanMonitorThread(QtCore.QThread):
 
@@ -679,17 +698,22 @@ class ButtonMonitorThread(QtCore.QThread):
 			# check if button was pressed
 			readButtons = ser.read(10)
 
+			#Starts recording
 			if readButtons == check:
 				print("Check")
 				if record_button == False:
 					record_button = True
 					session_timestamp = datetime.datetime.now()
+			#Stops recording and exports data
 			elif readButtons == close:
 				print("Close")
 				if record_button == True:
 					record_button = False
 					export_data()
-
+			#Exports previous session data
+			elif readButtons == right:
+				print("Right")
+				models.export_csv_previous(session["Session"])
 			#Close Connection
 			ser.close()
 
