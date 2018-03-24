@@ -10,6 +10,7 @@ import collections
 import sys
 import random
 import gui
+import main_window
 
 import serial
 
@@ -204,7 +205,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
 TSIPackState = {0: "Idle", 1: "Setup Drive", 2: "Drive", 3: "Setup Idle", 4:"OverCurrent"}
 
-displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4": '-', 
+displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4": '-',
 			   "Temp 1": '-', "Temp 2": '-', "Temp 3": '-', "Temp 4": '-',
 			   "State 1": '-', "State 2": '-', "State 3": '-', "State 4": '-',
 			   "SOC 1": '-', "SOC 2": '-', "SOC 3": '-', "SOC 4": '-',
@@ -212,7 +213,7 @@ displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4"
 			   "MC Voltage": '-', "MC Temp": '-', "MC State": '-',
 			   "TS Voltage": '-', "TS Temp": '-', "TS State": '-',
 			   "Motor RPM": '-', "Motor Temp": '-', "MC Throt Input": '-',
-			   "TSI IMD": '-', "TSI Current": '-', "TSI Throt Volt": '-', 
+			   "TSI IMD": '-', "TSI Current": '-', "TSI Throt Volt": '-',
 			   "VS State": '-', "VS Session": '-', "VS Time": '-'}
 
 # dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC": "-"}
@@ -715,7 +716,7 @@ class GuiUpdateThread(QtCore.QThread):
 			#self.emit(QtCore.SIGNAL('update()'))
 
 
-class Window(QtWidgets.QWidget, gui.Ui_Form):
+class Window(QtWidgets.QWidget, main_window.Ui_Form):
 
 	#GUI Update Thread
 	gui_update = None
@@ -752,120 +753,51 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 	def guiUpdate(self):
 		_translate = QtCore.QCoreApplication.translate
 
-		Vpack1 = str(displayDict["Voltage 1"]) + " V"
-		Vpack2 = str(displayDict["Voltage 2"]) + " V"
-		Vpack3 = str(displayDict["Voltage 3"]) + " V"
-		Vpack4 = str(displayDict["Voltage 4"]) + " V"
-		Tpack1 = str(displayDict["Temp 1"]) + " °C"
-		Tpack2 = str(displayDict["Temp 2"]) + " °C"
-		Tpack3 = str(displayDict["Temp 3"]) + " °C"
-		Tpack4 = str(displayDict["Temp 4"]) + " °C"
-		Spack1 = str(displayDict["State 1"])
-		Spack2 = str(displayDict["State 2"]) 
-		Spack3 = str(displayDict["State 3"])
-		Spack4  = str(displayDict["State 4"])
-		SOCpack1 = str(displayDict["SOC 1"]) + "%"
-		SOCpack2 = str(displayDict["SOC 2"]) + "%" 
-		SOCpack3 = str(displayDict["SOC 3"]) + "%"
-		SOCpack4 = str(displayDict["SOC 4"]) + "%"
-		MCVpack1 = str(displayDict["Min Cell Volt 1"]) + " V"
-		MCVpack2 = str(displayDict["Min Cell Volt 2"]) + " V"
-		MCVpack3 = str(displayDict["Min Cell Volt 3"]) + " V"
-		MCVpack4 = str(displayDict["Min Cell Volt 4"]) + " V"
-		MCV     = str(displayDict["MC Voltage"]) + " V"
-		MCT    = str(displayDict["MC Temp"]) + " °C"
-		MCS    = str(displayDict["MC State"])
-		TSV    = str(displayDict["TS Voltage"]) + " V"
-		TST     = str(displayDict["TS Temp"]) + " °F"
-		TSS      = str(displayDict["TS State"])
-		motorTemp = str(displayDict["Motor Temp"]) + " °C"
-		motorRPM  = str(displayDict["Motor RPM"]) + " RPM"
-		MCTI      = str(displayDict["MC Throt Input"]) + " RPM"
-		TSI_curr  = str(displayDict["TSI Current"]) + " A"
-		TSI_imd   = str(displayDict["TSI IMD"])
-		TSI_throt = str(displayDict["TSI Throt Volt"]) + " V"
-		VSState	 = str(displayDict["VS State"])
-		VSSess  = str(displayDict["VS Session"])
-		VSTime  = str(session["VS Time"])
 
-		#Set values for L table
-		item = self.LTable.item(0, 0)
-		item.setText(_translate("Form", Vpack1))
-		item = self.LTable.item(0, 1)
-		item.setText(_translate("Form", Tpack1))
-		item = self.LTable.item(0, 2)
-		item.setText(_translate("Form", Spack1))
-		item = self.LTable.item(0, 3)
-		item.setText(_translate("Form", SOCpack1))
-		item = self.LTable.item(0, 4)
-		item.setText(_translate("Form", MCVpack1))
-		item = self.LTable.item(1, 0)
-		item.setText(_translate("Form", Vpack2))
-		item = self.LTable.item(1, 1)
-		item.setText(_translate("Form", Tpack2))
-		item = self.LTable.item(1, 2)
-		item.setText(_translate("Form", Spack2))
-		item = self.LTable.item(1, 3)
-		item.setText(_translate("Form", SOCpack2))
-		item = self.LTable.item(1, 4)
-		item.setText(_translate("Form", MCVpack2))
-		item = self.LTable.item(2, 0)
-		item.setText(_translate("Form", Vpack3))
-		item = self.LTable.item(2, 1)
-		item.setText(_translate("Form", Tpack3))
-		item = self.LTable.item(2, 2)
-		item.setText(_translate("Form", Spack3))
-		item = self.LTable.item(2, 3)
-		item.setText(_translate("Form", SOCpack3))
-		item = self.LTable.item(2, 4)
-		item.setText(_translate("Form", MCVpack3))
-		item = self.LTable.item(3, 0)
-		item.setText(_translate("Form", Vpack4))
-		item = self.LTable.item(3, 1)
-		item.setText(_translate("Form", Tpack4))
-		item = self.LTable.item(3, 2)
-		item.setText(_translate("Form", Spack4))
-		item = self.LTable.item(3, 3)
-		item.setText(_translate("Form", SOCpack4))
-		item = self.LTable.item(3, 4)
-		item.setText(_translate("Form", MCVpack4))
-		item = self.LTable.item(4, 0)
-		item.setText(_translate("Form", MCV))
-		item = self.LTable.item(4, 1)
-		item.setText(_translate("Form", MCT))
-		item = self.LTable.item(4, 2)
-		item.setText(_translate("Form", MCS))
-		item = self.LTable.item(5, 0)
-		item.setText(_translate("Form", TSV))
-		item = self.LTable.item(5, 1)
-		item.setText(_translate("Form", TST))
-		item = self.LTable.item(5, 2)
-		item.setText(_translate("Form", TSS))
+		#VSCADA
+		self.VS_Session.display(str(displayDict["VS Session"]))
+		self.VS_Time.display(str(session["VS Time"]))
+		self.VS_State.display(str(displayDict["VS State"]))
 
-		#Set values for motor table
-		item = self.Motor.item(0, 0)
-		item.setText(_translate("Form", motorRPM))
-		item = self.Motor.item(1, 0)
-		item.setText(_translate("Form", motorTemp))
-		item = self.Motor.item(2, 0)
-		item.setText(_translate("Form", MCTI))
+		#Motor Controller
+		self.Motor_RPM.display(str(displayDict["Motor RPM"]))
+		self.Motor_Temp.display(str(displayDict["Motor Temp"]))
+		self.Motor_Throttle.display(str(displayDict["MC Throt Input"]))
 
-		#Set values for TSI table
-		item = self.TSI.item(0, 0)
-		item.setText(_translate("Form", TSI_imd))
-		item = self.TSI.item(0, 1)
-		item.setText(_translate("Form", TSI_throt))
-		item = self.TSI.item(0, 2)
-		item.setText(_translate("Form", TSI_curr))
+		#TSI
+		self.TSI_IMD.display(str(displayDict["TSI IMD"]))
+		self.TSI_Throttle_V.display(str(displayDict["TSI Throt Volt"]))
+		self.TSI_Current.display(str(displayDict["TSI Current"]))
 
-		#Set values for VSCADA table
-		item = self.VS.item(0, 0)
-		item.setText(_translate("Form", VSState))
-		item = self.VS.item(0, 1)
-		item.setText(_translate("Form", VSSess))
-		item = self.VS.item(0, 2)
-		item.setText(_translate("Form", VSTime))
-
+		#L table
+		self.Voltage1.display(str(displayDict["Voltage 1"]))
+		self.Voltage2.display(str(displayDict["Voltage 2"]))
+		self.Voltage3.display(str(displayDict["Voltage 3"]))
+		self.Voltage4.display(str(displayDict["Voltage 4"]))
+		self.temp1.display(str(displayDict["Temp 1"]))#°C
+		self.temp2.display(str(displayDict["Temp 2"]))#°C
+		self.temp3.display(str(displayDict["Temp 3"]))#°C
+		self.temp4.display(str(displayDict["Temp 4"]))#°C
+		self.SOC1.display(str(displayDict["SOC 1"]))
+		self.SOC2.display(str(displayDict["SOC 2"]))
+		self.SOC3.display(str(displayDict["SOC 3"]))
+		self.SOC4.display(str(displayDict["SOC 4"]))
+		self.State1.display(str(displayDict["State 1"]))
+		self.State2.display(str(displayDict["State 2"]))
+		self.State3.display(str(displayDict["State 3"]))
+		self.State4.display(str(displayDict["State 4"]))
+		self.MiniCellV1.display(str(displayDict["Min Cell Volt 1"]))
+		self.MiniCellV2.display(str(displayDict["Min Cell Volt 2"]))
+		self.MiniCellV3.display(str(displayDict["Min Cell Volt 3"]))
+		self.MiniCellV4.display(str(displayDict["Min Cell Volt 4"]))
+		#MC
+		self.MC_Vol.display(str(displayDict["MC Voltage"]))
+		self.MC_Temp.display(str(displayDict["MC Temp"]))
+		self.MC_State.display(str(displayDict["MC State"]))
+		#TSI
+		self.TSI_Vol.display(str(displayDict["TS Voltage"]))
+		self.TSI_Temp.display(str(displayDict["TS Temp"]))
+		self.TSI_State.display(str(displayDict["TS State"]))
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
