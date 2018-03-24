@@ -77,7 +77,7 @@ def export_csv(session):
 #Exports data from db to csv files in case of a system failure
 #Exports data from previous session
 def export_csv_previous(session):
-    
+
     if session > 0:
         #Search for text file on fash drive. Get path
         flash_drive_path = search_flash_drive()
@@ -92,12 +92,15 @@ def export_csv_previous(session):
         #Select data from db from the most recent session
         data_session = c.execute("SELECT sensor_id,time,data,flagged FROM data WHERE session_id={}".format(session))
 
-        g = open(flash_drive_path + '/car_data_session_{}.csv'.format(session), 'w')
+        g = open(flash_drive_path + '/car_data_recovery_session_{}.csv'.format(session), 'w')
 
         writer = csv.writer(g, delimiter=';')
         writer.writerows(data_session)
 
         g.close()  
+
+        print('Recovered data to: ' + flash_drive_path)
+
 
 #Searches for a USB flash drive that contains the correct text file. If it doesnt return empty str
 def search_flash_drive():
