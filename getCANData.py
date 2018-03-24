@@ -211,8 +211,7 @@ displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4"
 			   "TSI IMD": '-', "TSI Current": '-', "TSI Throt Volt": '-',
 			   "VS State": '-', "VS Session": '-', "VS Time": '-'}
 
-# dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC": "-"}
-dashboardDict = {"IMD": "-", "Throttle Voltage": "-", "TSV Voltage": "-", "TSI Temp": "-"}
+dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC": "-"}
 
 #Session is just an int that keeps track of when recording starts. If recording stops, the current session is exported and the session increments
 session = {"Session":0}
@@ -486,8 +485,8 @@ def update_dashboard_dict(datapoint):
 		if "SOC" in name:
 			currentLowest = dashboardDict["SOC"]
 			if currentLowest == "-":
-				curentLowest = 100
-			if datapoint.data < currentLowest:
+				dashboardDict["SOC"] = datapoint.data
+			elif datapoint.data < currentLowest:
 				dashboardDict["SOC"] = datapoint.data
 			else:
 				dashboardDict["SOC"] = currentLowest
