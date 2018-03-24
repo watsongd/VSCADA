@@ -329,11 +329,16 @@ def log_data(datapoint, error_list):
 
 	#Time
 	#now = datetime.datetime.now().strftime('%H:%M:%S')
-	now = datetime.datetime.now()
-	differenceDT = now - session_timestamp
-	differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
-	datetimeDiff = datetime.datetime.strptime(str(differenceNUM), '(%M, %S)')
-	elapsed_time = datetimeDiff.strftime('%M:%S')
+	if session_timestamp == 0:
+		elapsed_time = '00:00'
+	elif session_timestamp == 1:
+		pass
+	else:
+		now = datetime.datetime.now()
+		differenceDT = now - session_timestamp
+		differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
+		datetimeDiff = datetime.datetime.strptime(str(differenceNUM), '(%M, %S)')
+		elapsed_time = datetimeDiff.strftime('%M:%S')
 
 	for sensor_info in config.sensor_thresh_list:
 		if sensor_info.name == sensor_name:
