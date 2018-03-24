@@ -768,8 +768,8 @@ class Window(QtWidgets.QWidget, main_window.Ui_Form):
 		logger.info("LFEV VSCADA Started!")
 
 		#start gui as full screen
-		self.showFullScreen()
-		#self.getMaximized()
+		#self.showFullScreen()
+		self.getMaximized()
 
 		#get update
 		self.gui_update = GuiUpdateThread()
