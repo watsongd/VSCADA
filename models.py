@@ -78,8 +78,9 @@ def export_csv(session):
 #Exports data from db to csv files in case of a system failure
 #Exports data from previous session
 def export_csv_previous(session):
+    session = session - 1
     print (session)
-    if session > 0:
+    if session >= 0:
         #Search for text file on fash drive. Get path
         flash_drive_path = search_flash_drive()
         if flash_drive_path == '':
