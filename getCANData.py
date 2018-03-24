@@ -756,7 +756,7 @@ class Window(QtWidgets.QWidget, main_window.Ui_Form):
 
 		#VSCADA
 		self.VS_Session.display(str(displayDict["VS Session"]))
-		self.VS_Time.display(str(session["VS Time"]))
+		self.VS_Time.display(str(displayDict["VS Time"]))
 		self.VS_State.display(str(displayDict["VS State"]))
 
 		#Motor Controller
