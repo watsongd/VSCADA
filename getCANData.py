@@ -312,6 +312,7 @@ def parse():
 						update_dashboard_dict(newDataPoint)
 						item['updated'] = now
 						print("LAST UPDATED: " + str(item['updated']))
+						logger.info("LAST UPDATED: " + str(item['updated']))
 						print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 						logger.info(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 
