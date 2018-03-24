@@ -6,7 +6,7 @@ from peewee import *
 from playhouse.dataset import DataSet
 
 #Connect  to sqlite3 database
-db = SqliteDatabase('../car_data.db')
+db = SqliteDatabase('/home/pi/Desktop/car_data.db')
 
 #Table for Pack1 Data
 class Data(Model):
@@ -30,7 +30,7 @@ def build_db():
         print ("Data table already exists!")
 
 def get_session():
-    conn = sqlite3.connect('../car_data.db')
+    conn = sqlite3.connect('/home/pi/Desktop/car_data.db')
     c = conn.cursor()
     session = c.execute("SELECT session_id FROM data WHERE session_id=(SELECT MAX(session_id) FROM data)")
     try:
@@ -48,10 +48,10 @@ def export_csv(session):
     if flash_drive_path == '':
         if not os.path.exists("../VSCADA_CSV_FILES/"):
             os.makedirs("../VSCADA_CSV_FILES/")
-        flash_drive_path = "../VSCADA_CSV_FILES/"
+        flash_drive_path = "/home/pi/Desktop/VSCADA_CSV_FILES/"
 
     #Connect to database
-    conn = sqlite3.connect('../car_data.db')
+    conn = sqlite3.connect('/home/pi/Desktop/car_data.db')
     c = conn.cursor()
 
     #Select all data from db
@@ -86,10 +86,10 @@ def export_csv_previous(session):
         if flash_drive_path == '':
             if not os.path.exists("../VSCADA_CSV_FILES/"):
                 os.makedirs("../VSCADA_CSV_FILES/")
-            flash_drive_path = "../VSCADA_CSV_FILES/"
+            flash_drive_path = "/home/pi/Desktop/VSCADA_CSV_FILES/"
 
         #Connect to database
-        conn = sqlite3.connect('../car_data.db')
+        conn = sqlite3.connect('/home/pi/Desktop/car_data.db')
         c = conn.cursor()
 
         #Select data from db from the most recent session
