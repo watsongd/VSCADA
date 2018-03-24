@@ -332,7 +332,7 @@ def log_data(datapoint, error_list):
 	if session_timestamp == 0:
 		elapsed_time = '00:00'
 	elif session_timestamp == 1:
-		pass
+		elapsed_time = '00:00'
 	else:
 		now = datetime.datetime.now()
 		differenceDT = now - session_timestamp
