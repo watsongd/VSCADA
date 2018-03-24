@@ -408,7 +408,7 @@ def update_display_dict(datapoint):
 			name = "TS Temp"
 		elif "TSI State" in datapoint.sensor_name:
 			name = "TS State"
-			
+
 		else:
 			name = "NOT IN DISPLAY DICT"
 
@@ -758,7 +758,7 @@ class Window(QtWidgets.QWidget, main_window.Ui_Form):
 		#VSCADA
 		self.VS_Session.display(str(displayDict["VS Session"]))
 		self.VS_Time.display(str(displayDict["VS Time"]))
-		self.VS_State.display(str(displayDict["VS State"]))
+		self.VS_State.setText(str(displayDict["VS State"]))
 
 		#Motor Controller
 		self.Motor_RPM.display(str(displayDict["Motor RPM"]))
@@ -783,10 +783,10 @@ class Window(QtWidgets.QWidget, main_window.Ui_Form):
 		self.SOC2.display(str(displayDict["SOC 2"]))
 		self.SOC3.display(str(displayDict["SOC 3"]))
 		self.SOC4.display(str(displayDict["SOC 4"]))
-		self.State1.display(str(displayDict["State 1"]))
-		self.State2.display(str(displayDict["State 2"]))
-		self.State3.display(str(displayDict["State 3"]))
-		self.State4.display(str(displayDict["State 4"]))
+		self.State1.setText(str(displayDict["State 1"]))
+		self.State2.setText(str(displayDict["State 2"]))
+		self.State3.setText(str(displayDict["State 3"]))
+		self.State4.setText(str(displayDict["State 4"]))
 		self.MiniCellV1.display(str(displayDict["Min Cell Volt 1"]))
 		self.MiniCellV2.display(str(displayDict["Min Cell Volt 2"]))
 		self.MiniCellV3.display(str(displayDict["Min Cell Volt 3"]))
