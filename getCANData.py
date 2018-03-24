@@ -32,7 +32,7 @@ close = b'\x80\x01\x06\xce\xb6\x80\x01\x0c\x94\x19'
 _pollFrequency = 3.0
 #global time counter
 _time = 0
-
+logger = None
 # testNow = datetime.datetime.now().strftime('%H:%M:%S')
 
 class Datapoint(object):
@@ -715,6 +715,24 @@ class GuiUpdateThread(QtCore.QThread):
 
 			self.trigger.emit()
 			#self.emit(QtCore.SIGNAL('update()'))
+class pyQTLogHandler(logging.Handler):
+
+	def __init__(self, _level=logging.DEBUG):
+		"""
+		Comment Here...
+		"""
+		logging.Handler.__init__(self)
+		self.level = _level
+
+	def emit(self, _record):
+
+		#Emit a record
+
+		try:
+			record = self.format(_record)
+			self.appendPlainText(record)
+		except:
+			print('LOGGER ERROR!!! PANIC!!! RUN FOR THE HILLS!!!')
 
 
 class Window(QtWidgets.QWidget, main_window.Ui_Form):
@@ -730,6 +748,15 @@ class Window(QtWidgets.QWidget, main_window.Ui_Form):
 
 		QtWidgets.QWidget.__init__(self)
 		self.setupUi(self)
+
+		global logger
+
+		logger = logging.getLogger(__name__)
+		handler = pyQTLogHandler(self.log)
+		handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
+		logger.addHandler(handler)
+		logger.setLevel(logging.DEBUG)
+		logger.info("LFEV VSCADA Started!")
 
 		#start gui as full screen
 		self.showFullScreen()
