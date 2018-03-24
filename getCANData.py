@@ -459,6 +459,8 @@ def update_display_dict(datapoint):
 	# check the timestamp value
 	if session_timestamp == 0:
 		displayDict["VS Time"] = 0
+	elif session_timestamp == 1:
+		pass
 	else:
 		now = datetime.datetime.now()
 		differenceDT = now - session_timestamp
@@ -713,6 +715,7 @@ class ButtonMonitorThread(QtCore.QThread):
 				print("Close")
 				if record_button == True:
 					record_button = False
+					session_timestamp = 1
 					export_data()
 			#Exports previous session data
 			elif readButtons == right:
