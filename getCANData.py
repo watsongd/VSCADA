@@ -794,11 +794,11 @@ class Window(QtWidgets.QWidget, main_window.Ui_Form):
 		#MC
 		self.MC_Vol.display(str(displayDict["MC Voltage"]))
 		self.MC_Temp.display(str(displayDict["MC Temp"]))
-		self.MC_State.display(str(displayDict["MC State"]))
+		self.MC_State.setText(str(displayDict["MC State"]))
 		#TSI
 		self.TSI_Vol.display(str(displayDict["TS Voltage"]))
 		self.TSI_Temp.display(str(displayDict["TS Temp"]))
-		self.TSI_State.display(str(displayDict["TS State"]))
+		self.TSI_State.setText(str(displayDict["TS State"]))
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
