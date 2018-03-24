@@ -779,7 +779,7 @@ class Window(QtWidgets.QWidget, gui.Ui_Form):
 		TSI_throt = str(displayDict["TSI Throt Volt"]) + " V"
 		VSState	 = str(displayDict["VS State"])
 		VSSess  = str(displayDict["VS Session"])
-		VSTim  = str(session["VS Time"])
+		VSTime  = str(session["VS Time"])
 
 		#Set values for L table
 		item = self.LTable.item(0, 0)
