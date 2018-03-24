@@ -462,7 +462,8 @@ def update_display_dict(datapoint):
 	else:
 		now = datetime.datetime.now()
 		differenceDT = now - session_timestamp
-		displayDict["VS Time"] = differenceDT.strftime('%M:%S')
+		differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
+		displayDict["VS Time"] = differenceNUM.strftime('%M:%S')
 
 
 # In order to write to the dashboard display, the message needs to be 20 chars, so this funct will handle that
