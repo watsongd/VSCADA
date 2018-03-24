@@ -774,10 +774,10 @@ class Window(QtWidgets.QWidget, main_window.Ui_Form):
 		self.Voltage2.display(str(displayDict["Voltage 2"]))
 		self.Voltage3.display(str(displayDict["Voltage 3"]))
 		self.Voltage4.display(str(displayDict["Voltage 4"]))
-		self.temp1.display(str(displayDict["Temp 1"]))#°C
-		self.temp2.display(str(displayDict["Temp 2"]))#°C
-		self.temp3.display(str(displayDict["Temp 3"]))#°C
-		self.temp4.display(str(displayDict["Temp 4"]))#°C
+		self.Temp1.display(str(displayDict["Temp 1"]))#°C
+		self.Temp2.display(str(displayDict["Temp 2"]))#°C
+		self.Temp3.display(str(displayDict["Temp 3"]))#°C
+		self.Temp4.display(str(displayDict["Temp 4"]))#°C
 		self.SOC1.display(str(displayDict["SOC 1"]))
 		self.SOC2.display(str(displayDict["SOC 2"]))
 		self.SOC3.display(str(displayDict["SOC 3"]))
