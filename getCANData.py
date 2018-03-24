@@ -454,7 +454,7 @@ def update_display_dict(datapoint):
 	if record_button == True:
 		displayDict["VS State"] = "REC"
 	else:
-		displayDict["VS State"] = "IDLE"
+		displayDict["VS State"] = "Idle"
 
 	# check the timestamp value
 	if session_timestamp == 0:
@@ -699,7 +699,7 @@ class ButtonMonitorThread(QtCore.QThread):
 
 			######################## READ FROM BUTTONS ########################
 			# Open Serial connection for reading
-			ser = serial.Serial(portName, baudRate, timeout=1)
+			ser = serial.Serial(portName, baudRate, timeout=2)
 
 			# check if button was pressed
 			readButtons = ser.read(10)
