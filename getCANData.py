@@ -716,12 +716,13 @@ class GuiUpdateThread(QtCore.QThread):
 			self.trigger.emit()
 			#self.emit(QtCore.SIGNAL('update()'))
 class pyQTLogHandler(logging.Handler):
-
+	widget_list = None
 	def __init__(self, _level=logging.DEBUG):
 		"""
 		Comment Here...
 		"""
 		logging.Handler.__init__(self)
+		self.widget_list = _widget_list
 		self.level = _level
 
 	def emit(self, _record):
@@ -730,7 +731,11 @@ class pyQTLogHandler(logging.Handler):
 
 		try:
 			record = self.format(_record)
-			self.appendPlainText(record)
+			#print(self.format(_record))
+			if _record.levelname == "INFO":
+				self.widget_list['INFO'].appendPlainText(record)
+			else:
+				print(self.format(_record))
 		except:
 			print('LOGGER ERROR!!! PANIC!!! RUN FOR THE HILLS!!!')
 
@@ -751,8 +756,10 @@ class Window(QtWidgets.QWidget, main_window.Ui_Form):
 
 		global logger
 
+		logger_widgets = {"INFO":self.Log}
+
 		logger = logging.getLogger(__name__)
-		handler = pyQTLogHandler(self.Log)
+		handler = pyQTLogHandler(logger_widgets)
 		handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
 		logger.addHandler(handler)
 		logger.setLevel(logging.DEBUG)
