@@ -313,6 +313,7 @@ def parse():
 						item['updated'] = now
 						print("LAST UPDATED: " + str(item['updated']))
 						print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
+						logger.info(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 
 				#Check if displays need to be updated with a '-'
 				if timer() % 5 == 0:
