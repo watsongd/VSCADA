@@ -17,6 +17,8 @@ import serial
 from PyQt5 import QtCore, QtWidgets
 from screenwrite import *
 
+from errorList import *
+
 # initialization of serial port
 portName = '/dev/ttyACM0'
 baudRate = 115200
