@@ -463,7 +463,7 @@ def update_display_dict(datapoint):
 		now = datetime.datetime.now()
 		differenceDT = now - session_timestamp
 		differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
-		datetimeDiff = datetime.strptime(str(differenceNUM), '(%M, %S)')
+		datetimeDiff = datetime.datetime.strptime(str(differenceNUM), '(%M, %S)')
 		displayDict["VS Time"] = datetimeDiff.strftime('%M:%S')
 
 
