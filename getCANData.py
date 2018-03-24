@@ -564,18 +564,21 @@ def check_display_dict():
 								if oldestUpdateMCV > cellUpdated:
 									oldestUpdateMCV = cellUpdated
 
-					# check the last time that dict was updated
-					now = datetime.datetime.now()
+					if oldestUpdateMCV != 0:
 
-					# get the difference in times
-					differenceDT = now - oldestUpdateMCV
+						# check the last time that dict was updated
+						now = datetime.datetime.now()
 
-					# get the difference in numbers rather than a datetime timedelta object
-					differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
+						# get the difference in times
+						differenceDT = now - oldestUpdateMCV
 
-					# check the difference vs the sample time
-					if differenceNUM[1] > (3 * item['sampleTime']):
-						displayDict[key] = '-'
+						# get the difference in numbers rather than a datetime timedelta object
+						differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
+
+						# check the difference vs the sample time
+						if differenceNUM[1] > (3 * item['sampleTime']):
+							displayDict[key] = '-'
+
 				elif "Temp" in desc:
 
 					# Look through every cell in the pack to find the most recent update time
@@ -590,18 +593,20 @@ def check_display_dict():
 								if oldestUpdateMCT > cellUpdated:
 									oldestUpdateMCT = cellUpdated
 
-					# check the last time that dict was updated
-					now = datetime.datetime.now()
+					if oldestUpdateMCT != 0:
 
-					# get the difference in times
-					differenceDT = now - oldestUpdateMCT
+						# check the last time that dict was updated
+						now = datetime.datetime.now()
 
-					# get the difference in numbers rather than a datetime timedelta object
-					differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
+						# get the difference in times
+						differenceDT = now - oldestUpdateMCT
 
-					# check the difference vs the sample time
-					if differenceNUM[1] > (3 * item['sampleTime']):
-						displayDict[key] = '-'
+						# get the difference in numbers rather than a datetime timedelta object
+						differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
+
+						# check the difference vs the sample time
+						if differenceNUM[1] > (3 * item['sampleTime']):
+							displayDict[key] = '-'
 
 
 #Check if record button has been pressed. Export if stop button is pressed
