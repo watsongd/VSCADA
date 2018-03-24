@@ -407,6 +407,8 @@ def update_display_dict(datapoint):
 			name = "TS Temp"
 		elif "TSI State" in datapoint.sensor_name:
 			name = "TS State"
+		else:
+			name = "NOT IN DISPLAY DICT"
 
 	# If the name is in the display dictionary, update the value
 	if name in displayDict:
