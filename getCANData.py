@@ -752,7 +752,7 @@ class Window(QtWidgets.QWidget, main_window.Ui_Form):
 		global logger
 
 		logger = logging.getLogger(__name__)
-		handler = pyQTLogHandler(self.log)
+		handler = pyQTLogHandler(self.Log)
 		handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
 		logger.addHandler(handler)
 		logger.setLevel(logging.DEBUG)
