@@ -45,8 +45,9 @@ def export_csv(session):
     
     #Search for text file on fash drive. Get path
     flash_drive_path = search_flash_drive()
-    if not os.path.exists("../VSCADA_CSV_FILES/"):
-        os.makedirs("../VSCADA_CSV_FILES/")
+    if flash_drive_path == '':
+        if not os.path.exists("../VSCADA_CSV_FILES/"):
+            os.makedirs("../VSCADA_CSV_FILES/")
         flash_drive_path = "../VSCADA_CSV_FILES/"
 
     #Connect to database
@@ -77,12 +78,13 @@ def export_csv(session):
 #Exports data from db to csv files in case of a system failure
 #Exports data from previous session
 def export_csv_previous(session):
-
+    print (session)
     if session > 0:
         #Search for text file on fash drive. Get path
         flash_drive_path = search_flash_drive()
-        if not os.path.exists("../VSCADA_CSV_FILES/"):
-            os.makedirs("../VSCADA_CSV_FILES/")
+        if flash_drive_path == '':
+            if not os.path.exists("../VSCADA_CSV_FILES/"):
+                os.makedirs("../VSCADA_CSV_FILES/")
             flash_drive_path = "../VSCADA_CSV_FILES/"
 
         #Connect to database
@@ -110,4 +112,4 @@ def search_flash_drive():
                 #print(root)
                 return root
     else:
-        return ""
+        return ''
