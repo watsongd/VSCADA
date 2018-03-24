@@ -6,6 +6,8 @@ sensor_thresh_list = []
 
 SensorInfo = collections.namedtuple('sensor', 'name lower_threshold upper_threshold drop_out')
 
+config_path = ''
+
 for root, dirs, files in os.walk("/media/pi"):
     for file in files:
         if file.startswith("config"):
