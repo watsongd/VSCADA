@@ -769,7 +769,7 @@ class Window(QtWidgets.QWidget, main_window.Ui_Form):
 
 		#start gui as full screen
 		#self.showFullScreen()
-		self.getMaximized()
+		self.showMaximized()
 
 		#get update
 		self.gui_update = GuiUpdateThread()
