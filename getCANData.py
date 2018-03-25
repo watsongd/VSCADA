@@ -311,7 +311,7 @@ def parse():
 						logger.info(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 
 				#Check if displays need to be updated with a '-'
-				if timer() % 5 == 0:
+				# if timer() % 5 == 0:
 					# check_display_dict()
 
 
@@ -738,7 +738,7 @@ class ButtonMonitorThread(QtCore.QThread):
 			#Close Connection
 			ser.close()
 
-			if timer() % 5 == 0:
+			# if timer() % 5 == 0:
 				# check_display_dict()
 
 
