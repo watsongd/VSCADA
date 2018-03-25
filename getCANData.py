@@ -312,7 +312,7 @@ def parse():
 
 				#Check if displays need to be updated with a '-'
 				if timer() % 5 == 0:
-					check_display_dict()
+					# check_display_dict()
 
 
 #Takes data from parse() and stores in db if recording.
@@ -739,7 +739,7 @@ class ButtonMonitorThread(QtCore.QThread):
 			ser.close()
 
 			if timer() % 5 == 0:
-				check_display_dict()
+				# check_display_dict()
 
 
 class GuiUpdateThread(QtCore.QThread):
