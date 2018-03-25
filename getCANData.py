@@ -614,7 +614,7 @@ def check_display_dict():
 
 								if oldestUpdateMCT == 0:
 									oldestUpdateMCT = cellUpdated
-								if oldestUpdateMCT > cellUpdated:
+								elif oldestUpdateMCT > cellUpdated:
 									oldestUpdateMCT = cellUpdated
 
 					if oldestUpdateMCT != 0:
