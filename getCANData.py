@@ -197,7 +197,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 
 
 
-TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
+TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "LCO", 4: "Fault", 5: "Dead", 6: "Ready"}
 TSIPackState = {0: "Idle", 1: "Setup Drive", 2: "Drive", 3: "Setup Idle", 4:"OverCurrent"}
 
 displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4": '-',
@@ -301,18 +301,18 @@ def parse():
 				if timer() % item['sampleTime'] == 0:
 					now = datetime.datetime.now().strftime('%H:%M:%S')
 					if item['updated'] != now:
+						item['updated'] = now
 						log_data(newDataPoint, error_list)
 						update_display_dict(newDataPoint)
 						update_dashboard_dict(newDataPoint)
-						item['updated'] = now
 						print("LAST UPDATED: " + str(item['updated']))
 						logger.info("LAST UPDATED: " + str(item['updated']))
 						print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 						logger.info(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 
 				#Check if displays need to be updated with a '-'
-				# if timer() % 5 == 0:
-					# check_display_dict()
+				if timer() % 5 == 0:
+					check_display_dict()
 
 
 #Takes data from parse() and stores in db if recording.
@@ -738,8 +738,8 @@ class ButtonMonitorThread(QtCore.QThread):
 			#Close Connection
 			ser.close()
 
-			# if timer() % 5 == 0:
-				# check_display_dict()
+			if timer() % 5 == 0:
+				check_display_dict()
 
 
 class GuiUpdateThread(QtCore.QThread):
