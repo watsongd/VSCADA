@@ -209,7 +209,7 @@ displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4"
 			   "TS Voltage": '-', "TS Temp": '-', "TS State": '-',
 			   "Motor RPM": '-', "Motor Temp": '-', "MC Throt Input": '-',
 			   "TSI IMD": '-', "TSI Current": '-', "TSI Throt Volt": '-',
-			   "VS State": '-', "VS Session": '-', "VS Time": '-'}
+			   "VS State": '-  ', "VS Session": '-', "VS Time": '-'}
 
 dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC": "-"}
 
@@ -368,7 +368,7 @@ def log_data(datapoint, error_list):
 						error_list.reset_num_errors(sensor_name)
 					else:
 						logging.critical('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s', session["Session"], elapsed_time, sensor_name, data)
-			
+
 			if record_button is True:
 				print("Logged")
 				models.Data.create(sensor_id=sensor_id,sensorName=sensor_name, data=data, time=elapsed_time, system=system, pack=pack, flagged=flag, session_id=session["Session"])
@@ -660,7 +660,7 @@ def get_num_errors(error_list, name):
 	error_list.append(error)
 	return 1
 
-#Removes 
+#Removes
 def get_num_errors(error_list, name):
 	#Named tuple for tracking sensors that exceed thresholds
 
