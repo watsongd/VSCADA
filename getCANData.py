@@ -540,7 +540,7 @@ def update_error_dict(error):
 	errorDict["Error3"] = errorDict["Error4"]
 	errorDict["Error4"] = errorDict["Error5"]
 	errorDict["Error5"] = error
-	error_string = errorDict["Error1"] + '\n' + errorDict["Error2"] + '\n' + errorDict["Error3"] + '\n' + errorDict["Error4"] + '\n' + errorDict["Error5"]
+	error_string = str(errorDict["Error1"]) + '\n' + str(errorDict["Error2"]) + '\n' + str(errorDict["Error3"]) + '\n' + str(errorDict["Error4"]) + '\n' + str(errorDict["Error5"])
 	print(error_string)
 
 # Check the frequency with which things are being updated
