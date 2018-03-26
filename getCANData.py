@@ -619,7 +619,9 @@ def check_display_dict():
 							else:
 								cellUpdated= datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
 
-								if oldestUpdateMCV > cellUpdated:
+								if oldestUpdateMCV == 0:
+									oldestUpdateMCV = cellUpdated
+								elif oldestUpdateMCV > cellUpdated:
 									oldestUpdateMCV = cellUpdated
 
 					if oldestUpdateMCV != 0:
@@ -648,7 +650,9 @@ def check_display_dict():
 							else:
 								cellUpdated= datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
 
-								if oldestUpdateMCT > cellUpdated:
+								if oldestUpdateMCT == 0:
+									oldestUpdateMCT = cellUpdated
+								elif oldestUpdateMCT > cellUpdated:
 									oldestUpdateMCT = cellUpdated
 
 					if oldestUpdateMCT != 0:
