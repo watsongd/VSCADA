@@ -18,6 +18,7 @@ from PyQt5 import QtCore, QtWidgets
 from screenwrite import *
 
 from errorList import *
+from config import *
 
 # initialization of serial port
 portName = '/dev/ttyACM0'
@@ -236,7 +237,14 @@ def send_throttle_control(throttleControl):
 def parse():
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
+	
+	#Initialize the error list to zero
 	error_list = errorList()
+
+	#Get sensor thresholds from config file
+	config = Config()
+	ccnfig.populate_thresh_list()
+
 	for msg in bus:
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
@@ -301,7 +309,7 @@ def parse():
 				if timer() % item['sampleTime'] == 0:
 					now = datetime.datetime.now().strftime('%H:%M:%S')
 					if item['updated'] != now:
-						log_data(newDataPoint, error_list)
+						log_data(newDataPoint, error_list, config)
 						update_display_dict(newDataPoint)
 						update_dashboard_dict(newDataPoint)
 						item['updated'] = now
