@@ -309,6 +309,9 @@ def parse():
 					else:
 						newDataPoint.data = TSVPackState[newDataPoint.data]
 
+				if "Capacitor Voltage" in newDataPoint.sensor_name:
+					newDataPoint.data = newDataPoint.data / 10		
+
 				# Log data based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
 					now = datetime.datetime.now().strftime('%H:%M:%S')
