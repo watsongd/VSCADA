@@ -316,7 +316,7 @@ def parse():
 				if timer() % item['sampleTime'] == 0:
 					now = datetime.datetime.now().strftime('%H:%M:%S')
 					if item['updated'] != now:
-						log_data(newDataPoint, error_list, config)
+						log_data(newDataPoint, error_list)
 						item['updated'] = now
 						print("LAST UPDATED: " + str(item['updated']))
 
