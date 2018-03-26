@@ -34,7 +34,7 @@ close = b'\x80\x01\x06\xce\xb6\x80\x01\x0c\x94\x19'
 _pollFrequency = 3.0
 #global time counter
 _time = 0
-logger = None
+
 # testNow = datetime.datetime.now().strftime('%H:%M:%S')
 
 class Datapoint(object):
@@ -318,9 +318,9 @@ def parse():
 						update_dashboard_dict(newDataPoint)
 						item['updated'] = now
 						print("LAST UPDATED: " + str(item['updated']))
-						logger.info("LAST UPDATED: " + str(item['updated']))
+
 						print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
-						logger.info(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
+
 
 				#Check if displays need to be updated with a '-'
 				if timer() % 5 == 0:
@@ -757,29 +757,7 @@ class GuiUpdateThread(QtCore.QThread):
 
 			self.trigger.emit()
 			#self.emit(QtCore.SIGNAL('update()'))
-class pyQTLogHandler(logging.Handler):
-	widget_list = None
-	def __init__(self, _widget_list=None,_level=logging.DEBUG):
-		"""
-		Comment Here...
-		"""
-		logging.Handler.__init__(self)
-		self.widget_list = _widget_list
-		self.level = _level
 
-	def emit(self, _record):
-
-		#Emit a record
-
-		try:
-			record = self.format(_record)
-			#print(self.format(_record))
-			if _record.levelname == "INFO":
-				self.widget_list['INFO'].appendPlainText(record)
-			else:
-				print(self.format(_record))
-		except:
-			print('LOGGER ERROR!!! PANIC!!! RUN FOR THE HILLS!!!')
 
 
 class Window(QtWidgets.QWidget, ui.Ui_Form):
@@ -795,17 +773,6 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 
 		QtWidgets.QWidget.__init__(self)
 		self.setupUi(self)
-
-		global logger
-
-		logger_widgets = {"INFO":self.Log}
-
-		logger = logging.getLogger(__name__)
-		handler = pyQTLogHandler(logger_widgets)
-		handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
-		logger.addHandler(handler)
-		logger.setLevel(logging.DEBUG)
-		logger.info("LFEV VSCADA Started!")
 
 		#start gui as full screen
 		#self.showFullScreen()
