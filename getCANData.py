@@ -386,13 +386,13 @@ def log_data(datapoint, error_list):
 						#Drop out call
 						#send_throttle_control(1)
 						error_list.reset_num_errors(sensor_name)
-						error1 = str(sensor_name) + ' has exceeded the given threshold. Value: ' + str(data)
+						error1 = str(sensor_name) + ' has exceeded threshold. Value: ' + str(data)
 						update_error_dict(error1)
-						error2 = 'Droppping out of Drive Mode'
+						error2 = 'Drop out of Drive Mode'
 						update_error_dict(error2)
 					else:
 						logging.critical('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s', session["Session"], elapsed_time, sensor_name, data)
-						error1 = str(sensor_name) + ' has exceeded the given threshold. Value: ' + str(data)
+						error1 = str(sensor_name) + ' has threshold. Value: ' + str(data)
 						update_error_dict(error1)
 
 			#Store in database if record button is true
