@@ -319,14 +319,15 @@ def parse():
 						log_data(newDataPoint, error_list)
 						item['updated'] = now
 						print("LAST UPDATED: " + str(item['updated']))
-
 						print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
-
 
 				# update screens
 				if timer() % 2 == 0:
-					update_display_dict(newDataPoint)
-					update_dashboard_dict(newDataPoint)
+					now = datetime.datetime.now().strftime('%H:%M:%S')
+					if item['updated'] != now:
+						item['updated'] = now
+						update_display_dict(newDataPoint)
+						update_dashboard_dict(newDataPoint)
 
 				#Check if displays need to be updated with a '-'
 				if timer() % 5 == 0:
@@ -504,7 +505,6 @@ def update_display_dict(datapoint):
 		differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
 		datetimeDiff = datetime.datetime.strptime(str(differenceNUM), '(%M, %S)')
 		displayDict["VS Time"] = datetimeDiff.strftime('%M:%S')
-
 
 # In order to write to the dashboard display, the message needs to be 20 chars, so this funct will handle that
 def makeMessageTwentyChars(sensorName, data):
