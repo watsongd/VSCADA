@@ -10,22 +10,22 @@ Cell 4 Status,0,0,0
 Cell 5 Status,0,0,0
 Cell 6 Status,0,0,0
 Cell 7 Status,0,0,0
-Cell 1 Voltage,2.7,3.6,1
-Cell 2 Voltage,2.7,3.6,1
-Cell 3 Voltage,2.7,3.6,1
-Cell 4 Voltage,2.7,3.6,1
-Cell 5 Voltage,2.7,3.6,1
-Cell 6 Voltage,2.7,3.6,1
-Cell 7 Voltage,2.7,3.6,1
-Cell 1 Temp,0,60,1
-Cell 2 Temp,0,60,1
-Cell 3 Temp,0,60,1
-Cell 4 Temp,0,60,1
-Cell 5 Temp,0,60,1
-Cell 6 Temp,0,60,1
-Cell 7 Temp,0,60,1
+Cell 1 Voltage,2.7,3.6,0
+Cell 2 Voltage,2.7,3.6,0
+Cell 3 Voltage,2.7,3.6,0
+Cell 4 Voltage,2.7,3.6,0
+Cell 5 Voltage,2.7,3.6,0
+Cell 6 Voltage,2.7,3.6,0
+Cell 7 Voltage,2.7,3.6,0
+Cell 1 Temp,0,60,0
+Cell 2 Temp,0,60,0
+Cell 3 Temp,0,60,0
+Cell 4 Temp,0,60,0
+Cell 5 Temp,0,60,0
+Cell 6 Temp,0,60,0
+Cell 7 Temp,0,60,0
 Motor RPM,0,0,0
-Motor Temp,0,90,1
+Motor Temp,0,90,0
 Controller Temp,0,0,0
 RMS Current,0,0,0
 Capacitor Voltage,0,0,0
@@ -36,7 +36,7 @@ Throttle Input,0,0,0
 Brake Input,0,0,0
 TSV Current,0,0,0
 TSV Voltage,0,0,0
-TSI Temp,0,90,1
+TSI Temp,0,90,0
 Brake,0,0,0
 IMD,0,0,0
 TSI State,0,0,0
