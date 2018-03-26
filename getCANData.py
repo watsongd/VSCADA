@@ -242,7 +242,7 @@ def send_throttle_control(throttleControl):
 def parse():
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
-	
+
 	#Initialize the error list to zero
 	error_list = errorList()
 
@@ -535,7 +535,7 @@ def update_error_dict(error):
 	errorDict["Error3"] = errorDict["Error4"]
 	errorDict["Error4"] = errorDict["Error5"]
 	errorDict["Error5"] = error
-	error_string = errorDict["Error1"] + '/' + errorDict["Error2"] + '/' + errorDict["Error3"] + '/' + errorDict["Error4"] + '/' + errorDict["Error5"]  
+	error_string = errorDict["Error1"] + '/n' + errorDict["Error2"] + '/n' + errorDict["Error3"] + '/n' + errorDict["Error4"] + '/n' + errorDict["Error5"]
 
 # Check the frequency with which things are being updated
 def check_display_dict():
@@ -875,6 +875,8 @@ class Window(QtWidgets.QWidget, main_window.Ui_Form):
 		self.TSI_Vol.display(str(displayDict["TS Voltage"]))
 		self.TSI_Temp.display(str(displayDict["TS Temp"]))
 		self.TSI_State.setText(str(displayDict["TS State"]))
+		#LOG
+		self.Log.setPlainText(error_string)
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
