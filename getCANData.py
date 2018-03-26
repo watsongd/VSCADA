@@ -227,7 +227,7 @@ global error_string
 record_button = False
 write_screen = False
 session_timestamp = 0
-error_string = errorDict["Error1"] + '/n' + errorDict["Error2"] + '/n' + errorDict["Error3"] + '/n' + errorDict["Error4"] + '/n' + errorDict["Error5"]
+error_string = errorDict["Error1"] + '\n' + errorDict["Error2"] + '\n' + errorDict["Error3"] + '\n' + errorDict["Error4"] + '\n' + errorDict["Error5"]
 
 def timer():
    now = time.localtime(time.time())
@@ -540,7 +540,7 @@ def update_error_dict(error):
 	errorDict["Error3"] = errorDict["Error4"]
 	errorDict["Error4"] = errorDict["Error5"]
 	errorDict["Error5"] = error
-	error_string = errorDict["Error1"] + '/n' + errorDict["Error2"] + '/n' + errorDict["Error3"] + '/n' + errorDict["Error4"] + '/n' + errorDict["Error5"]
+	error_string = errorDict["Error1"] + '\n' + errorDict["Error2"] + '\n' + errorDict["Error3"] + '\n' + errorDict["Error4"] + '\n' + errorDict["Error5"]
 	print(error_string)
 
 # Check the frequency with which things are being updated
