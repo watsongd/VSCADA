@@ -9,8 +9,7 @@ import collections
 
 import sys
 import random
-import gui
-import main_window
+import ui
 
 import serial
 
@@ -35,7 +34,7 @@ close = b'\x80\x01\x06\xce\xb6\x80\x01\x0c\x94\x19'
 _pollFrequency = 3.0
 #global time counter
 _time = 0
-logger = None
+
 # testNow = datetime.datetime.now().strftime('%H:%M:%S')
 
 class Datapoint(object):
@@ -247,8 +246,8 @@ def parse():
 	error_list = errorList()
 
 	#Get sensor thresholds from config file
-	config = Config()
-	ccnfig.populate_thresh_list()
+	#config = Config()
+	#ccnfig.populate_thresh_list()
 
 	for msg in bus:
 		# Set the address, data, and data length for each message
@@ -317,9 +316,9 @@ def parse():
 						log_data(newDataPoint, error_list, config)
 						item['updated'] = now
 						print("LAST UPDATED: " + str(item['updated']))
-						logger.info("LAST UPDATED: " + str(item['updated']))
+
 						print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
-						logger.info(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
+
 
 				# update screens
 				if timer() % 2 == 0:
@@ -539,6 +538,7 @@ def update_error_dict(error):
 	errorDict["Error4"] = errorDict["Error5"]
 	errorDict["Error5"] = error
 	error_string = errorDict["Error1"] + '/n' + errorDict["Error2"] + '/n' + errorDict["Error3"] + '/n' + errorDict["Error4"] + '/n' + errorDict["Error5"]
+	print(error_string)
 
 # Check the frequency with which things are being updated
 def check_display_dict():
@@ -760,32 +760,10 @@ class GuiUpdateThread(QtCore.QThread):
 
 			self.trigger.emit()
 			#self.emit(QtCore.SIGNAL('update()'))
-class pyQTLogHandler(logging.Handler):
-	widget_list = None
-	def __init__(self, _widget_list=None,_level=logging.DEBUG):
-		"""
-		Comment Here...
-		"""
-		logging.Handler.__init__(self)
-		self.widget_list = _widget_list
-		self.level = _level
-
-	def emit(self, _record):
-
-		#Emit a record
-
-		try:
-			record = self.format(_record)
-			#print(self.format(_record))
-			if _record.levelname == "INFO":
-				self.widget_list['INFO'].appendPlainText(record)
-			else:
-				print(self.format(_record))
-		except:
-			print('LOGGER ERROR!!! PANIC!!! RUN FOR THE HILLS!!!')
 
 
-class Window(QtWidgets.QWidget, main_window.Ui_Form):
+
+class Window(QtWidgets.QWidget, ui.Ui_Form):
 
 	#GUI Update Thread
 	gui_update = None
@@ -798,17 +776,6 @@ class Window(QtWidgets.QWidget, main_window.Ui_Form):
 
 		QtWidgets.QWidget.__init__(self)
 		self.setupUi(self)
-
-		global logger
-
-		logger_widgets = {"INFO":self.Log}
-
-		logger = logging.getLogger(__name__)
-		handler = pyQTLogHandler(logger_widgets)
-		handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
-		logger.addHandler(handler)
-		logger.setLevel(logging.DEBUG)
-		logger.info("LFEV VSCADA Started!")
 
 		#start gui as full screen
 		#self.showFullScreen()
