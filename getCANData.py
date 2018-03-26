@@ -484,6 +484,9 @@ def update_display_dict(datapoint):
 				displayDict[name] = displayDict[name]
 		else:
 			displayDict[name] = datapoint.data
+			if displayDict[name] == "Voltage 1":
+				print("//////////////////////////////////////////////////////")
+				print(datapoint.data)
 
 	########## VSCADA TABLE ##########
 	displayDict["VS Session"] = session["Session"]
