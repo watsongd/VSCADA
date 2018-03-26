@@ -9,8 +9,7 @@ import collections
 
 import sys
 import random
-import gui
-import main_window
+import ui
 
 import serial
 
@@ -793,7 +792,7 @@ class pyQTLogHandler(logging.Handler):
 			print('LOGGER ERROR!!! PANIC!!! RUN FOR THE HILLS!!!')
 
 
-class Window(QtWidgets.QWidget, main_window.Ui_Form):
+class Window(QtWidgets.QWidget, ui.Ui_Form):
 
 	#GUI Update Thread
 	gui_update = None

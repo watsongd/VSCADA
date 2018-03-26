@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(537, 386)
+        Form.resize(539, 386)
         Form.setStyleSheet("background : rgb(130, 36, 51)")
         self.gridLayout = QtWidgets.QGridLayout(Form)
         self.gridLayout.setObjectName("gridLayout")
@@ -539,9 +539,9 @@ class Ui_Form(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.TSI_T.setText(_translate("Form", "TSI"))
         self.VSstate.setText(_translate("Form", "State"))
-        self.Mini_Cell_Voltage.setText(_translate("Form", "Mini Cell(V)"))
+        self.Mini_Cell_Voltage.setText(_translate("Form", "Min Cell(V)"))
         self.TSIIMD.setText(_translate("Form", "IMD"))
-        self.MotorTemp.setText(_translate("Form", "Temp(°F)"))
+        self.MotorTemp.setText(_translate("Form", "Temp(°C)"))
         self.VSsession.setText(_translate("Form", "Session"))
         self.Motor.setText(_translate("Form", "MOTOR"))
         self.SOC.setText(_translate("Form", "SOC(%)"))
@@ -559,5 +559,5 @@ class Ui_Form(object):
         self.Temp.setText(_translate("Form", "Temp(°C)"))
         self.TSI.setText(_translate("Form", "TSI"))
         self.TSICurrent.setText(_translate("Form", "Current(A)"))
-        self.ThrottleV.setText(_translate("Form", "Throttle(V)"))
+        self.ThrottleV.setText(_translate("Form", "Throttle(%)"))
 
