@@ -9,8 +9,7 @@ import collections
 
 import sys
 import random
-import gui
-import main_window
+import ui
 
 import serial
 
