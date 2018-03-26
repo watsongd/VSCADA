@@ -301,7 +301,7 @@ def parse():
 					newDataPoint.data = newDataPoint.data / 10
 
 				# update the displays every 2 seconds
-				if timer() % 2 == 0;
+				if timer() % 2 == 0:
 					update_display_dict(newDataPoint)
 					update_dashboard_dict(newDataPoint)
 
