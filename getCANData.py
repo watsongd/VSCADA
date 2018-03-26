@@ -217,7 +217,7 @@ dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC":
 session = {"Session":0}
 
 #Strings for error messages on GLV Display
-errorDict = {"Error1": "-", "Error2": "-", "Error3": "-", "Error4": "-", "Error5": "-"}
+errorDict = {"Error1": "LEV SCADA", "Error2": "-", "Error3": "-", "Error4": "-", "Error5": "-"}
 
 #Variables for storing
 global record_button
@@ -227,7 +227,7 @@ global error_string
 record_button = False
 write_screen = False
 session_timestamp = 0
-error_string = ''
+error_string = errorDict["Error1"] + '/n' + errorDict["Error2"] + '/n' + errorDict["Error3"] + '/n' + errorDict["Error4"] + '/n' + errorDict["Error5"]
 
 def timer():
    now = time.localtime(time.time())
