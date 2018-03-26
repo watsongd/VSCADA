@@ -318,7 +318,6 @@ def parse():
 					if item['updated'] != now:
 						log_data(newDataPoint, error_list)
 						item['updated'] = now
-						print("LAST UPDATED: " + str(item['updated']))
 						print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 
 				# update screens
@@ -415,6 +414,8 @@ def update_display_dict(datapoint):
 			name = "Temp " + str(datapoint.pack)
 		else:
 			name = datapoint.sensor_name + " " + str(datapoint.pack)
+			print("/////////////////////////////////////////")
+			print(name)
 
 	# Handle data from other subsystems
 	else:
@@ -485,8 +486,6 @@ def update_display_dict(datapoint):
 		else:
 			displayDict[name] = datapoint.data
 			if displayDict[name] == "Voltage 1":
-				print("//////////////////////////////////////////////////////")
-				print(datapoint.data)
 
 	########## VSCADA TABLE ##########
 	displayDict["VS Session"] = session["Session"]
