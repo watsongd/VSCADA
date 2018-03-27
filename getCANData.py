@@ -192,7 +192,6 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x0F3, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":121, "description": "Throttle Plausibility"}]
 
 
-
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
 TSIPackState = {0: "Idle", 1: "Setup Drive", 2: "Drive", 3: "Setup Idle", 4:"OverCurrent"}
 
@@ -306,23 +305,21 @@ def parse():
 						newDataPoint.data = TSVPackState[newDataPoint.data]
 
 				if "Capacitor Voltage" in newDataPoint.sensor_name:
-					newDataPoint.data = newDataPoint.data / 10		
+					newDataPoint.data = newDataPoint.data / 10
+
+				# Record the time the datapoint was updated
+				now = datetime.datetime.now().strftime('%H:%M:%S')
+				if item['updated'] != now:
+					item['updated'] = now
 
 				# Log data based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
-					now = datetime.datetime.now().strftime('%H:%M:%S')
-					if item['updated'] != now:
-						log_data(newDataPoint, error_list)
-						item['updated'] = now
-						print("LAST UPDATED: " + str(item['updated']))
-
-						print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
-
+					log_data(newDataPoint, error_list)
+					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 
 				# update screens
-				if timer() % 2 == 0:
-					update_display_dict(newDataPoint)
-					update_dashboard_dict(newDataPoint)
+				update_display_dict(newDataPoint)
+				update_dashboard_dict(newDataPoint)
 
 				#Check if displays need to be updated with a '-'
 				if timer() % 5 == 0:
@@ -473,8 +470,10 @@ def update_display_dict(datapoint):
 
 			# Otherwise, take the highest
 			elif maxTemp < datapoint.data:
-				displayDict[name] = datapoint.data
-
+				if datapoint.data > 150:
+					pass
+				else:
+					displayDict[name] = datapoint.data
 			else:
 				displayDict[name] = displayDict[name]
 		else:
@@ -500,7 +499,6 @@ def update_display_dict(datapoint):
 		differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
 		datetimeDiff = datetime.datetime.strptime(str(differenceNUM), '(%M, %S)')
 		displayDict["VS Time"] = datetimeDiff.strftime('%M:%S')
-
 
 # In order to write to the dashboard display, the message needs to be 20 chars, so this funct will handle that
 def makeMessageTwentyChars(sensorName, data):
@@ -615,7 +613,9 @@ def check_display_dict():
 							else:
 								cellUpdated= datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
 
-								if oldestUpdateMCV > cellUpdated:
+								if oldestUpdateMCV == 0:
+									oldestUpdateMCV = cellUpdated
+								elif oldestUpdateMCV > cellUpdated:
 									oldestUpdateMCV = cellUpdated
 
 					if oldestUpdateMCV != 0:
@@ -644,7 +644,9 @@ def check_display_dict():
 							else:
 								cellUpdated= datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
 
-								if oldestUpdateMCT > cellUpdated:
+								if oldestUpdateMCT == 0:
+									oldestUpdateMCT = cellUpdated
+								elif oldestUpdateMCT > cellUpdated:
 									oldestUpdateMCT = cellUpdated
 
 					if oldestUpdateMCT != 0:
@@ -846,6 +848,11 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.TSI_State.setText(str(displayDict["TS State"]))
 		#LOG
 		self.Log.setPlainText(error_string)
+
+		print("V1",str(displayDict["Voltage 1"]))
+		print("V2",str(displayDict["Voltage 2"]))
+		print("V3",str(displayDict["Voltage 3"]))
+		print("V4",str(displayDict["Voltage 4"]))
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
