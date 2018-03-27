@@ -858,11 +858,6 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		#LOG
 		self.Log.setPlainText(error_string)
 
-		print("V1: ",str(displayDict["Voltage 1"]))
-		print("V2: ",str(displayDict["Voltage 2"]))
-		print("V3: ",str(displayDict["Voltage 3"]))
-		print("V4: ",str(displayDict["Voltage 4"]))
-
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
 	window = Window()
