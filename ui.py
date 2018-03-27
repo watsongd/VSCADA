@@ -369,8 +369,10 @@ class Ui_Form(object):
         sizePolicy.setHeightForWidth(self.Log.sizePolicy().hasHeightForWidth())
         self.Log.setSizePolicy(sizePolicy)
         self.Log.setStyleSheet("background-color : white; color : black;")
+        self.Log.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.Log.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.Log.setPlainText("")
-        self.Log.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
+        self.Log.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByKeyboard|QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextBrowserInteraction|QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.Log.setObjectName("Log")
         self.gridLayout.addWidget(self.Log, 11, 6, 2, 2)
         self.VS_State = QtWidgets.QLineEdit(Form)
@@ -559,5 +561,5 @@ class Ui_Form(object):
         self.Temp.setText(_translate("Form", "Temp(°C)"))
         self.TSI.setText(_translate("Form", "TSI"))
         self.TSICurrent.setText(_translate("Form", "Current(A)"))
-        self.ThrottleV.setText(_translate("Form", "Throttle(%)"))
+        self.ThrottleV.setText(_translate("Form", "Throttle(V)"))
 
