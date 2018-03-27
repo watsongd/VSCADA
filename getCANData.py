@@ -477,14 +477,14 @@ def update_display_dict(datapoint):
 
 			# Otherwise, take the highest
 			elif maxTemp < datapoint.data:
-				displayDict[name] = datapoint.data
-
+				if datapoint.data > 150:
+					pass
+				else:
+					displayDict[name] = datapoint.data
 			else:
 				displayDict[name] = displayDict[name]
 		else:
 			displayDict[name] = datapoint.data
-
-		print(str(displayDict[name]) + "-------------------------")
 
 	########## VSCADA TABLE ##########
 	displayDict["VS Session"] = session["Session"]
