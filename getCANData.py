@@ -404,6 +404,7 @@ def update_display_dict(datapoint):
 	global record_button
 	global session_timestamp
 
+	print(datapoint.sensor_name + "<----- IN UPDATE ")
 	# Handle data from the packs
 	if datapoint.pack > 0:
 
@@ -413,7 +414,7 @@ def update_display_dict(datapoint):
 			name = "Temp " + str(datapoint.pack)
 		else:
 			name = datapoint.sensor_name + " " + str(datapoint.pack)
-			print(name + ": " + "<---- IN PACK UPDATE")
+			# print(name + ": " + "<---- IN PACK UPDATE")
 
 	# Handle data from other subsystems
 	else:
@@ -485,8 +486,8 @@ def update_display_dict(datapoint):
 				displayDict[name] = displayDict[name]
 		else:
 			displayDict[name] = datapoint.data
-			print("IN UPDATE")
-			print(name + ": " + str(displayDict[name]))
+			# print("IN UPDATE")
+			# print(name + ": " + str(displayDict[name]))
 
 	########## VSCADA TABLE ##########
 	displayDict["VS Session"] = session["Session"]
