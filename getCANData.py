@@ -415,9 +415,6 @@ def update_display_dict(datapoint):
 		else:
 			name = datapoint.sensor_name + " " + str(datapoint.pack)
 
-		if name == "Voltage 1" or "Voltage 2" or "Voltage 3" or "Voltage 4":
-			print("/////////////////////////////////////////")
-
 	# Handle data from other subsystems
 	else:
 
@@ -486,6 +483,8 @@ def update_display_dict(datapoint):
 				displayDict[name] = displayDict[name]
 		else:
 			displayDict[name] = datapoint.data
+
+		print(str(displayDict[name]) + "-------------------------")
 
 	########## VSCADA TABLE ##########
 	displayDict["VS Session"] = session["Session"]
