@@ -312,6 +312,12 @@ def parse():
 				if "Capacitor Voltage" in newDataPoint.sensor_name:
 					newDataPoint.data = newDataPoint.data / 10
 
+				if "IMD" in newDataPoint.sensor_name:
+					newDataPoint.data = newDataPoint.data / 10
+
+				if "Throttle Voltage" in newDataPoint.sensor_name:
+					newDataPoint.data = newDataPoint.data / 10
+
 				# Record the time the datapoint was updated
 				now = datetime.datetime.now().strftime('%H:%M:%S')
 				if item['updated'] != now:
@@ -483,6 +489,8 @@ def update_display_dict(datapoint):
 				displayDict[name] = displayDict[name]
 		else:
 			displayDict[name] = datapoint.data
+			print("IN UPDATE")
+			print(name + ": " + str(displayDict[name]))
 
 	########## VSCADA TABLE ##########
 	displayDict["VS Session"] = session["Session"]
@@ -854,10 +862,10 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		#LOG
 		self.Log.setPlainText(error_string)
 
-		print("V1",str(displayDict["Voltage 1"]))
-		print("V2",str(displayDict["Voltage 2"]))
-		print("V3",str(displayDict["Voltage 3"]))
-		print("V4",str(displayDict["Voltage 4"]))
+		print("V1: ",str(displayDict["Voltage 1"]))
+		print("V2: ",str(displayDict["Voltage 2"]))
+		print("V3: ",str(displayDict["Voltage 3"]))
+		print("V4: ",str(displayDict["Voltage 4"]))
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
