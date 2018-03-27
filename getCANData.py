@@ -312,21 +312,19 @@ def parse():
 				if "Capacitor Voltage" in newDataPoint.sensor_name:
 					newDataPoint.data = newDataPoint.data / 10		
 
+				# Record the time the datapoint was updated
+				now = datetime.datetime.now().strftime('%H:%M:%S')
+				if item['updated'] != now:
+					item['updated'] = now
+
 				# Log data based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
-					now = datetime.datetime.now().strftime('%H:%M:%S')
-					if item['updated'] != now:
-						log_data(newDataPoint, error_list)
-						item['updated'] = now
-						print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
+					log_data(newDataPoint, error_list)
+					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
 
 				# update screens
-				if timer() % 2 == 0:
-					now = datetime.datetime.now().strftime('%H:%M:%S')
-					if item['updated'] != now:
-						item['updated'] = now
-						update_display_dict(newDataPoint)
-						update_dashboard_dict(newDataPoint)
+				update_display_dict(newDataPoint)
+				update_dashboard_dict(newDataPoint)
 
 				#Check if displays need to be updated with a '-'
 				if timer() % 5 == 0:
