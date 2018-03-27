@@ -313,6 +313,9 @@ def parse():
 				if "Throttle Voltage" in newDataPoint.sensor_name:
 					newDataPoint.data = newDataPoint.data / 10
 
+				if "Throttle Input" in newDataPoint.sensor_name:
+					newDataPoint.data = newDataPoint.data / 10
+
 				# Record the time the datapoint was updated
 				now = datetime.datetime.now().strftime('%H:%M:%S')
 				if item['updated'] != now:
