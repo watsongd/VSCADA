@@ -310,7 +310,7 @@ def parse():
 						newDataPoint.data = TSVPackState[newDataPoint.data]
 
 				if "Capacitor Voltage" in newDataPoint.sensor_name:
-					newDataPoint.data = newDataPoint.data / 10		
+					newDataPoint.data = newDataPoint.data / 10
 
 				# Record the time the datapoint was updated
 				now = datetime.datetime.now().strftime('%H:%M:%S')
@@ -853,6 +853,11 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.TSI_State.setText(str(displayDict["TS State"]))
 		#LOG
 		self.Log.setPlainText(error_string)
+
+		print("V1",str(displayDict["Voltage 1"]))
+		print("V2",str(displayDict["Voltage 2"]))
+		print("V3",str(displayDict["Voltage 3"]))
+		print("V4",str(displayDict["Voltage 4"]))
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
