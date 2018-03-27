@@ -81,7 +81,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 
 					  {"address": 0x200, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 2, "sampleTime": 5, "updated": 0, "id":28, "description": "State"},
 					  {"address": 0x200, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 2, "sampleTime": 5, "updated": 0, "id":29, "description": "Voltage"},
-					  {"address": 0x200, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 2, "sampleTime": 1,  "updated": 0, "id":30, "description": "Current"},
+					  {"address": 0x200, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 2, "sampleTime": 1, "updated": 0, "id":30, "description": "Current"},
 					  {"address": 0x200, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 2, "sampleTime": 5, "updated": 0, "id":31, "description": "SOC"},
 					  {"address": 0x201, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 2, "sampleTime": 5, "updated": 0, "id":32, "description": "Columbs"},
 
@@ -414,8 +414,9 @@ def update_display_dict(datapoint):
 			name = "Temp " + str(datapoint.pack)
 		else:
 			name = datapoint.sensor_name + " " + str(datapoint.pack)
+
+		if name == "Voltage 1" or "Voltage 2" or "Voltage 3" or "Voltage 4":
 			print("/////////////////////////////////////////")
-			print(name)
 
 	# Handle data from other subsystems
 	else:
