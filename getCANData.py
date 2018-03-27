@@ -171,10 +171,10 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x405, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 4, "sampleTime": 5, "updated": 0, "id":104, "description": "Cell 7 Temp"},
 
 
-					  {"address": 0x601, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 1,  "updated": 0, "id":105, "description": "Motor RPM"},
+					  {"address": 0x601, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 1, "updated": 0, "id":105, "description": "Motor RPM"},
 					  {"address": 0x601, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "sampleTime": 5, "updated": 0, "id":106, "description": "Motor Temp"},
 					  {"address": 0x601, "offset": 3, "byteLength": 1, "system": "MC", "pack": 0, "sampleTime": 5, "updated": 0, "id":107, "description": "Controller Temp"},
-					  {"address": 0x601, "offset": 4, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 1,  "updated": 0, "id":108, "description": "RMS Current"},
+					  {"address": 0x601, "offset": 4, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 1, "updated": 0, "id":108, "description": "RMS Current"},
 					  {"address": 0x601, "offset": 6, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 5, "updated": 0, "id":109, "description": "Capacitor Voltage"},
 					  {"address": 0x602, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 5, "updated": 0, "id":110, "description": "Stator Frequency"},
 					  {"address": 0x602, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "sampleTime": 5, "updated": 0, "id":111, "description": "Controller Fault Primary"},
@@ -404,7 +404,6 @@ def update_display_dict(datapoint):
 	global record_button
 	global session_timestamp
 
-	print(datapoint.sensor_name + "<----- IN UPDATE ")
 	# Handle data from the packs
 	if datapoint.pack > 0:
 
@@ -417,7 +416,6 @@ def update_display_dict(datapoint):
 				name = "DONT CARE"
 		else:
 			name = datapoint.sensor_name + " " + str(datapoint.pack)
-			# print(name + ": " + "<---- IN PACK UPDATE")
 
 	# Handle data from other subsystems
 	else:
@@ -489,8 +487,6 @@ def update_display_dict(datapoint):
 				displayDict[name] = displayDict[name]
 		else:
 			displayDict[name] = datapoint.data
-			# print("IN UPDATE")
-			# print(name + ": " + str(displayDict[name]))
 
 	########## VSCADA TABLE ##########
 	displayDict["VS Session"] = session["Session"]
