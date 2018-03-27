@@ -413,6 +413,7 @@ def update_display_dict(datapoint):
 			name = "Temp " + str(datapoint.pack)
 		else:
 			name = datapoint.sensor_name + " " + str(datapoint.pack)
+			print(name + ": " + "<---- IN PACK UPDATE")
 
 	# Handle data from other subsystems
 	else:
