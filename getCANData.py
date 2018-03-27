@@ -413,6 +413,8 @@ def update_display_dict(datapoint):
 				name = "Min Cell Volt " + str(datapoint.pack)
 			elif "Temp" in datapoint.sensor_name:
 				name = "Temp " + str(datapoint.pack)
+			else:
+				name = "DONT CARE"
 		else:
 			name = datapoint.sensor_name + " " + str(datapoint.pack)
 			# print(name + ": " + "<---- IN PACK UPDATE")
