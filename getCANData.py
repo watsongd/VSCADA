@@ -240,7 +240,7 @@ def parse():
 
 	#Get sensor thresholds from config file
 	config_list = configList()
-	ccnfig_list.populate_thresh_list()
+	config_list.populate_thresh_list()
 
 	for msg in bus:
 		# Set the address, data, and data length for each message
