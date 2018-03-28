@@ -738,11 +738,13 @@ class ButtonMonitorThread(QtCore.QThread):
 			if write_screen:
 				for key in dashboardDict.keys():
 					if "Motor RPM" in key:
+
 						if dashboardDict[key] == '-':
 							rpm = 0
 						else:
 							rpm = dashboardDict[key]
-						
+
+						# Formula for calculating MPH from RPM
 						mph = (float(rpm) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
 						writeToScreen(0, makeMessageTwentyChars("MPH", fixDecimalPlaces(mph, 1)))
 					elif "Current" in key:
