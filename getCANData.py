@@ -222,7 +222,7 @@ global write_screen
 global session_timestamp
 global error_string
 record_button = False
-write_screen = False
+write_screen = (False, 0)
 session_timestamp = 0
 
 error_string = errorDict["Error1"] + '\n' + errorDict["Error2"] + '\n' + errorDict["Error3"] + '\n' + errorDict["Error4"]
