@@ -417,13 +417,13 @@ def fixDecimalPlaces(decimalValue, desiredDecimalPlaces):
 	# Append or removed from the data string until we have the correct number of decimal places
 	while decimalPlaces != desiredDecimalPlaces:
 
-	if decimalPlaces > desiredDecimalPlaces:
-		dataString = dataString[:-1]
-		decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
+		if decimalPlaces > desiredDecimalPlaces:
+			dataString = dataString[:-1]
+			decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
 
-	elif decimalPlaces < desiredDecimalPlaces:
-		dataString = dataString + "0"
-		decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
+		elif decimalPlaces < desiredDecimalPlaces:
+			dataString = dataString + "0"
+			decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
 
 	return float(dataString.strip('"'))
 
