@@ -226,8 +226,8 @@ write_screen = False
 session_timestamp = 0
 
 def timer():
-   now = time.localtime(time.time())
-   return now[5]
+	now = time.localtime(time.time())
+	return now[5]
 
 def send_throttle_control(throttleControl):
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
