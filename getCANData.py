@@ -16,7 +16,7 @@ from PyQt5 import QtCore, QtWidgets
 from screenwrite import *
 
 from errorList import *
-from config import *
+from configList import *
 
 # initialization of serial port
 portName = '/dev/ttyACM0'
@@ -239,7 +239,7 @@ def parse():
 	error_list = errorList()
 
 	#Get sensor thresholds from config file
-	config_list = config()
+	config_list = configList()
 	ccnfig_list.populate_thresh_list()
 
 	for msg in bus:
