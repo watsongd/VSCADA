@@ -544,8 +544,8 @@ def makeMessageTwentyChars(sensorName, data):
 # Updates the dashboard dictionary that stores data that appears for the driver
 def update_dashboard_dict(datapoint):
 	global write_screen
-
 	name = datapoint.sensor_name
+
 	if name in dashboardDict:
 		# for state of charge, we want to display the charge of the pack with the lowest value
 		if "SOC" in name:
@@ -556,9 +556,16 @@ def update_dashboard_dict(datapoint):
 				dashboardDict["SOC"] = datapoint.data
 			else:
 				dashboardDict["SOC"] = currentLowest
-		else:
+			write_screen = (True, 3)
+		elif "Motor RPM" in name:
 			dashboardDict[name] = datapoint.data
-			write_screen = True
+			write_screen = (True, 0)
+		elif "TSV Current" in name:
+			dashboardDict[name] = datapoint.data
+			write_screen = (True, 1)
+		elif "Motor Temp" in name:
+			dashboardDict[name] = datapoint.data
+			write_screen = (True, 2)
 
 # Updates error dictionary with most recent error message
 def update_error_dict(error):
@@ -731,9 +738,9 @@ class ButtonMonitorThread(QtCore.QThread):
 
 			######################## WRITE TO SCREEN ########################
 			# Write to the dashboard if a new value has been seen
-			if write_screen:
+			if write_screen[0]:
 				for key in dashboardDict.keys():
-					if "Motor RPM" in key:
+					if write_screen[1] == 0 and "Motor RPM" in key:
 
 						if dashboardDict[key] == '-':
 							rpm = 0
@@ -743,13 +750,13 @@ class ButtonMonitorThread(QtCore.QThread):
 						# Formula for calculating MPH from RPM
 						mph = (float(rpm) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
 						writeToScreen(0, makeMessageTwentyChars("MPH", fixDecimalPlaces(mph, 1)))
-					elif "Current" in key:
+					elif write_screen[1] == 1 "Current" in key:
 						writeToScreen(1, makeMessageTwentyChars("Current", dashboardDict[key]))
-					elif "Motor Temp" in key:
+					elif write_screen[1] == 2 "Motor Temp" in key:
 						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key]))
-					elif "SOC" in key:
+					elif write_screen[1] == 3 "SOC" in key:
 						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key]))
-				write_screen = False
+				write_screen = (False, 0)
 
 			######################## READ FROM BUTTONS ########################
 			# Open Serial connection for reading
