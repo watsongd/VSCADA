@@ -738,7 +738,7 @@ class ButtonMonitorThread(QtCore.QThread):
 			if write_screen:
 				for key in dashboardDict.keys():
 					if "Motor RPM" in key:
-						mph = (dashboardDict[key] * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
+						mph = (float(dashboardDict[key]) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
 						writeToScreen(0, makeMessageTwentyChars("MPH", fixDecimalPlaces(mph, 1)))
 					elif "Current" in key:
 						writeToScreen(1, makeMessageTwentyChars("Current", dashboardDict[key]))
