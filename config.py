@@ -4,7 +4,7 @@ import os
 
 SensorInfo = collections.namedtuple('sensor', 'name lower_threshold upper_threshold drop_out')
 
-class Config(object):
+class config(object):
     sensor_thresh_list = []
     def __init__(self):
         self.sensor_thresh_list = []

@@ -2,7 +2,6 @@ import can
 import time
 import queue
 import logging
-import config
 import models
 import datetime
 import collections
@@ -240,7 +239,7 @@ def parse():
 	error_list = errorList()
 
 	#Get sensor thresholds from config file
-	config = Config()
+	config = config()
 	ccnfig.populate_thresh_list()
 
 	for msg in bus:
