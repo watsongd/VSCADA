@@ -239,8 +239,8 @@ def parse():
 	error_list = errorList()
 
 	#Get sensor thresholds from config file
-	config = config()
-	ccnfig.populate_thresh_list()
+	config_list = config()
+	ccnfig_list.populate_thresh_list()
 
 	for msg in bus:
 		# Set the address, data, and data length for each message
@@ -318,7 +318,7 @@ def parse():
 				if timer() % item['sampleTime'] == 0:
 					now = datetime.datetime.now().strftime('%H:%M:%S')
 					if item['updated'] != now:
-						log_data(newDataPoint, error_list, config)
+						log_data(newDataPoint, error_list, config_list)
 						# Record the time the datapoint was updated
 						item['updated'] = now
 
