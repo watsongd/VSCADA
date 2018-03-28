@@ -222,6 +222,7 @@ global error_string
 record_button = False
 write_screen = False
 session_timestamp = 0
+
 error_string = errorDict["Error1"] + '\n' + errorDict["Error2"] + '\n' + errorDict["Error3"] + '\n' + errorDict["Error4"] + '\n' + errorDict["Error5"]
 
 def timer():
@@ -469,7 +470,26 @@ def update_display_dict(datapoint):
 
 			# Otherwise, take the lowest
 			elif lowestCellVolt > datapoint.data:
-				displayDict[name] = datapoint.data
+
+				# data as a String
+				dataString = str(datapoint.data)
+
+				# Make sure the new data has three decimal places
+				decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
+
+				# Append or removed from the data string until we have the correct number of decimal places
+				while decimalPlaces != 3:
+
+					if decimalPlaces > 3:
+						dataString = dataString[:-1]
+						decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
+
+					elif decimalPlaces < 3:
+						dataString = dataString + "0"
+						decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
+
+				displayDict[name] = float(dataString.strip('"'))
+
 
 			else:
 				displayDict[name] = displayDict[name]
@@ -485,7 +505,24 @@ def update_display_dict(datapoint):
 				if datapoint.data > 150:
 					pass
 				else:
-					displayDict[name] = datapoint.data
+					# data as a String
+					dataString = str(datapoint.data)
+
+					# Make sure the new data has three decimal places
+					decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
+
+					# Append or removed from the data string until we have the correct number of decimal places
+					while decimalPlaces != 1:
+
+						if decimalPlaces > 1:
+							dataString = dataString[:-1]
+							decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
+
+						elif decimalPlaces < 1:
+							dataString = dataString + "0"
+							decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
+
+					displayDict[name] = float(dataString.strip('"'))
 			else:
 				displayDict[name] = displayDict[name]
 		else:
