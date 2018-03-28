@@ -112,5 +112,4 @@ def search_flash_drive():
             if file.startswith("lafayetteSCADA"):
                 #print(root)
                 return root
-    else:
-        return ''
+    return ''

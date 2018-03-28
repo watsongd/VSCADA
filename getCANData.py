@@ -2,7 +2,6 @@ import can
 import time
 import queue
 import logging
-import config
 import models
 import datetime
 import collections
@@ -17,7 +16,8 @@ from PyQt5 import QtCore, QtWidgets
 from screenwrite import *
 
 from errorList import *
-from config import *
+from configList import *
+
 from math import pi
 from decimal import *
 
@@ -228,8 +228,8 @@ session_timestamp = 0
 error_string = errorDict["Error1"] + '\n' + errorDict["Error2"] + '\n' + errorDict["Error3"] + '\n' + errorDict["Error4"]
 
 def timer():
-   now = time.localtime(time.time())
-   return now[5]
+	now = time.localtime(time.time())
+	return now[5]
 
 def send_throttle_control(throttleControl):
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
@@ -239,13 +239,12 @@ def send_throttle_control(throttleControl):
 def parse():
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
-
 	#Initialize the error list to zero
 	error_list = errorList()
 
 	#Get sensor thresholds from config file
-	#config = Config()
-	#ccnfig.populate_thresh_list()
+	config_list = configList()
+	config_list.populate_thresh_list()
 
 	for msg in bus:
 		# Set the address, data, and data length for each message
@@ -319,15 +318,13 @@ def parse():
 				if "Throttle Input" in newDataPoint.sensor_name:
 					newDataPoint.data = newDataPoint.data / 10
 
-				# Record the time the datapoint was updated
-				now = datetime.datetime.now().strftime('%H:%M:%S')
-				if item['updated'] != now:
-					item['updated'] = now
-
 				# Log data based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
-					log_data(newDataPoint, error_list)
-					print(newDataPoint.sensor_name + ": " + str(newDataPoint.data))
+					now = datetime.datetime.now().strftime('%H:%M:%S')
+					if item['updated'] != now:
+						log_data(newDataPoint, error_list, config_list)
+						# Record the time the datapoint was updated
+						item['updated'] = now
 
 				# update screens
 				update_display_dict(newDataPoint)
@@ -339,7 +336,7 @@ def parse():
 
 
 #Takes data from parse() and stores in db if recording.
-def log_data(datapoint, error_list):
+def log_data(datapoint, error_list, config):
 
 	global record_button
 	global session_timestamp

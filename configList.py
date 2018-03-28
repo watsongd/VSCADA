@@ -4,7 +4,7 @@ import os
 
 SensorInfo = collections.namedtuple('sensor', 'name lower_threshold upper_threshold drop_out')
 
-class config(object):
+class configList(object):
     sensor_thresh_list = []
     def __init__(self):
         self.sensor_thresh_list = []
@@ -16,7 +16,7 @@ class config(object):
             for file in files:
                 if file.startswith("config"):
                     print (root)
-                    config_path = root + 'config.csv'
+                    config_path = root + '/config.csv'
                     return config_path
         config_path ='/home/pi/Desktop/VSCADA/' + 'config.csv'
         return config_path
