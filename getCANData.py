@@ -171,10 +171,10 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x405, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 4, "sampleTime": 5, "updated": 0, "id":104, "description": "Cell 7 Temp"},
 
 
-					  {"address": 0x601, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 1,  "updated": 0, "id":105, "description": "Motor RPM"},
+					  {"address": 0x601, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 1, "updated": 0, "id":105, "description": "Motor RPM"},
 					  {"address": 0x601, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "sampleTime": 5, "updated": 0, "id":106, "description": "Motor Temp"},
 					  {"address": 0x601, "offset": 3, "byteLength": 1, "system": "MC", "pack": 0, "sampleTime": 5, "updated": 0, "id":107, "description": "Controller Temp"},
-					  {"address": 0x601, "offset": 4, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 1,  "updated": 0, "id":108, "description": "RMS Current"},
+					  {"address": 0x601, "offset": 4, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 1, "updated": 0, "id":108, "description": "RMS Current"},
 					  {"address": 0x601, "offset": 6, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 5, "updated": 0, "id":109, "description": "Capacitor Voltage"},
 					  {"address": 0x602, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "sampleTime": 5, "updated": 0, "id":110, "description": "Stator Frequency"},
 					  {"address": 0x602, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "sampleTime": 5, "updated": 0, "id":111, "description": "Controller Fault Primary"},
@@ -313,6 +313,9 @@ def parse():
 				if "Throttle Voltage" in newDataPoint.sensor_name:
 					newDataPoint.data = newDataPoint.data / 10
 
+				if "Throttle Input" in newDataPoint.sensor_name:
+					newDataPoint.data = newDataPoint.data / 10
+
 				# Record the time the datapoint was updated
 				now = datetime.datetime.now().strftime('%H:%M:%S')
 				if item['updated'] != now:
@@ -407,10 +410,13 @@ def update_display_dict(datapoint):
 	# Handle data from the packs
 	if datapoint.pack > 0:
 
-		if "Cell" and "Voltage" in datapoint.sensor_name:
-			name = "Min Cell Volt " + str(datapoint.pack)
-		elif "Cell" and "Temp" in datapoint.sensor_name:
-			name = "Temp " + str(datapoint.pack)
+		if "Cell" in datapoint.sensor_name:
+			if "Voltage" in datapoint.sensor_name:
+				name = "Min Cell Volt " + str(datapoint.pack)
+			elif "Temp" in datapoint.sensor_name:
+				name = "Temp " + str(datapoint.pack)
+			else:
+				name = "DONT CARE"
 		else:
 			name = datapoint.sensor_name + " " + str(datapoint.pack)
 
@@ -484,8 +490,6 @@ def update_display_dict(datapoint):
 				displayDict[name] = displayDict[name]
 		else:
 			displayDict[name] = datapoint.data
-			print("IN UPDATE")
-			print(name + ": " + str(displayDict[name]))
 
 	########## VSCADA TABLE ##########
 	displayDict["VS Session"] = session["Session"]
@@ -856,11 +860,6 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.TSI_State.setText(str(displayDict["TS State"]))
 		#LOG
 		self.Log.setPlainText(error_string)
-
-		print("V1: ",str(displayDict["Voltage 1"]))
-		print("V2: ",str(displayDict["Voltage 2"]))
-		print("V3: ",str(displayDict["Voltage 3"]))
-		print("V4: ",str(displayDict["Voltage 4"]))
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
