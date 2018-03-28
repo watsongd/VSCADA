@@ -383,7 +383,7 @@ def log_data(datapoint, error_list):
 						print("CONFIRM CRITICAL ERROR")
 						logging.critical('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s. Droppping out of Drive Mode', session["Session"], elapsed_time, sensor_name, data)
 						#Drop out call
-						#send_throttle_control(1)
+						send_throttle_control(1)
 						error_list.reset_num_errors(sensor_name)
 						error1 = str(sensor_name) + ' has exceeded threshold. Value: ' + str(data)
 						update_error_dict(error1)
