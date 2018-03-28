@@ -750,11 +750,11 @@ class ButtonMonitorThread(QtCore.QThread):
 						# Formula for calculating MPH from RPM
 						mph = (float(rpm) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
 						writeToScreen(0, makeMessageTwentyChars("MPH", fixDecimalPlaces(mph, 1)))
-					elif write_screen[1] == 1 "Current" in key:
+					elif write_screen[1] == 1 and "Current" in key:
 						writeToScreen(1, makeMessageTwentyChars("Current", dashboardDict[key]))
-					elif write_screen[1] == 2 "Motor Temp" in key:
+					elif write_screen[1] == 2 and "Motor Temp" in key:
 						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key]))
-					elif write_screen[1] == 3 "SOC" in key:
+					elif write_screen[1] == 3 and "SOC" in key:
 						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key]))
 				write_screen = (False, 0)
 
