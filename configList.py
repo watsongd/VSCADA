@@ -16,7 +16,7 @@ class configList(object):
             for file in files:
                 if file.startswith("config"):
                     print (root)
-                    config_path = root + 'config.csv'
+                    config_path = root + '/config.csv'
                     return config_path
         config_path ='/home/pi/Desktop/VSCADA/' + 'config.csv'
         return config_path
