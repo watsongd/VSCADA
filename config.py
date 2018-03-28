@@ -7,7 +7,7 @@ SensorInfo = collections.namedtuple('sensor', 'name lower_threshold upper_thresh
 class Config(object):
     sensor_thresh_list = []
     def __init__(self):
-        sensor_thresh_list = []
+        self.sensor_thresh_list = []
 
     def get_config_path(self):
         config_path = ''
@@ -18,7 +18,6 @@ class Config(object):
                     print (root)
                     config_path = root + 'config.csv'
                     return config_path
-        
         config_path ='/home/pi/Desktop/VSCADA/' + 'config.csv'
         return config_path
 
@@ -29,6 +28,4 @@ class Config(object):
             for row in reader:
                 sensor = SensorInfo(name=row[0], lower_threshold=float(row[1]), upper_threshold=float(row[2]), drop_out=float(row[3]))
                 self.sensor_thresh_list.append(sensor)
-        
-
-#print (sensor_thresh_list)
+        print (self.sensor_thresh_list)
