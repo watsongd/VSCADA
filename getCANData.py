@@ -214,7 +214,7 @@ dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC":
 session = {"Session":0}
 
 #Strings for error messages on GLV Display
-errorDict = {"Error1": "LEV SCADA", "Error2": "-", "Error3": "-", "Error4": "-", "Error5": "-"}
+errorDict = {"Error1": "LEV SCADA", "Error2": "-", "Error3": "-", "Error4": "-"}
 
 #Variables for storing
 global record_button
@@ -225,7 +225,7 @@ record_button = False
 write_screen = False
 session_timestamp = 0
 
-error_string = errorDict["Error1"] + '\n' + errorDict["Error2"] + '\n' + errorDict["Error3"] + '\n' + errorDict["Error4"] + '\n' + errorDict["Error5"]
+error_string = errorDict["Error1"] + '\n' + errorDict["Error2"] + '\n' + errorDict["Error3"] + '\n' + errorDict["Error4"]
 
 def timer():
    now = time.localtime(time.time())
@@ -569,9 +569,8 @@ def update_error_dict(error):
 	errorDict["Error1"] = errorDict["Error2"]
 	errorDict["Error2"] = errorDict["Error3"]
 	errorDict["Error3"] = errorDict["Error4"]
-	errorDict["Error4"] = errorDict["Error5"]
-	errorDict["Error5"] = error
-	error_string = str(errorDict["Error1"]) + '\n' + str(errorDict["Error2"]) + '\n' + str(errorDict["Error3"]) + '\n' + str(errorDict["Error4"]) + '\n' + str(errorDict["Error5"])
+	errorDict["Error4"] = error
+	error_string = str(errorDict["Error1"]) + '\n' + str(errorDict["Error2"]) + '\n' + str(errorDict["Error3"]) + '\n' + str(errorDict["Error4"])
 	print(error_string)
 
 # Check the frequency with which things are being updated
