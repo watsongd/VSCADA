@@ -18,6 +18,8 @@ from screenwrite import *
 
 from errorList import *
 from config import *
+from math import pi
+from decimal import *
 
 # initialization of serial port
 portName = '/dev/ttyACM0'
@@ -403,6 +405,28 @@ def log_data(datapoint, error_list):
 				print("Logged")
 				models.Data.create(sensor_id=sensor_id,sensorName=sensor_name, data=data, time=elapsed_time, system=system, pack=pack, flagged=flag, session_id=session["Session"])
 
+# Fix the number of decimal places to what you want
+def fixDecimalPlaces(decimalValue, desiredDecimalPlaces):
+
+	# Data as a String
+	dataString = str(decimalValue)
+
+	# Make sure the new data has three decimal places
+	decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
+
+	# Append or removed from the data string until we have the correct number of decimal places
+	while decimalPlaces != desiredDecimalPlaces:
+
+	if decimalPlaces > desiredDecimalPlaces:
+		dataString = dataString[:-1]
+		decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
+
+	elif decimalPlaces < desiredDecimalPlaces:
+		dataString = dataString + "0"
+		decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
+
+	return float(dataString.strip('"'))
+
 # Updates the display dictionary that stores data that appears on the GLV screen
 def update_display_dict(datapoint):
 	global record_button
@@ -470,26 +494,7 @@ def update_display_dict(datapoint):
 
 			# Otherwise, take the lowest
 			elif lowestCellVolt > datapoint.data:
-
-				# data as a String
-				dataString = str(datapoint.data)
-
-				# Make sure the new data has three decimal places
-				decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
-
-				# Append or removed from the data string until we have the correct number of decimal places
-				while decimalPlaces != 3:
-
-					if decimalPlaces > 3:
-						dataString = dataString[:-1]
-						decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
-
-					elif decimalPlaces < 3:
-						dataString = dataString + "0"
-						decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
-
-				displayDict[name] = float(dataString.strip('"'))
-
+				displayDict[name] = fixDecimalPlaces(datapoint.data, 3)
 
 			else:
 				displayDict[name] = displayDict[name]
@@ -505,24 +510,7 @@ def update_display_dict(datapoint):
 				if datapoint.data > 150:
 					pass
 				else:
-					# data as a String
-					dataString = str(datapoint.data)
-
-					# Make sure the new data has three decimal places
-					decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
-
-					# Append or removed from the data string until we have the correct number of decimal places
-					while decimalPlaces != 1:
-
-						if decimalPlaces > 1:
-							dataString = dataString[:-1]
-							decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
-
-						elif decimalPlaces < 1:
-							dataString = dataString + "0"
-							decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
-
-					displayDict[name] = float(dataString.strip('"'))
+					displayDict[name] = fixDecimalPlaces(datapoint.data, 1)
 			else:
 				displayDict[name] = displayDict[name]
 		else:
@@ -750,7 +738,8 @@ class ButtonMonitorThread(QtCore.QThread):
 			if write_screen:
 				for key in dashboardDict.keys():
 					if "Motor RPM" in key:
-						writeToScreen(0, makeMessageTwentyChars(key, dashboardDict[key]))
+						mph = (dashboardDict[key] * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
+						writeToScreen(0, makeMessageTwentyChars("MPH", fixDecimalPlaces(mph, 1)))
 					elif "Current" in key:
 						writeToScreen(1, makeMessageTwentyChars("Current", dashboardDict[key]))
 					elif "Motor Temp" in key:
