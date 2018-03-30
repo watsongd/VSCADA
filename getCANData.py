@@ -419,10 +419,13 @@ def fixDecimalPlaces(decimalValue, desiredDecimalPlaces):
 			decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
 
 		elif decimalPlaces < desiredDecimalPlaces:
-			dataString = dataString + "0"
+			if decimalPlaces == 0:
+				dataString = dataString + ".0"
+			else:
+				dataString = dataString + "0"
 			decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
 
-	return float(dataString.strip('"'))
+	return dataString
 
 # Updates the display dictionary that stores data that appears on the GLV screen
 def update_display_dict(datapoint):
@@ -756,7 +759,7 @@ class ButtonMonitorThread(QtCore.QThread):
 							rpm = dashboardDict[key]
 
 						# Formula for calculating MPH from RPM
-						mph = (float(rpm) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
+						mph = float(float(rpm) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
 						writeToScreen(0, makeMessageTwentyChars("MPH", fixDecimalPlaces(mph, 1)))
 					elif write_screen[1] == 1 and "Current" in key:
 						writeToScreen(1, makeMessageTwentyChars("Current", dashboardDict[key]))
