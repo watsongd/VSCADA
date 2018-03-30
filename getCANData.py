@@ -206,7 +206,7 @@ displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4"
 			   "TS Voltage": '-', "TS Temp": '-', "TS State": '-',
 			   "Motor RPM": '-', "Motor Temp": '-', "MC Throt Input": '-',
 			   "TSI IMD": '-', "TSI Current": '-', "TSI Throt Volt": '-',
-			   "VS State": '-', "VS Session": '-', "VS Time": '-'}
+			   "VS State": '-  ', "VS Session": '-', "VS Time": '-'}
 
 dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC": "-"}
 
