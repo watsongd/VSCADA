@@ -835,8 +835,8 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.setupUi(self)
 
 		#start gui as full screen
-		#self.showFullScreen()
-		self.showMaximized()
+		self.showFullScreen()
+		#self.showMaximized()
 
 		#get update
 		self.gui_update = GuiUpdateThread()
