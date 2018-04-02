@@ -3,7 +3,6 @@ import time
 import queue
 import logging
 import models
-import datetime
 import collections
 
 import sys
@@ -20,6 +19,7 @@ from configList import *
 
 from math import pi
 from decimal import *
+from datetime import *
 
 # initialization of serial port
 portName = '/dev/ttyACM0'
@@ -37,7 +37,7 @@ _pollFrequency = 3.0
 #global time counter
 _time = 0
 
-# testNow = datetime.datetime.now().strftime('%H:%M:%S')
+# testNow = datetime.now().strftime('%H:%M:%S')
 
 class Datapoint(object):
 
@@ -320,7 +320,7 @@ def parse():
 
 				# Log data based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
-					now = datetime.datetime.now().strftime('%H:%M:%S')
+					now = datetime.now().strftime('%H:%M:%S')
 					if item['updated'] != now:
 						log_data(newDataPoint, error_list, config_list)
 						# Record the time the datapoint was updated
@@ -349,16 +349,16 @@ def log_data(datapoint, error_list, config):
 	sensor_id = datapoint.sensor_id
 
 	#Time
-	#now = datetime.datetime.now().strftime('%H:%M:%S')
+	#now = datetime.now().strftime('%H:%M:%S')
 	if session_timestamp == 0:
 		elapsed_time = '00:00'
 	elif session_timestamp == 1:
 		elapsed_time = '00:00'
 	else:
-		now = datetime.datetime.now()
+		now = datetime.now()
 		differenceDT = now - session_timestamp
 		differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
-		datetimeDiff = datetime.datetime.strptime(str(differenceNUM), '(%M, %S)')
+		datetimeDiff = datetime.strptime(str(differenceNUM), '(%M, %S)')
 		elapsed_time = datetimeDiff.strftime('%M:%S')
 
 	for sensor_info in config.sensor_thresh_list:
@@ -531,10 +531,10 @@ def update_display_dict(datapoint):
 	elif session_timestamp == 1:
 		pass
 	else:
-		now = datetime.datetime.now()
+		now = datetime.now()
 		differenceDT = now - session_timestamp
 		differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
-		datetimeDiff = datetime.datetime.strptime(str(differenceNUM), '(%M, %S)')
+		datetimeDiff = datetime.strptime(str(differenceNUM), '(%M, %S)')
 		displayDict["VS Time"] = datetimeDiff.strftime('%M:%S')
 
 # In order to write to the dashboard display, the message needs to be 20 chars, so this funct will handle that
@@ -636,8 +636,8 @@ def check_display_dict():
 					displayDict[key] = '-'
 				else:
 					# check the last time that dict was updated
-					now = datetime.datetime.now()
-					lastUpdated = datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
+					now = datetime.now()
+					lastUpdated = datetime.strptime(str(item['updated']), '%H:%M:%S')
 
 					# get the difference in times
 					differenceDT = now - lastUpdated
@@ -661,10 +661,10 @@ def check_display_dict():
 								pass
 							else:
 								if item['updated'] == 0:
-									item['updated'] = datetime.datetime.now().strftime('%H:%M:%S')
-									cellUpdated = datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
+									item['updated'] = datetime.now().strftime('%H:%M:%S')
+									cellUpdated = datetime.strptime(str(item['updated']), '%H:%M:%S')
 								else:
-									cellUpdated= datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
+									cellUpdated= datetime.strptime(str(item['updated']), '%H:%M:%S')
 
 								if oldestUpdateMCV == 0:
 									oldestUpdateMCV = cellUpdated
@@ -674,7 +674,7 @@ def check_display_dict():
 					if oldestUpdateMCV != 0:
 
 						# check the last time that dict was updated
-						now = datetime.datetime.now()
+						now = datetime.now()
 
 						# get the difference in times
 						differenceDT = now - oldestUpdateMCV
@@ -696,10 +696,10 @@ def check_display_dict():
 								pass
 							else:
 								if item['updated'] == 0:
-									item['updated'] = datetime.datetime.now().strftime('%H:%M:%S')
-									cellUpdated = datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
+									item['updated'] = datetime.now().strftime('%H:%M:%S')
+									cellUpdated = datetime.strptime(str(item['updated']), '%H:%M:%S')
 								else:
-									cellUpdated= datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
+									cellUpdated= datetime.strptime(str(item['updated']), '%H:%M:%S')
 
 								if oldestUpdateMCT == 0:
 									oldestUpdateMCT = cellUpdated
@@ -709,7 +709,7 @@ def check_display_dict():
 					if oldestUpdateMCT != 0:
 
 						# check the last time that dict was updated
-						now = datetime.datetime.now()
+						now = datetime.now()
 
 						# get the difference in times
 						differenceDT = now - oldestUpdateMCT
@@ -787,7 +787,7 @@ class ButtonMonitorThread(QtCore.QThread):
 				print("Check")
 				if record_button == False:
 					record_button = True
-					session_timestamp = datetime.datetime.now()
+					session_timestamp = datetime.now()
 			#Stops recording and exports data
 			elif readButtons == close:
 				print("Close")
