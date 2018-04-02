@@ -25,7 +25,7 @@ from decimal import *
 portName = '/dev/ttyACM0'
 baudRate = 115200
 
-# byte arrays output of dashboard display key presses
+# byte arrays output of dashboard display key presses (press and depress)
 up    = b'\x80\x01\x01q\xc2\x80\x01\x07G\xa7'
 down  = b'\x80\x01\x02\xea\xf0\x80\x01\x08\xb0_'
 left  = b'\x80\x01\x03c\xe1\x80\x01\t9N'
@@ -538,10 +538,16 @@ def update_display_dict(datapoint):
 		displayDict["VS Time"] = datetimeDiff.strftime('%M:%S')
 
 # In order to write to the dashboard display, the message needs to be 20 chars, so this funct will handle that
-def makeMessageTwentyChars(sensorName, data):
+def makeMessageTwentyChars(sensorName, data, recording):
 	twentyChars = "" + sensorName + ": " +str(data)
 	while len(twentyChars) < 20:
-		twentyChars = twentyChars + " "
+		if recording == False:
+			twentyChars = twentyChars + " "
+		else:
+			if len(twentyChars) > 17:
+				twentyChars = twentyChars + "*"
+			else:
+				twentyChars = twentyChars + " "
 	return twentyChars
 
 # Updates the dashboard dictionary that stores data that appears for the driver
@@ -715,7 +721,6 @@ def check_display_dict():
 						if differenceNUM[1] > (3 * item['sampleTime']):
 							displayDict[key] = '-'
 
-
 #Check if record button has been pressed. Export if stop button is pressed
 def export_data():
 	#Exports data exactly one time after stop button is pressed
@@ -753,20 +758,21 @@ class ButtonMonitorThread(QtCore.QThread):
 				for key in dashboardDict.keys():
 					if write_screen[1] == 0 and "Motor RPM" in key:
 
+						# Get the RPM
 						if dashboardDict[key] == '-':
 							rpm = 0
 						else:
 							rpm = dashboardDict[key]
-
 						# Formula for calculating MPH from RPM
 						mph = float(float(rpm) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
-						writeToScreen(0, makeMessageTwentyChars("MPH", fixDecimalPlaces(mph, 1)))
+
+						writeToScreen(0, makeMessageTwentyChars("MPH", fixDecimalPlaces(mph, 1), record_button))
 					elif write_screen[1] == 1 and "Current" in key:
-						writeToScreen(1, makeMessageTwentyChars("Current", dashboardDict[key]))
+						writeToScreen(1, makeMessageTwentyChars("Current", dashboardDict[key]), False)
 					elif write_screen[1] == 2 and "Motor Temp" in key:
-						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key]))
+						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key]), False)
 					elif write_screen[1] == 3 and "SOC" in key:
-						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key]))
+						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key]), False)
 				write_screen = (False, 0)
 
 			######################## READ FROM BUTTONS ########################
@@ -820,7 +826,6 @@ class GuiUpdateThread(QtCore.QThread):
 
 			self.trigger.emit()
 			#self.emit(QtCore.SIGNAL('update()'))
-
 
 
 class Window(QtWidgets.QWidget, ui.Ui_Form):
@@ -907,6 +912,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.TSI_State.setText(str(displayDict["TS State"]))
 		#LOG
 		self.Log.setPlainText(error_string)
+
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
