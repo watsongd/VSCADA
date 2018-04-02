@@ -227,15 +227,18 @@ session_timestamp = 0
 
 error_string = errorDict["Error1"] + '\n' + errorDict["Error2"] + '\n' + errorDict["Error3"] + '\n' + errorDict["Error4"]
 
+# Simple timer function that returns the number of seconds in now()
 def timer():
 	now = time.localtime(time.time())
 	return now[5]
 
+# Function to send a signal to the TSI when we need to drop out drive mode
 def send_throttle_control(throttleControl):
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 	msg = msg = can.Message(arbitration_id=0x010, data=[throttleControl], extended_id=False)
 	bus.send(msg)
 
+# Main Function that handles reading the CAN network and translating that data
 def parse():
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
@@ -334,8 +337,7 @@ def parse():
 				#if timer() % 5 == 0:
 					#check_display_dict()
 
-
-#Takes data from parse() and stores in db if recording.
+# Takes data from parse() and stores in db if recording.
 def log_data(datapoint, error_list, config):
 
 	global record_button
@@ -486,7 +488,7 @@ def update_display_dict(datapoint):
 
 		# If the name is max temp or min volt of cell, make comparisons
 		if "Min Cell Volt" in name:
-			lowestCellVolt = displayDict[name]
+			lowestCellVolt = float(displayDict[name])
 
 			# If its the first entry, directly input
 			if lowestCellVolt == '-':
@@ -499,7 +501,7 @@ def update_display_dict(datapoint):
 			else:
 				displayDict[name] = displayDict[name]
 		elif "Temp " in name:
-			maxTemp = displayDict[name]
+			maxTemp = float(displayDict[name])
 
 			# If its the first entry, directly input
 			if maxTemp == '-':
@@ -721,7 +723,7 @@ def check_display_dict():
 						if differenceNUM[1] > (3 * item['sampleTime']):
 							displayDict[key] = '-'
 
-#Check if record button has been pressed. Export if stop button is pressed
+# Check if record button has been pressed. Export if stop button is pressed
 def export_data():
 	#Exports data exactly one time after stop button is pressed
 	models.export_csv(session["Session"])
@@ -731,7 +733,7 @@ def export_data():
 	session["Session"] = session["Session"] + 1
 	print("New session{}".format(session["Session"]))
 
-#Thread to Monitor and Parse CAN bus Data
+# Thread to Monitor and Parse CAN bus Data
 class CanMonitorThread(QtCore.QThread):
 
 	def run(self):
@@ -741,7 +743,7 @@ class CanMonitorThread(QtCore.QThread):
 		while (True):
 			parse()
 
-#Thread to update driver display and scan dashboard buttons
+# Thread to update driver display and scan dashboard buttons
 class ButtonMonitorThread(QtCore.QThread):
 
 	def run(self):
