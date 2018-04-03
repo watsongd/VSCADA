@@ -657,6 +657,7 @@ def check_display_dict():
 
 				# check if has ever been updated before, if not, just set to '-'
 				if item['updated'] == 0:
+					print("IN HERE")
 					displayDict[key] = '-'
 				else:
 					# check the last time that dict was updated
