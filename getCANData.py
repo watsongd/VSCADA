@@ -571,7 +571,7 @@ def makeMessageTwentyChars(sensorName, data, recording):
 		if recording == False:
 			twentyChars = twentyChars + " "
 		else:
-			if len(twentyChars) > 17:
+			if len(twentyChars) > 16:
 				twentyChars = twentyChars + "*"
 			else:
 				twentyChars = twentyChars + " "
