@@ -962,7 +962,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 
 		if critical_error is true:
 			self.VS_State.setStyleSheet("background:white;color:red;")
-		else
+		else:
 			self.VS_State.setStyleSheet("background:white;color:white;")
 
 if __name__ == "__main__":
