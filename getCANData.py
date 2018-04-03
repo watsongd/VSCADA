@@ -876,7 +876,7 @@ class GuiUpdateThread(QtCore.QThread):
 
 
 class Window(QtWidgets.QWidget, ui.Ui_Form):
-
+	global critical_error
 	#GUI Update Thread
 	gui_update = None
 
