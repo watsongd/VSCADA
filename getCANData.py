@@ -519,22 +519,24 @@ def update_display_dict(datapoint):
 
 				else:
 					displayDict[name] = displayDict[name]
-					
+
 		elif "Temp " in name:
-			maxTemp = float(displayDict[name])
 
 			# If its the first entry, directly input
-			if maxTemp == '-':
+			if displayDict[name] == '-':
 				displayDict[name] = datapoint.data
 
-			# Otherwise, take the highest
-			elif maxTemp < datapoint.data:
-				if datapoint.data > 150:
-					pass
-				else:
-					displayDict[name] = fixDecimalPlaces(datapoint.data, 1)
 			else:
-				displayDict[name] = displayDict[name]
+				maxTemp = float(displayDict[name])
+
+				# Otherwise, take the highest
+				elif maxTemp < datapoint.data:
+					if datapoint.data > 150:
+						pass
+					else:
+						displayDict[name] = fixDecimalPlaces(datapoint.data, 1)
+				else:
+					displayDict[name] = displayDict[name]
 		else:
 			displayDict[name] = datapoint.data
 
