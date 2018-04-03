@@ -792,11 +792,11 @@ class ButtonMonitorThread(QtCore.QThread):
 
 						writeToScreen(0, makeMessageTwentyChars("MPH", fixDecimalPlaces(mph, 1), record_button))
 					elif write_screen[1] == 1 and "Current" in key:
-						writeToScreen(1, makeMessageTwentyChars("Current", dashboardDict[key], False))
+						writeToScreen(1, makeMessageTwentyChars("Current", dashboardDict[key], record_button))
 					elif write_screen[1] == 2 and "Motor Temp" in key:
-						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key], False))
+						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key], record_button))
 					elif write_screen[1] == 3 and "SOC" in key:
-						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key], False))
+						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key], record_button))
 				write_screen = (False, 0)
 
 			######################## READ FROM BUTTONS ########################
