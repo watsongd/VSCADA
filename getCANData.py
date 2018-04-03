@@ -530,7 +530,7 @@ def update_display_dict(datapoint):
 				maxTemp = float(displayDict[name])
 
 				# Otherwise, take the highest
-				elif maxTemp < datapoint.data:
+				if maxTemp < datapoint.data:
 					if datapoint.data > 150:
 						pass
 					else:
