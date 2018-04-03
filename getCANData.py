@@ -51,7 +51,7 @@ class Datapoint(object):
 
 listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 1, "sampleTime": 5, "updated": 0, "id":1, "description": "State"},
 					  {"address": 0x100, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 1, "sampleTime": 5, "updated": 0, "id":2, "description": "Voltage"},
-					  {"address": 0x100, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 1, "sampleTime": 1,  "updated": 0, "id":3, "description": "Current"},
+					  {"address": 0x100, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 1, "sampleTime": 1, "updated": 0,"id":3, "description": "Current"},
 					  {"address": 0x100, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 1, "sampleTime": 5, "updated": 0, "id":4, "description": "SOC"},
 					  {"address": 0x101, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 1, "sampleTime": 5, "updated": 0, "id":5, "description": "Columbs"},
 
@@ -221,9 +221,11 @@ global record_button
 global write_screen
 global session_timestamp
 global error_string
+global min_volt_cell
 record_button = False
 write_screen = (False, 0)
 session_timestamp = 0
+min_volt_cell = 0
 
 error_string = errorDict["Error1"] + '\n' + errorDict["Error2"] + '\n' + errorDict["Error3"] + '\n' + errorDict["Error4"]
 
@@ -433,6 +435,7 @@ def fixDecimalPlaces(decimalValue, desiredDecimalPlaces):
 def update_display_dict(datapoint):
 	global record_button
 	global session_timestamp
+	global min_volt_cell
 
 	# Handle data from the packs
 	if datapoint.pack > 0:
@@ -490,12 +493,24 @@ def update_display_dict(datapoint):
 		if "Min Cell Volt" in name:
 			lowestCellVolt = float(displayDict[name])
 
+			# find which cell has the minimum voltage
+			for char in datapoint.sensor_name:
+				if char.isdigit():
+					cell = int(char)
+					break
+
 			# If its the first entry, directly input
 			if lowestCellVolt == '-':
+				min_volt_cell = cell
 				displayDict[name] = datapoint.data
+
+			# If the data is coming from the same cell, update the value
+			elif cell == min_volt_cell:
+				displayDict[name] = fixDecimalPlaces(datapoint.data, 3)
 
 			# Otherwise, take the lowest
 			elif lowestCellVolt > datapoint.data:
+				min_volt_cell = cell
 				displayDict[name] = fixDecimalPlaces(datapoint.data, 3)
 
 			else:
