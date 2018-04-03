@@ -231,8 +231,10 @@ error_string = errorDict["Error1"] + '\n' + errorDict["Error2"] + '\n' + errorDi
 
 # Simple timer function that returns the number of seconds in now()
 def timer():
-	now = time.localtime(time.time())
-	return now[5]
+	now = datetime.now()
+	nowSeconds = datetime.strftime(now, '%s')
+	intSeconds = int(nowSeconds) % 60
+	return intSeconds
 
 # Function to send a signal to the TSI when we need to drop out drive mode
 def send_throttle_control(throttleControl):
