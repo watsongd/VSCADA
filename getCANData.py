@@ -961,7 +961,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		#LOG
 		self.Log.setPlainText(error_string)
 
-		if critical_error is true:
+		if critical_error:
 			self.VS_State.setStyleSheet("background:white;color:red;")
 		else:
 			self.VS_State.setStyleSheet("background:white;color:black;")
