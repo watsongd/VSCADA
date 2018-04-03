@@ -412,7 +412,7 @@ def log_data(datapoint, error_list, config):
 						update_error_dict(error1)
 						error2 = 'Drop out of Drive Mode'
 						update_error_dict(error2)
-						
+
 						#Now that the error has been seen enough times it is set to critical.
 						error_list.set_critical_error(sensor_id)
 
@@ -420,10 +420,10 @@ def log_data(datapoint, error_list, config):
 						logging.critical('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s', session["Session"], elapsed_time, name, data)
 						error1 = str(name) + ' has exceeded threshold. Value: ' + str(data)
 						update_error_dict(error1)
-			
+
 			#Check every error in list to see if any of them are critical
 			critical_error = error_list.check_critical_errors()
-			
+
 			#Store in database if record button is true
 			if record_button is True:
 				print("Logged")
@@ -960,6 +960,10 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		#LOG
 		self.Log.setPlainText(error_string)
 
+		if critical_error is true:
+			self.VS_State.setStyleSheet("background:white;color:red;")
+		else
+			self.VS_State.setStyleSheet("background:white;color:white;")
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
