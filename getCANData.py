@@ -338,8 +338,8 @@ def parse():
 				update_dashboard_dict(newDataPoint)
 
 				#Check if displays need to be updated with a '-'
-				#if timer() % 5 == 0:
-					#check_display_dict()
+				if timer() % 5 == 0:
+					check_display_dict()
 
 # Takes data from parse() and stores in db if recording.
 def log_data(datapoint, error_list, config):
@@ -792,11 +792,11 @@ class ButtonMonitorThread(QtCore.QThread):
 
 						writeToScreen(0, makeMessageTwentyChars("MPH", fixDecimalPlaces(mph, 1), record_button))
 					elif write_screen[1] == 1 and "Current" in key:
-						writeToScreen(1, makeMessageTwentyChars("Current", dashboardDict[key], record_button))
+						writeToScreen(1, makeMessageTwentyChars("Current", dashboardDict[key], False))
 					elif write_screen[1] == 2 and "Motor Temp" in key:
-						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key], record_button))
+						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key], False))
 					elif write_screen[1] == 3 and "SOC" in key:
-						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key], record_button))
+						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key], False))
 				write_screen = (False, 0)
 
 			######################## READ FROM BUTTONS ########################
@@ -826,8 +826,8 @@ class ButtonMonitorThread(QtCore.QThread):
 			#Close Connection
 			ser.close()
 
-			#if timer() % 5 == 0:
-				#check_display_dict()
+			if timer() % 5 == 0:
+				check_display_dict()
 
 
 class GuiUpdateThread(QtCore.QThread):
