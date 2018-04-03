@@ -341,8 +341,8 @@ def parse():
 				update_dashboard_dict(newDataPoint)
 
 				#Check if displays need to be updated with a '-'
-				if timer() % 5 == 0:
-					check_display_dict()
+				# if timer() % 5 == 0:
+				# 	check_display_dict()
 
 # Takes data from parse() and stores in db if recording.
 def log_data(datapoint, error_list, config):
@@ -831,8 +831,8 @@ class ButtonMonitorThread(QtCore.QThread):
 			#Close Connection
 			ser.close()
 
-			if timer() % 5 == 0:
-				check_display_dict()
+			# if timer() % 5 == 0:
+			# 	check_display_dict()
 
 
 class GuiUpdateThread(QtCore.QThread):
