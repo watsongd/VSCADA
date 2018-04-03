@@ -221,6 +221,7 @@ global record_button
 global write_screen
 global session_timestamp
 global error_string
+global critical_error
 global min_volt_cell
 record_button = False
 write_screen = (False, 0)
@@ -350,12 +351,22 @@ def log_data(datapoint, error_list, config):
 	global record_button
 	global session_timestamp
 	global error_string
+	global critical_error
 
 	data = datapoint.data
 	sensor_name = datapoint.sensor_name
 	pack = datapoint.pack
 	system = datapoint.system
 	sensor_id = datapoint.sensor_id
+
+	#Places Pack number in the name to increase log readability
+	if pack>0:
+		name = str(sensor_name) + " Pack: " + str(pack)
+	else:
+		name = sensor_name
+
+	#Number of times SCADA must see a bad value before it drops out of drive mode
+	max_num_errors = 4
 
 	#Time
 	#now = datetime.now().strftime('%H:%M:%S')
@@ -378,33 +389,40 @@ def log_data(datapoint, error_list, config):
 			elif data > sensor_info.lower_threshold and data < sensor_info.upper_threshold:
 				#Sensor data is within allowable range
 				flag = False
+				error_list.reset_num_errors(sensor_id)
 			else:
 				#Sensor data is not within allowable range. Flag and check if drop out of drive mode needed
 				flag = True
 				print (str(sensor_info.lower_threshold) + ',' + str(sensor_info.upper_threshold) + ',' + str(data))
 				#Do not need to drop out
 				if sensor_info.drop_out == 0:
-					logging.warning('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s', session["Session"], elapsed_time, sensor_name, data)
-					error1 = str(sensor_name) + ' has exceeded threshold. Value: ' + str(data)
+					logging.warning('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s', session["Session"], elapsed_time, name, data)
+					error1 = str(name) + ' has exceeded threshold. Value: ' + str(data)
 					update_error_dict(error1)
 				#Need to drop out
 				elif sensor_info.drop_out == 1:
 					#DROP OUT CALL HERE
 					#Need to see value over threshold four times before dropping out
-					if error_list.get_num_errors(sensor_name) >= 4:
+					if error_list.get_num_errors(sensor_id) >= max_num_errors:
 						print("CONFIRM CRITICAL ERROR")
-						logging.critical('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s. Droppping out of Drive Mode', session["Session"], elapsed_time, sensor_name, data)
+						logging.critical('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s. Droppping out of Drive Mode', session["Session"], elapsed_time, name, data)
 						#Drop out call
 						send_throttle_control(1)
-						error_list.reset_num_errors(sensor_name)
-						error1 = str(sensor_name) + ' has exceeded threshold. Value: ' + str(data)
+						error1 = str(name) + ' has exceeded threshold. Value: ' + str(data)
 						update_error_dict(error1)
 						error2 = 'Drop out of Drive Mode'
 						update_error_dict(error2)
+
+						#Now that the error has been seen enough times it is set to critical.
+						error_list.set_critical_error(sensor_id)
+
 					else:
-						logging.critical('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s', session["Session"], elapsed_time, sensor_name, data)
-						error1 = str(sensor_name) + ' has exceeded threshold. Value: ' + str(data)
+						logging.critical('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s', session["Session"], elapsed_time, name, data)
+						error1 = str(name) + ' has exceeded threshold. Value: ' + str(data)
 						update_error_dict(error1)
+
+			#Check every error in list to see if any of them are critical
+			critical_error = error_list.check_critical_errors()
 
 			#Store in database if record button is true
 			if record_button is True:
@@ -942,6 +960,10 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		#LOG
 		self.Log.setPlainText(error_string)
 
+		if critical_error is true:
+			self.VS_State.setStyleSheet("background:white;color:red;")
+		else:
+			self.VS_State.setStyleSheet("background:white;color:white;")
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
