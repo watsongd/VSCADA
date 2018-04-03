@@ -3,7 +3,6 @@ import time
 import queue
 import logging
 import models
-import datetime
 import collections
 
 import sys
@@ -20,12 +19,13 @@ from configList import *
 
 from math import pi
 from decimal import *
+from datetime import *
 
 # initialization of serial port
 portName = '/dev/ttyACM0'
 baudRate = 115200
 
-# byte arrays output of dashboard display key presses
+# byte arrays output of dashboard display key presses (press and depress)
 up    = b'\x80\x01\x01q\xc2\x80\x01\x07G\xa7'
 down  = b'\x80\x01\x02\xea\xf0\x80\x01\x08\xb0_'
 left  = b'\x80\x01\x03c\xe1\x80\x01\t9N'
@@ -37,7 +37,7 @@ _pollFrequency = 3.0
 #global time counter
 _time = 0
 
-# testNow = datetime.datetime.now().strftime('%H:%M:%S')
+# testNow = datetime.now().strftime('%H:%M:%S')
 
 class Datapoint(object):
 
@@ -51,7 +51,7 @@ class Datapoint(object):
 
 listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 1, "sampleTime": 5, "updated": 0, "id":1, "description": "State"},
 					  {"address": 0x100, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 1, "sampleTime": 5, "updated": 0, "id":2, "description": "Voltage"},
-					  {"address": 0x100, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 1, "sampleTime": 1,  "updated": 0, "id":3, "description": "Current"},
+					  {"address": 0x100, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 1, "sampleTime": 1, "updated": 0,"id":3, "description": "Current"},
 					  {"address": 0x100, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 1, "sampleTime": 5, "updated": 0, "id":4, "description": "SOC"},
 					  {"address": 0x101, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 1, "sampleTime": 5, "updated": 0, "id":5, "description": "Columbs"},
 
@@ -206,7 +206,7 @@ displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4"
 			   "TS Voltage": '-', "TS Temp": '-', "TS State": '-',
 			   "Motor RPM": '-', "Motor Temp": '-', "MC Throt Input": '-',
 			   "TSI IMD": '-', "TSI Current": '-', "TSI Throt Volt": '-',
-			   "VS State": '-', "VS Session": '-', "VS Time": '-'}
+			   "VS State": '-  ', "VS Session": '-', "VS Time": '-'}
 
 dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC": "-"}
 
@@ -222,21 +222,28 @@ global write_screen
 global session_timestamp
 global error_string
 global critical_error
+global min_volt_cell
 record_button = False
 write_screen = (False, 0)
 session_timestamp = 0
+min_volt_cell = 0
 
 error_string = errorDict["Error1"] + '\n' + errorDict["Error2"] + '\n' + errorDict["Error3"] + '\n' + errorDict["Error4"]
 
+# Simple timer function that returns the number of seconds in now()
 def timer():
-	now = time.localtime(time.time())
-	return now[5]
+	now = datetime.now()
+	nowSeconds = datetime.strftime(now, '%s')
+	intSeconds = int(nowSeconds) % 60
+	return intSeconds
 
+# Function to send a signal to the TSI when we need to drop out drive mode
 def send_throttle_control(throttleControl):
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 	msg = msg = can.Message(arbitration_id=0x010, data=[throttleControl], extended_id=False)
 	bus.send(msg)
 
+# Main Function that handles reading the CAN network and translating that data
 def parse():
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
@@ -321,22 +328,24 @@ def parse():
 
 				# Log data based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
-					now = datetime.datetime.now().strftime('%H:%M:%S')
+					now = datetime.now().strftime('%H:%M:%S')
 					if item['updated'] != now:
+						print("OLD: " + str(item['updated']))
 						log_data(newDataPoint, error_list, config_list)
 						# Record the time the datapoint was updated
 						item['updated'] = now
+						print("NEW: " + item['updated'])
+						print(newDataPoint.sensor_name + "^^^")
 
 				# update screens
 				update_display_dict(newDataPoint)
 				update_dashboard_dict(newDataPoint)
 
 				#Check if displays need to be updated with a '-'
-				#if timer() % 5 == 0:
-					#check_display_dict()
+				# if timer() % 5 == 0:
+				# 	check_display_dict()
 
-
-#Takes data from parse() and stores in db if recording.
+# Takes data from parse() and stores in db if recording.
 def log_data(datapoint, error_list, config):
 
 	global record_button
@@ -360,16 +369,16 @@ def log_data(datapoint, error_list, config):
 	max_num_errors = 4
 
 	#Time
-	#now = datetime.datetime.now().strftime('%H:%M:%S')
+	#now = datetime.now().strftime('%H:%M:%S')
 	if session_timestamp == 0:
 		elapsed_time = '00:00'
 	elif session_timestamp == 1:
 		elapsed_time = '00:00'
 	else:
-		now = datetime.datetime.now()
+		now = datetime.now()
 		differenceDT = now - session_timestamp
 		differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
-		datetimeDiff = datetime.datetime.strptime(str(differenceNUM), '(%M, %S)')
+		datetimeDiff = datetime.strptime(str(differenceNUM), '(%M, %S)')
 		elapsed_time = datetimeDiff.strftime('%M:%S')
 
 	for sensor_info in config.sensor_thresh_list:
@@ -437,15 +446,19 @@ def fixDecimalPlaces(decimalValue, desiredDecimalPlaces):
 			decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
 
 		elif decimalPlaces < desiredDecimalPlaces:
-			dataString = dataString + "0"
+			if decimalPlaces == 0:
+				dataString = dataString + ".0"
+			else:
+				dataString = dataString + "0"
 			decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
 
-	return float(dataString.strip('"'))
+	return dataString
 
 # Updates the display dictionary that stores data that appears on the GLV screen
 def update_display_dict(datapoint):
 	global record_button
 	global session_timestamp
+	global min_volt_cell
 
 	# Handle data from the packs
 	if datapoint.pack > 0:
@@ -501,33 +514,50 @@ def update_display_dict(datapoint):
 
 		# If the name is max temp or min volt of cell, make comparisons
 		if "Min Cell Volt" in name:
-			lowestCellVolt = displayDict[name]
+
+			# find which cell has the minimum voltage
+			for char in datapoint.sensor_name:
+				if char.isdigit():
+					cell = int(char)
+					break
 
 			# If its the first entry, directly input
-			if lowestCellVolt == '-':
+			if displayDict[name] == '-':
+				min_volt_cell = cell
 				displayDict[name] = datapoint.data
-
-			# Otherwise, take the lowest
-			elif lowestCellVolt > datapoint.data:
-				displayDict[name] = fixDecimalPlaces(datapoint.data, 3)
 
 			else:
-				displayDict[name] = displayDict[name]
-		elif "Temp " in name:
-			maxTemp = displayDict[name]
+				lowestCellVolt = float(displayDict[name])
 
-			# If its the first entry, directly input
-			if maxTemp == '-':
-				displayDict[name] = datapoint.data
+				# If the data is coming from the same cell, update the value
+				if cell == min_volt_cell:
+					displayDict[name] = fixDecimalPlaces(datapoint.data, 3)
 
-			# Otherwise, take the highest
-			elif maxTemp < datapoint.data:
-				if datapoint.data > 150:
-					pass
+				# Otherwise, take the lowest
+				elif lowestCellVolt > datapoint.data:
+					min_volt_cell = cell
+					displayDict[name] = fixDecimalPlaces(datapoint.data, 3)
+
 				else:
-					displayDict[name] = fixDecimalPlaces(datapoint.data, 1)
+					displayDict[name] = displayDict[name]
+
+		elif "Temp " in name:
+
+			# If its the first entry, directly input
+			if displayDict[name] == '-':
+				displayDict[name] = datapoint.data
+
 			else:
-				displayDict[name] = displayDict[name]
+				maxTemp = float(displayDict[name])
+
+				# Otherwise, take the highest
+				if maxTemp < datapoint.data:
+					if datapoint.data > 150:
+						pass
+					else:
+						displayDict[name] = fixDecimalPlaces(datapoint.data, 1)
+				else:
+					displayDict[name] = displayDict[name]
 		else:
 			displayDict[name] = datapoint.data
 
@@ -546,17 +576,23 @@ def update_display_dict(datapoint):
 	elif session_timestamp == 1:
 		pass
 	else:
-		now = datetime.datetime.now()
+		now = datetime.now()
 		differenceDT = now - session_timestamp
 		differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
-		datetimeDiff = datetime.datetime.strptime(str(differenceNUM), '(%M, %S)')
+		datetimeDiff = datetime.strptime(str(differenceNUM), '(%M, %S)')
 		displayDict["VS Time"] = datetimeDiff.strftime('%M:%S')
 
 # In order to write to the dashboard display, the message needs to be 20 chars, so this funct will handle that
-def makeMessageTwentyChars(sensorName, data):
+def makeMessageTwentyChars(sensorName, data, recording):
 	twentyChars = "" + sensorName + ": " +str(data)
 	while len(twentyChars) < 20:
-		twentyChars = twentyChars + " "
+		if recording == False:
+			twentyChars = twentyChars + " "
+		else:
+			if len(twentyChars) > 17:
+				twentyChars = twentyChars + "*"
+			else:
+				twentyChars = twentyChars + " "
 	return twentyChars
 
 # Updates the dashboard dictionary that stores data that appears for the driver
@@ -642,11 +678,13 @@ def check_display_dict():
 
 				# check if has ever been updated before, if not, just set to '-'
 				if item['updated'] == 0:
+					print("IN HERE")
+					print("Pack : " + str(pack) + " desc: " + desc)
 					displayDict[key] = '-'
 				else:
 					# check the last time that dict was updated
-					now = datetime.datetime.now()
-					lastUpdated = datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
+					now = datetime.now()
+					lastUpdated = datetime.strptime(str(item['updated']), '%H:%M:%S')
 
 					# get the difference in times
 					differenceDT = now - lastUpdated
@@ -670,10 +708,10 @@ def check_display_dict():
 								pass
 							else:
 								if item['updated'] == 0:
-									item['updated'] = datetime.datetime.now().strftime('%H:%M:%S')
-									cellUpdated = datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
+									item['updated'] = datetime.now().strftime('%H:%M:%S')
+									cellUpdated = datetime.strptime(str(item['updated']), '%H:%M:%S')
 								else:
-									cellUpdated= datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
+									cellUpdated= datetime.strptime(str(item['updated']), '%H:%M:%S')
 
 								if oldestUpdateMCV == 0:
 									oldestUpdateMCV = cellUpdated
@@ -683,7 +721,7 @@ def check_display_dict():
 					if oldestUpdateMCV != 0:
 
 						# check the last time that dict was updated
-						now = datetime.datetime.now()
+						now = datetime.now()
 
 						# get the difference in times
 						differenceDT = now - oldestUpdateMCV
@@ -705,10 +743,10 @@ def check_display_dict():
 								pass
 							else:
 								if item['updated'] == 0:
-									item['updated'] = datetime.datetime.now().strftime('%H:%M:%S')
-									cellUpdated = datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
+									item['updated'] = datetime.now().strftime('%H:%M:%S')
+									cellUpdated = datetime.strptime(str(item['updated']), '%H:%M:%S')
 								else:
-									cellUpdated= datetime.datetime.strptime(str(item['updated']), '%H:%M:%S')
+									cellUpdated= datetime.strptime(str(item['updated']), '%H:%M:%S')
 
 								if oldestUpdateMCT == 0:
 									oldestUpdateMCT = cellUpdated
@@ -718,7 +756,7 @@ def check_display_dict():
 					if oldestUpdateMCT != 0:
 
 						# check the last time that dict was updated
-						now = datetime.datetime.now()
+						now = datetime.now()
 
 						# get the difference in times
 						differenceDT = now - oldestUpdateMCT
@@ -730,8 +768,7 @@ def check_display_dict():
 						if differenceNUM[1] > (3 * item['sampleTime']):
 							displayDict[key] = '-'
 
-
-#Check if record button has been pressed. Export if stop button is pressed
+# Check if record button has been pressed. Export if stop button is pressed
 def export_data():
 	#Exports data exactly one time after stop button is pressed
 	models.export_csv(session["Session"])
@@ -741,7 +778,7 @@ def export_data():
 	session["Session"] = session["Session"] + 1
 	print("New session{}".format(session["Session"]))
 
-#Thread to Monitor and Parse CAN bus Data
+# Thread to Monitor and Parse CAN bus Data
 class CanMonitorThread(QtCore.QThread):
 
 	def run(self):
@@ -751,7 +788,7 @@ class CanMonitorThread(QtCore.QThread):
 		while (True):
 			parse()
 
-#Thread to update driver display and scan dashboard buttons
+# Thread to update driver display and scan dashboard buttons
 class ButtonMonitorThread(QtCore.QThread):
 
 	def run(self):
@@ -768,20 +805,21 @@ class ButtonMonitorThread(QtCore.QThread):
 				for key in dashboardDict.keys():
 					if write_screen[1] == 0 and "Motor RPM" in key:
 
+						# Get the RPM
 						if dashboardDict[key] == '-':
 							rpm = 0
 						else:
 							rpm = dashboardDict[key]
-
 						# Formula for calculating MPH from RPM
-						mph = (float(rpm) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
-						writeToScreen(0, makeMessageTwentyChars("MPH", fixDecimalPlaces(mph, 1)))
+						mph = float(float(rpm) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
+
+						writeToScreen(0, makeMessageTwentyChars("MPH", fixDecimalPlaces(mph, 1), record_button))
 					elif write_screen[1] == 1 and "Current" in key:
-						writeToScreen(1, makeMessageTwentyChars("Current", dashboardDict[key]))
+						writeToScreen(1, makeMessageTwentyChars("Current", dashboardDict[key], False))
 					elif write_screen[1] == 2 and "Motor Temp" in key:
-						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key]))
+						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key], False))
 					elif write_screen[1] == 3 and "SOC" in key:
-						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key]))
+						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key], False))
 				write_screen = (False, 0)
 
 			######################## READ FROM BUTTONS ########################
@@ -796,7 +834,7 @@ class ButtonMonitorThread(QtCore.QThread):
 				print("Check")
 				if record_button == False:
 					record_button = True
-					session_timestamp = datetime.datetime.now()
+					session_timestamp = datetime.now()
 			#Stops recording and exports data
 			elif readButtons == close:
 				print("Close")
@@ -811,8 +849,8 @@ class ButtonMonitorThread(QtCore.QThread):
 			#Close Connection
 			ser.close()
 
-			#if timer() % 5 == 0:
-				#check_display_dict()
+			# if timer() % 5 == 0:
+			# 	check_display_dict()
 
 
 class GuiUpdateThread(QtCore.QThread):
@@ -837,7 +875,6 @@ class GuiUpdateThread(QtCore.QThread):
 			#self.emit(QtCore.SIGNAL('update()'))
 
 
-
 class Window(QtWidgets.QWidget, ui.Ui_Form):
 
 	#GUI Update Thread
@@ -853,8 +890,8 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.setupUi(self)
 
 		#start gui as full screen
-		#self.showFullScreen()
-		self.showMaximized()
+		self.showFullScreen()
+		#self.showMaximized()
 
 		#get update
 		self.gui_update = GuiUpdateThread()
@@ -922,6 +959,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.TSI_State.setText(str(displayDict["TS State"]))
 		#LOG
 		self.Log.setPlainText(error_string)
+
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
