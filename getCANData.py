@@ -329,10 +329,11 @@ def parse():
 				if timer() % item['sampleTime'] == 0:
 					now = datetime.now().strftime('%H:%M:%S')
 					if item['updated'] != now:
-						print("IN PARSE")
+						print("OLD: " + item['updated'])
 						log_data(newDataPoint, error_list, config_list)
 						# Record the time the datapoint was updated
 						item['updated'] = now
+						print("NEW: " + item['updated'])
 
 				# update screens
 				update_display_dict(newDataPoint)
