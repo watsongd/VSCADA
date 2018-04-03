@@ -334,6 +334,7 @@ def parse():
 						# Record the time the datapoint was updated
 						item['updated'] = now
 						print("NEW: " + item['updated'])
+						print(newDataPoint.sensor_name + "^^^")
 
 				# update screens
 				update_display_dict(newDataPoint)
@@ -660,6 +661,7 @@ def check_display_dict():
 				# check if has ever been updated before, if not, just set to '-'
 				if item['updated'] == 0:
 					print("IN HERE")
+					print("Pack : " + str(pack) + " desc: " + desc)
 					displayDict[key] = '-'
 				else:
 					# check the last time that dict was updated
