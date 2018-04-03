@@ -493,7 +493,6 @@ def update_display_dict(datapoint):
 
 		# If the name is max temp or min volt of cell, make comparisons
 		if "Min Cell Volt" in name:
-			lowestCellVolt = float(displayDict[name])
 
 			# find which cell has the minimum voltage
 			for char in datapoint.sensor_name:
@@ -502,21 +501,25 @@ def update_display_dict(datapoint):
 					break
 
 			# If its the first entry, directly input
-			if lowestCellVolt == '-':
+			if displayDict[name] == '-':
 				min_volt_cell = cell
 				displayDict[name] = datapoint.data
 
-			# If the data is coming from the same cell, update the value
-			elif cell == min_volt_cell:
-				displayDict[name] = fixDecimalPlaces(datapoint.data, 3)
-
-			# Otherwise, take the lowest
-			elif lowestCellVolt > datapoint.data:
-				min_volt_cell = cell
-				displayDict[name] = fixDecimalPlaces(datapoint.data, 3)
-
 			else:
-				displayDict[name] = displayDict[name]
+				lowestCellVolt = float(displayDict[name])
+
+				# If the data is coming from the same cell, update the value
+				if cell == min_volt_cell:
+					displayDict[name] = fixDecimalPlaces(datapoint.data, 3)
+
+				# Otherwise, take the lowest
+				elif lowestCellVolt > datapoint.data:
+					min_volt_cell = cell
+					displayDict[name] = fixDecimalPlaces(datapoint.data, 3)
+
+				else:
+					displayDict[name] = displayDict[name]
+					
 		elif "Temp " in name:
 			maxTemp = float(displayDict[name])
 
