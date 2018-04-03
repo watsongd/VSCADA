@@ -224,6 +224,7 @@ global error_string
 global critical_error
 global min_volt_cell
 record_button = False
+critical_error = False
 write_screen = (False, 0)
 session_timestamp = 0
 min_volt_cell = 0
