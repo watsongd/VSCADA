@@ -60,6 +60,7 @@ def export_csv(session):
     f = open(flash_drive_path + '/car_data_all.csv', 'w')
 
     writer = csv.writer(f, delimiter=';')
+    writer.writerows(['Sensor_id', 'Time', 'Data Value', 'Flagged?'])
     writer.writerows(data_all)
 
     f.close()
@@ -70,6 +71,7 @@ def export_csv(session):
     g = open(flash_drive_path + '/car_data_session_{}.csv'.format(session), 'w')
 
     writer = csv.writer(g, delimiter=';')
+    writer.writerows(['Sensor_id', 'Time', 'Data Value', 'Flagged?'])
     writer.writerows(data_session)
 
     g.close()
@@ -98,6 +100,7 @@ def export_csv_previous(session):
         g = open(flash_drive_path + '/car_data_recovery_session_{}.csv'.format(session), 'w')
 
         writer = csv.writer(g, delimiter=';')
+        writer.writerows(['Sensor_id', 'Time', 'Data Value', 'Flagged?'])
         writer.writerows(data_session)
 
         g.close()  
