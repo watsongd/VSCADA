@@ -560,12 +560,7 @@ def update_display_dict(datapoint):
 				else:
 					displayDict[name] = displayDict[name]
 		else:
-			if "Temp" in name:
-				displayDict[name] = fixDecimalPlaces(datapoint.data, 1)
-			elif "Voltage" in name:
-				displayDict[name] = fixDecimalPlaces(datapoint.data, 1)
-			else:
-				displayDict[name] = datapoint.data
+			displayDict[name] = datapoint.data
 
 	########## VSCADA TABLE ##########
 	displayDict["VS Session"] = session["Session"]
@@ -938,14 +933,14 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.TSI_Current.display(str(displayDict["TSI Current"]))
 
 		#L table
-		self.Voltage1.display(str(displayDict["Voltage 1"]))
-		self.Voltage2.display(str(displayDict["Voltage 2"]))
-		self.Voltage3.display(str(displayDict["Voltage 3"]))
-		self.Voltage4.display(str(displayDict["Voltage 4"]))
-		self.Temp1.display(str(displayDict["Temp 1"]))#°C
-		self.Temp2.display(str(displayDict["Temp 2"]))#°C
-		self.Temp3.display(str(displayDict["Temp 3"]))#°C
-		self.Temp4.display(str(displayDict["Temp 4"]))#°C
+		self.Voltage1.display(str(fixDecimalPlaces(displayDict["Voltage 1"], 1)))
+		self.Voltage2.display(str(fixDecimalPlaces(displayDict["Voltage 2"], 1)))
+		self.Voltage3.display(str(fixDecimalPlaces(displayDict["Voltage 3"], 1)))
+		self.Voltage4.display(str(fixDecimalPlaces(displayDict["Voltage 4"], 1)))
+		self.Temp1.display(str(fixDecimalPlaces(displayDict["Temp 1"], 1)))#°C
+		self.Temp2.display(str(fixDecimalPlaces(displayDict["Temp 2"], 1)))#°C
+		self.Temp3.display(str(fixDecimalPlaces(displayDict["Temp 3"], 1)))#°C
+		self.Temp4.display(str(fixDecimalPlaces(displayDict["Temp 4"], 1)))#°C
 		self.SOC1.display(str(displayDict["SOC 1"]))
 		self.SOC2.display(str(displayDict["SOC 2"]))
 		self.SOC3.display(str(displayDict["SOC 3"]))
@@ -959,12 +954,12 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.MiniCellV3.display(str(displayDict["Min Cell Volt 3"]))
 		self.MiniCellV4.display(str(displayDict["Min Cell Volt 4"]))
 		#MC
-		self.MC_Vol.display(str(displayDict["MC Voltage"]))
-		self.MC_Temp.display(str(displayDict["MC Temp"]))
+		self.MC_Vol.display(str(fixDecimalPlaces(displayDict["MC Voltage"], 1)))
+		self.MC_Temp.display(str(fixDecimalPlaces(displayDict["MC Temp"], 1)))
 		self.MC_State.setText(str(displayDict["MC State"]))
 		#TSI
-		self.TSI_Vol.display(str(displayDict["TS Voltage"]))
-		self.TSI_Temp.display(str(displayDict["TS Temp"]))
+		self.TSI_Vol.display(str(fixDecimalPlaces(displayDict["TS Voltage"], 1)))
+		self.TSI_Temp.display(str(fixDecimalPlaces(displayDict["TS Temp"], 1)))
 		self.TSI_State.setText(str(displayDict["TS State"]))
 		#LOG
 		self.Log.setPlainText(error_string)
