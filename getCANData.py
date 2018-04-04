@@ -560,7 +560,12 @@ def update_display_dict(datapoint):
 				else:
 					displayDict[name] = displayDict[name]
 		else:
-			displayDict[name] = datapoint.data
+			if "Temp" in name:
+				displayDict[name] = fixDecimalPlaces(datapoint.data, 1)
+			elif "Voltage" in name:
+				displayDict[name] = fixDecimalPlaces(datapoint.data, 1)
+			else:
+				displayDict[name] = datapoint.data
 
 	########## VSCADA TABLE ##########
 	displayDict["VS Session"] = session["Session"]
@@ -797,6 +802,7 @@ class ButtonMonitorThread(QtCore.QThread):
 		global record_button
 		global write_screen
 		global session_timestamp
+		# Write initially to the screen
 		writeToScreen(0, makeMessageTwentyChars("MPH", '-', False))
 		writeToScreen(1, makeMessageTwentyChars("Current", '-', False))
 		writeToScreen(2, makeMessageTwentyChars("Motor Temp", '-', False))
