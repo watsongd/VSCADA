@@ -224,6 +224,7 @@ global error_string
 global critical_error
 global min_volt_cell
 record_button = False
+critical_error = False
 write_screen = (False, 0)
 session_timestamp = 0
 min_volt_cell = 0
@@ -796,7 +797,10 @@ class ButtonMonitorThread(QtCore.QThread):
 		global record_button
 		global write_screen
 		global session_timestamp
-
+		writeToScreen(0, makeMessageTwentyChars("MPH", '-', False))
+		writeToScreen(1, makeMessageTwentyChars("Current", '-', False))
+		writeToScreen(2, makeMessageTwentyChars("Motor Temp", '-', False))
+		writeToScreen(3, makeMessageTwentyChars("SOC", '-', False))
 		while (True):
 
 			######################## WRITE TO SCREEN ########################
@@ -912,7 +916,6 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 	def guiUpdate(self):
 		_translate = QtCore.QCoreApplication.translate
 
-
 		#VSCADA
 		self.VS_Session.display(str(displayDict["VS Session"]))
 		self.VS_Time.display(str(displayDict["VS Time"]))
@@ -960,10 +963,10 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		#LOG
 		self.Log.setPlainText(error_string)
 
-		if critical_error is true:
+		if critical_error:
 			self.VS_State.setStyleSheet("background:white;color:red;")
 		else:
-			self.VS_State.setStyleSheet("background:white;color:white;")
+			self.VS_State.setStyleSheet("background:white;color:black;")
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
