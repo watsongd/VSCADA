@@ -436,24 +436,28 @@ def fixDecimalPlaces(decimalValue, desiredDecimalPlaces):
 	# Data as a String
 	dataString = str(decimalValue)
 
-	# Make sure the new data has three decimal places
-	decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
+	if dataString == '-':
+		return dataString
 
-	# Append or removed from the data string until we have the correct number of decimal places
-	while decimalPlaces != desiredDecimalPlaces:
+	else:
+		# Make sure the new data has three decimal places
+		decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
 
-		if decimalPlaces > desiredDecimalPlaces:
-			dataString = dataString[:-1]
-			decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
+		# Append or removed from the data string until we have the correct number of decimal places
+		while decimalPlaces != desiredDecimalPlaces:
 
-		elif decimalPlaces < desiredDecimalPlaces:
-			if decimalPlaces == 0:
-				dataString = dataString + ".0"
-			else:
-				dataString = dataString + "0"
-			decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
+			if decimalPlaces > desiredDecimalPlaces:
+				dataString = dataString[:-1]
+				decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
 
-	return dataString
+			elif decimalPlaces < desiredDecimalPlaces:
+				if decimalPlaces == 0:
+					dataString = dataString + ".0"
+				else:
+					dataString = dataString + "0"
+				decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
+
+		return dataString
 
 # Updates the display dictionary that stores data that appears on the GLV screen
 def update_display_dict(datapoint):
