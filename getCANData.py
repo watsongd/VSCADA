@@ -797,7 +797,10 @@ class ButtonMonitorThread(QtCore.QThread):
 		global record_button
 		global write_screen
 		global session_timestamp
-
+		writeToScreen(0, makeMessageTwentyChars("MPH", '-', False))
+		writeToScreen(1, makeMessageTwentyChars("Current", '-', False))
+		writeToScreen(2, makeMessageTwentyChars("Motor Temp", '-', False))
+		writeToScreen(3, makeMessageTwentyChars("SOC", '-', False))
 		while (True):
 
 			######################## WRITE TO SCREEN ########################
@@ -912,7 +915,6 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 
 	def guiUpdate(self):
 		_translate = QtCore.QCoreApplication.translate
-
 
 		#VSCADA
 		self.VS_Session.display(str(displayDict["VS Session"]))
