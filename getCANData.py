@@ -190,7 +190,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x0F2, "offset": 1, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":116, "description": "IMD"}, #IMD needs multiplied by 10
 					  {"address": 0x0F2, "offset": 3, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":117, "description": "Throttle Voltage"}, #Needs multiplied by 10
 					  {"address": 0x0F2, "offset": 5, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":118, "description": "Brake Press"}, #1 if pressed, 0 if not
-					  {"address": 0x0F2, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":119, "description": "Safety Loop"}, #1 if closed, 0 if open
+					  {"address": 0x0F2, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":119, "description": "AIRS State"}, #1 if closed, 0 if open
 					  {"address": 0x0F3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":120, "description": "TSV Voltage"},
 					  {"address": 0x0F3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 1, "updated": 0, "id":120, "description": "TSV Current"},
 					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":121, "description": "TSI Temp"},
