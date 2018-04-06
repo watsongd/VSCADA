@@ -226,11 +226,17 @@ global session_timestamp
 global error_string
 global critical_error
 global min_volt_cell
+global throttle_plausibility
+global airs_status
+global brake_status
 record_button = False
 critical_error = False
 write_screen = (False, 0)
 session_timestamp = 0
 min_volt_cell = 0
+throttle_plausibility = 0
+airs_status = 0
+brake_status = 0
 
 error_string = errorDict["Error1"] + '\n' + errorDict["Error2"] + '\n' + errorDict["Error3"] + '\n' + errorDict["Error4"]
 
@@ -468,6 +474,16 @@ def update_display_dict(datapoint):
 	global record_button
 	global session_timestamp
 	global min_volt_cell
+	global throttle_plausibility
+	global airs_status
+	global brake_status
+
+	if datapoint.sensor_name == "Throttle Plausibility":
+		throttle_plausibility = datapoint.data
+	if datapoint.sensor_name == "AIRS Status":
+		airs_status = datapoint.data
+	if datapoint.sensor_name == "Brake Press":
+		brake_status = datapoint.data
 
 	# Handle data from the packs
 	if datapoint.pack > 0:
