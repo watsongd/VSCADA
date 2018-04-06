@@ -906,6 +906,9 @@ class GuiUpdateThread(QtCore.QThread):
 
 class Window(QtWidgets.QWidget, ui.Ui_Form):
 	global critical_error
+	global throttle_plausibility
+	global airs_status
+	global brake_status
 	#GUI Update Thread
 	gui_update = None
 
@@ -989,9 +992,25 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.Log.setPlainText(error_string)
 
 		if critical_error:
-			self.VS_State.setStyleSheet("background:white;color:red;")
+			self.VS_State.setStyleSheet("background:red;color:white;")
 		else:
 			self.VS_State.setStyleSheet("background:white;color:black;")
+
+		if throttle_plausibility is 0:
+			self.TSI_Throttle_V.setStyleSheet("background:red;color:white;")
+		else:
+			self.TSI_Throttle_V.setStyleSheet("background:white;color:black;")
+
+		if air_status is 0:
+			self.radioButton_2.setChecked(False)
+		else:
+			self.radioButton_2.setChecked(True)
+
+
+		if brake_status is 0:
+			self.radioButton.setChecked(False)
+		else:
+			self.radioButton.setChecked(True)
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
