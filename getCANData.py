@@ -336,6 +336,9 @@ def parse():
 				if "Throttle Input" in newDataPoint.sensor_name:
 					newDataPoint.data = newDataPoint.data / 10
 
+				if "TSV Voltage" in newDataPoint.sensor_name:
+					newDataPoint.data = newDataPoint.data / 10
+
 				# Log data based on the sample time of the object
 				if timer() % item['sampleTime'] == 0:
 					now = datetime.now().strftime('%H:%M:%S')
