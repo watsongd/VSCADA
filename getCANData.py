@@ -1004,7 +1004,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		else:
 			self.TSI_Throttle_V.setStyleSheet("background:white;color:black;")
 
-		if air_status is 0:
+		if airs_status is 0:
 			self.radioButton_2.setChecked(False)
 		else:
 			self.radioButton_2.setChecked(True)
