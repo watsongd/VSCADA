@@ -1005,15 +1005,15 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 			self.TSI_Throttle_V.setStyleSheet("background:red;color:white;")
 
 		if airs_status is 0:
-			self.radioButton_2.setChecked(False)
+			self.lineEdit.setStyleSheet("background: green; color: white")
 		else:
-			self.radioButton_2.setChecked(True)
+			self.lineEdit.setStyleSheet("background: red; color: white")
 
 
 		if brake_status is 0:
-			self.radioButton.setChecked(False)
+			self.lineEdit_2.setStyleSheet("background: green; color: white")
 		else:
-			self.radioButton.setChecked(True)
+			self.lineEdit_2.setStyleSheet("background: red; color: white")
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
