@@ -253,18 +253,56 @@ def send_throttle_control(throttleControl):
 	msg = msg = can.Message(arbitration_id=0x010, data=[throttleControl], extended_id=False)
 	bus.send(msg)
 
+# Function to shift the decimal point of CAN data
+def shift_decimal_point(datapoint):
+	if datapoint.pack > 0:
+		if "Voltage" in datapoint.sensor_name:
+			if "Cell" in datapoint.sensor_name:
+				# mV --> V
+				datapoint.data = datapoint.data / 1000
+			else:
+				datapoint.data = datapoint.data / 10
+
+		elif "Current" in datapoint.sensor_name:
+			# mA --> A
+			datapoint.data = datapoint.data / 1000
+
+		elif "Temp" in datapoint.sensor_name:
+			if "Cell" in datapoint.sensor_name:
+				datapoint.data = datapoint.data / 10
+
+	if "State" in datapoint.sensor_name:
+		if "TSI" in datapoint.sensor_name:
+			datapoint.data = TSIPackState[datapoint.data]
+		else:
+			datapoint.data = TSVPackState[datapoint.data]
+
+	if "Capacitor Voltage" in datapoint.sensor_name:
+		datapoint.data = datapoint.data / 10
+
+	if "IMD" in datapoint.sensor_name:
+		datapoint.data = datapoint.data / 10
+
+	if "Throttle Voltage" in datapoint.sensor_name:
+		datapoint.data = datapoint.data / 10
+
+	if "Throttle Input" in datapoint.sensor_name:
+		datapoint.data = datapoint.data / 10
+
+	if "TSV Voltage" in datapoint.sensor_name:
+		datapoint.data = datapoint.data / 10
+
 # Main Function that handles reading the CAN network and translating that data
-def parse():
-	session["Session"] = models.get_session()
+def receive():
+	#Initialze bus
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
-	#Initialize the error list to zero
-	error_list = errorList()
 
-	#Get sensor thresholds from config file
-	config_list = configList()
-	config_list.populate_thresh_list()
+	# Recieve the first message on the bus a Message or None, based on if data is present on the bus
+	msg = bus.recv(0.0)
 
-	for msg in bus:
+	if msg is None:
+		return None
+	else:
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
 		data = msg.data
@@ -302,62 +340,9 @@ def parse():
 					newDataPoint.data = data[offset]
 
 				# Based on the description, shift the decimal point as necessary
-				if newDataPoint.pack > 0:
-					if "Voltage" in newDataPoint.sensor_name:
-						if "Cell" in newDataPoint.sensor_name:
-							# mV --> V
-							newDataPoint.data = newDataPoint.data / 1000
-						else:
-							newDataPoint.data = newDataPoint.data / 10
+				shift_decimal_point(newDataPoint)
 
-					elif "Current" in newDataPoint.sensor_name:
-						# mA --> A
-						newDataPoint.data = newDataPoint.data / 1000
-
-					elif "Temp" in newDataPoint.sensor_name:
-						if "Cell" in newDataPoint.sensor_name:
-							newDataPoint.data = newDataPoint.data / 10
-
-				if "State" in newDataPoint.sensor_name:
-					if "TSI" in newDataPoint.sensor_name:
-						newDataPoint.data = TSIPackState[newDataPoint.data]
-					else:
-						newDataPoint.data = TSVPackState[newDataPoint.data]
-
-				if "Capacitor Voltage" in newDataPoint.sensor_name:
-					newDataPoint.data = newDataPoint.data / 10
-
-				if "IMD" in newDataPoint.sensor_name:
-					newDataPoint.data = newDataPoint.data / 10
-
-				if "Throttle Voltage" in newDataPoint.sensor_name:
-					newDataPoint.data = newDataPoint.data / 10
-
-				if "Throttle Input" in newDataPoint.sensor_name:
-					newDataPoint.data = newDataPoint.data / 10
-
-				if "TSV Voltage" in newDataPoint.sensor_name:
-					newDataPoint.data = newDataPoint.data / 10
-
-				# Log data based on the sample time of the object
-				if timer() % item['sampleTime'] == 0:
-					now = datetime.now().strftime('%H:%M:%S')
-					if item['updated'] != now:
-						# print("OLD: " + str(item['updated']))
-						log_data(newDataPoint, error_list, config_list)
-						# Record the time the datapoint was updated
-						item['updated'] = now
-						# print("NEW: " + item['updated'])
-						print("SENSOR: " + newDataPoint.sensor_name + " -->" + str(newDataPoint.data))
-						# print(newDataPoint.sensor_name + "^^^")
-
-				# update screens
-				update_display_dict(newDataPoint)
-				update_dashboard_dict(newDataPoint)
-
-				#Check if displays need to be updated with a '-'
-				# if timer() % 5 == 0:
-				# 	check_display_dict()
+				return newDataPoint
 
 # Takes data from parse() and stores in db if recording.
 def log_data(datapoint, error_list, config):
@@ -444,7 +429,7 @@ def log_data(datapoint, error_list, config):
 				models.Data.create(sensor_id=sensor_id,sensorName=sensor_name, data=data, time=elapsed_time, system=system, pack=pack, flagged=flag, session_id=session["Session"])
 
 # Fix the number of decimal places to what you want
-def fixDecimalPlaces(decimalValue, desiredDecimalPlaces):
+def fix_decimal_places(decimalValue, desiredDecimalPlaces):
 
 	# Data as a String
 	dataString = str(decimalValue)
@@ -474,8 +459,6 @@ def fixDecimalPlaces(decimalValue, desiredDecimalPlaces):
 
 # Updates the display dictionary that stores data that appears on the GLV screen
 def update_display_dict(datapoint):
-	global record_button
-	global session_timestamp
 	global min_volt_cell
 	global throttle_plausibility
 	global airs_status
@@ -559,12 +542,12 @@ def update_display_dict(datapoint):
 
 				# If the data is coming from the same cell, update the value
 				if cell == min_volt_cell:
-					displayDict[name] = fixDecimalPlaces(datapoint.data, 3)
+					displayDict[name] = fix_decimal_places(datapoint.data, 3)
 
 				# Otherwise, take the lowest
 				elif lowestCellVolt > datapoint.data:
 					min_volt_cell = cell
-					displayDict[name] = fixDecimalPlaces(datapoint.data, 3)
+					displayDict[name] = fix_decimal_places(datapoint.data, 3)
 
 				else:
 					displayDict[name] = displayDict[name]
@@ -583,11 +566,16 @@ def update_display_dict(datapoint):
 					if datapoint.data > 150:
 						pass
 					else:
-						displayDict[name] = fixDecimalPlaces(datapoint.data, 1)
+						displayDict[name] = fix_decimal_places(datapoint.data, 1)
 				else:
 					displayDict[name] = displayDict[name]
 		else:
 			displayDict[name] = datapoint.data
+
+# Updates VSCADA indepent of CAN data
+def update_scada_table():
+	global record_button
+	global session_timestamp
 
 	########## VSCADA TABLE ##########
 	displayDict["VS Session"] = session["Session"]
@@ -611,7 +599,7 @@ def update_display_dict(datapoint):
 		displayDict["VS Time"] = datetimeDiff.strftime('%M:%S')
 
 # In order to write to the dashboard display, the message needs to be 20 chars, so this funct will handle that
-def makeMessageTwentyChars(sensorName, data, recording):
+def make_message_twenty_chars(sensorName, data, recording):
 	twentyChars = "" + sensorName + ": " +str(data)
 	while len(twentyChars) < 20:
 		if recording == False:
@@ -813,8 +801,38 @@ class CanMonitorThread(QtCore.QThread):
 
 		models.build_db()
 		logging.basicConfig(filename='/home/pi/Desktop/VSCADA/log.log', level=logging.WARNING)
+
+		session["Session"] = models.get_session()
+
+		#Initialize the error list to zero
+		error_list = errorList()
+
+		#Get sensor thresholds from config file
+		config_list = configList()
+		config_list.populate_thresh_list()
+
 		while (True):
-			parse()
+			# Receive a datapoint
+			datapoint = receive()
+
+			if datapoint is None:
+				update_scada_table()
+			else:
+				# Log data based on the sample time of the object
+				if timer() % datapoint.sampleTime == 0:
+					now = datetime.now().strftime('%H:%M:%S')
+					for item in listOfViewableData:
+						if item['id'] == datapoint.sensor_id:
+							if item['updated'] != now:
+								# Record the time the datapoint was updated
+								item['updated'] = now
+								log_data(datapoint, error_list, config_list)
+								#print("SENSOR: " + datapoint.sensor_name + " -->" + str(datapoint.data))
+
+				# update screens
+				update_display_dict(datapoint)
+				update_dashboard_dict(datapoint)
+				update_scada_table()
 
 # Thread to update driver display and scan dashboard buttons
 class ButtonMonitorThread(QtCore.QThread):
@@ -825,10 +843,10 @@ class ButtonMonitorThread(QtCore.QThread):
 		global write_screen
 		global session_timestamp
 		# Write initially to the screen
-		writeToScreen(0, makeMessageTwentyChars("MPH", '-', False))
-		writeToScreen(1, makeMessageTwentyChars("Current", '-', False))
-		writeToScreen(2, makeMessageTwentyChars("Motor Temp", '-', False))
-		writeToScreen(3, makeMessageTwentyChars("SOC", '-', False))
+		writeToScreen(0, make_message_twenty_chars("MPH", '-', False))
+		writeToScreen(1, make_message_twenty_chars("Current", '-', False))
+		writeToScreen(2, make_message_twenty_chars("Motor Temp", '-', False))
+		writeToScreen(3, make_message_twenty_chars("SOC", '-', False))
 		while (True):
 
 			######################## WRITE TO SCREEN ########################
@@ -845,13 +863,13 @@ class ButtonMonitorThread(QtCore.QThread):
 						# Formula for calculating MPH from RPM
 						mph = float(float(rpm) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
 
-						writeToScreen(0, makeMessageTwentyChars("MPH", fixDecimalPlaces(mph, 1), record_button))
+						writeToScreen(0, make_message_twenty_chars("MPH", fix_decimal_places(mph, 1), record_button))
 					elif write_screen[1] == 1 and "Current" in key:
-						writeToScreen(1, makeMessageTwentyChars("Current", dashboardDict[key], False))
+						writeToScreen(1, make_message_twenty_chars("Current", dashboardDict[key], False))
 					elif write_screen[1] == 2 and "Motor Temp" in key:
-						writeToScreen(2, makeMessageTwentyChars(key, dashboardDict[key], False))
+						writeToScreen(2, make_message_twenty_chars(key, dashboardDict[key], False))
 					elif write_screen[1] == 3 and "SOC" in key:
-						writeToScreen(3, makeMessageTwentyChars(key, dashboardDict[key], False))
+						writeToScreen(3, make_message_twenty_chars(key, dashboardDict[key], False))
 				write_screen = (False, 0)
 
 			######################## READ FROM BUTTONS ########################
@@ -963,14 +981,14 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.TSI_Current.display(str(displayDict["TSI Current"]))
 
 		#L table
-		self.Voltage1.display(str(fixDecimalPlaces(displayDict["Voltage 1"], 1)))
-		self.Voltage2.display(str(fixDecimalPlaces(displayDict["Voltage 2"], 1)))
-		self.Voltage3.display(str(fixDecimalPlaces(displayDict["Voltage 3"], 1)))
-		self.Voltage4.display(str(fixDecimalPlaces(displayDict["Voltage 4"], 1)))
-		self.Temp1.display(str(fixDecimalPlaces(displayDict["Temp 1"], 1)))#°C
-		self.Temp2.display(str(fixDecimalPlaces(displayDict["Temp 2"], 1)))#°C
-		self.Temp3.display(str(fixDecimalPlaces(displayDict["Temp 3"], 1)))#°C
-		self.Temp4.display(str(fixDecimalPlaces(displayDict["Temp 4"], 1)))#°C
+		self.Voltage1.display(str(fix_decimal_places(displayDict["Voltage 1"], 1)))
+		self.Voltage2.display(str(fix_decimal_places(displayDict["Voltage 2"], 1)))
+		self.Voltage3.display(str(fix_decimal_places(displayDict["Voltage 3"], 1)))
+		self.Voltage4.display(str(fix_decimal_places(displayDict["Voltage 4"], 1)))
+		self.Temp1.display(str(fix_decimal_places(displayDict["Temp 1"], 1)))#°C
+		self.Temp2.display(str(fix_decimal_places(displayDict["Temp 2"], 1)))#°C
+		self.Temp3.display(str(fix_decimal_places(displayDict["Temp 3"], 1)))#°C
+		self.Temp4.display(str(fix_decimal_places(displayDict["Temp 4"], 1)))#°C
 		self.SOC1.display(str(displayDict["SOC 1"]))
 		self.SOC2.display(str(displayDict["SOC 2"]))
 		self.SOC3.display(str(displayDict["SOC 3"]))
@@ -984,12 +1002,12 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.MiniCellV3.display(str(displayDict["Min Cell Volt 3"]))
 		self.MiniCellV4.display(str(displayDict["Min Cell Volt 4"]))
 		#MC
-		self.MC_Vol.display(str(fixDecimalPlaces(displayDict["MC Voltage"], 1)))
-		self.MC_Temp.display(str(fixDecimalPlaces(displayDict["MC Temp"], 1)))
+		self.MC_Vol.display(str(fix_decimal_places(displayDict["MC Voltage"], 1)))
+		self.MC_Temp.display(str(fix_decimal_places(displayDict["MC Temp"], 1)))
 		self.MC_State.setText(str(displayDict["MC State"]))
 		#TSI
-		self.TSI_Vol.display(str(fixDecimalPlaces(displayDict["TS Voltage"], 1)))
-		self.TSI_Temp.display(str(fixDecimalPlaces(displayDict["TS Temp"], 1)))
+		self.TSI_Vol.display(str(fix_decimal_places(displayDict["TS Voltage"], 1)))
+		self.TSI_Temp.display(str(fix_decimal_places(displayDict["TS Temp"], 1)))
 		self.TSI_State.setText(str(displayDict["TS State"]))
 		#LOG
 		self.Log.setPlainText(error_string)
