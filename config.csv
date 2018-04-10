@@ -12,7 +12,7 @@ Id,lower_thresh,upper_thresh,drop_out,log_en,csv_en,Notes
 11,0,0,0,1,1,Status
 12,0,0,0,1,1,Status
 13,2.7,3.6,0,1,1,Voltage
-14,2.7,3.6,1,1,1,Voltage
+14,2.7,3.6,0,1,1,Voltage
 15,2.7,3.6,0,1,1,Voltage
 16,2.7,3.6,0,1,1,Voltage
 17,2.7,3.6,0,1,1,Voltage
