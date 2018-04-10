@@ -1006,15 +1006,15 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 			self.TSI_Throttle_V.setStyleSheet("background:red;color:white;")
 
 		if airs_status is 0:
-			self.lineEdit.setStyleSheet("background: lightgreen; color: darkgreen")
+			self.Airs.setStyleSheet("background: lightgreen; color: darkgreen")
 		else:
-			self.lineEdit.setStyleSheet("background: red; color: white")
+			self.Airs.setStyleSheet("background: red; color: white")
 
 
 		if brake_status is 0:
-			self.lineEdit_2.setStyleSheet("background: lightgreen; color: darkgreen")
+			self.Brake.setStyleSheet("background: lightgreen; color: darkgreen")
 		else:
-			self.lineEdit_2.setStyleSheet("background: red; color: white")
+			self.Brake.setStyleSheet("background: red; color: white")
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
