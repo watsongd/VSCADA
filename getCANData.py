@@ -192,9 +192,9 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x0F2, "offset": 5, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":118, "description": "Brake Press"}, #1 if pressed, 0 if not
 					  {"address": 0x0F2, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":119, "description": "AIRS Status"}, #1 if closed, 0 if open
 					  {"address": 0x0F3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":120, "description": "TSV Voltage"},
-					  {"address": 0x0F3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 1, "updated": 0, "id":120, "description": "TSV Current"},
-					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":121, "description": "TSI Temp"},
-					  {"address": 0x0F3, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":122, "description": "Throttle Plausibility"}]
+					  {"address": 0x0F3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 1, "updated": 0, "id":121, "description": "TSV Current"},
+					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":122, "description": "TSI Temp"},
+					  {"address": 0x0F3, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":123, "description": "Throttle Plausibility"}]
 
 
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
@@ -396,7 +396,7 @@ def log_data(datapoint, error_list, config):
 		elapsed_time = datetimeDiff.strftime('%M:%S')
 
 	for sensor_info in config.sensor_thresh_list:
-		if sensor_info.name == sensor_name:
+		if sensor_info.sensor_id == sensor_id:
 			#Check thresholds
 			if (sensor_info.lower_threshold == sensor_info.upper_threshold):
 				flag = False
@@ -420,6 +420,7 @@ def log_data(datapoint, error_list, config):
 					if error_list.get_num_errors(sensor_id) >= max_num_errors:
 						print("CONFIRM CRITICAL ERROR")
 						logging.critical('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s. Droppping out of Drive Mode', session["Session"], elapsed_time, name, data)
+						
 						#Drop out call
 						send_throttle_control(1)
 						error1 = str(name) + ' has exceeded threshold. Value: ' + str(data)
@@ -439,9 +440,9 @@ def log_data(datapoint, error_list, config):
 			critical_error = error_list.check_critical_errors()
 
 			#Store in database if record button is true
-			if record_button is True:
+			if record_button is True and sensor_info.log_en is True:
 				print("Logged")
-				models.Data.create(sensor_id=sensor_id,sensorName=sensor_name, data=data, time=elapsed_time, system=system, pack=pack, flagged=flag, session_id=session["Session"])
+				models.Data.create(sensor_id=sensor_id,sensorName=sensor_name, data=data, time=elapsed_time, system=system, pack=pack, flagged=flag, session_id=session["Session"], csv_out=sensor_info.csv_out)
 
 # Fix the number of decimal places to what you want
 def fixDecimalPlaces(decimalValue, desiredDecimalPlaces):

@@ -17,6 +17,7 @@ class Data(Model):
     system     = CharField(max_length = 6)
     pack       = CharField(max_length = 6, null = True)
     flagged    = BooleanField()
+    csv_out    = IntegerField()
     session_id = IntegerField()
 
     class Meta:
@@ -42,7 +43,7 @@ def get_session():
 #Exports data from db to two csv files
 #One file has all data from db. The other has only the data from the most recent session
 def export_csv(session):
-    
+
     #Search for text file on fash drive. Get path
     flash_drive_path = search_flash_drive()
     if flash_drive_path == '':
@@ -66,7 +67,7 @@ def export_csv(session):
     f.close()
 
     #Select data from db from the most recent session
-    data_session = c.execute("SELECT sensor_id,time,data,flagged FROM data WHERE session_id={}".format(session))
+    data_session = c.execute("SELECT sensor_id,time,data,flagged FROM data WHERE session_id={} AND csv_out = 1".format(session))
 
     g = open(flash_drive_path + '/car_data_session_{}.csv'.format(session), 'w')
 
@@ -95,7 +96,7 @@ def export_csv_previous(session):
         c = conn.cursor()
 
         #Select data from db from the most recent session
-        data_session = c.execute("SELECT sensor_id,time,data,flagged FROM data WHERE session_id={}".format(session))
+        data_session = c.execute("SELECT sensor_id,time,data,flagged FROM data WHERE session_id={} AND csv_out = 1".format(session))
 
         g = open(flash_drive_path + '/car_data_recovery_session_{}.csv'.format(session), 'w')
 
