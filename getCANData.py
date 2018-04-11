@@ -293,56 +293,114 @@ def shift_decimal_point(datapoint):
 		datapoint.data = datapoint.data / 10
 
 # Main Function that handles reading the CAN network and translating that data
-def receive():
-	#Initialze bus
+def process_can_data(address, data, dataLength):
+	# Iterate through the possible data points
+	for item in listOfViewableData:
+
+		#if the data point's address equals the one of the message, make a new datapoint
+		if hex(item['address']) == address:
+
+			newDataPoint = Datapoint()
+			newDataPoint.sensor_id = item['id']
+			newDataPoint.sensor_name = item['description']
+			newDataPoint.system = item['system']
+			newDataPoint.sampleTime = item['sampleTime']
+			newDataPoint.pack = item['pack']
+			offset = int(item['offset'])
+
+			# Handle the byte length on data points
+			if item['byteLength'] > 1:
+
+				formattedData = data[offset]
+
+				# for the length of byte, append to formatted data
+				for i in range(int(item['byteLength'])):
+					if i == (item['byteLength'] - 1):
+						break
+					else:
+						# NUM * 2^8 --> SHIFT LEFT 8
+						formattedData = ((formattedData * 2**8) + data[offset + (i + 1)])
+
+				newDataPoint.data = formattedData
+			else:
+				newDataPoint.data = data[offset]
+
+			# Based on the description, shift the decimal point as necessary
+			if newDataPoint.pack > 0:
+				if "Voltage" in newDataPoint.sensor_name:
+					if "Cell" in newDataPoint.sensor_name:
+						# mV --> V
+						newDataPoint.data = newDataPoint.data / 1000
+					else:
+						newDataPoint.data = newDataPoint.data / 10
+
+				elif "Current" in newDataPoint.sensor_name:
+					# mA --> A
+					newDataPoint.data = newDataPoint.data / 1000
+
+				elif "Temp" in newDataPoint.sensor_name:
+					if "Cell" in newDataPoint.sensor_name:
+						newDataPoint.data = newDataPoint.data / 10
+
+			if "State" in newDataPoint.sensor_name:
+				if "TSI" in newDataPoint.sensor_name:
+					newDataPoint.data = TSIPackState[newDataPoint.data]
+				else:
+					newDataPoint.data = TSVPackState[newDataPoint.data]
+
+			if "Capacitor Voltage" in newDataPoint.sensor_name:
+				newDataPoint.data = newDataPoint.data / 10
+
+			if "IMD" in newDataPoint.sensor_name:
+				newDataPoint.data = newDataPoint.data / 10
+
+			if "Throttle Voltage" in newDataPoint.sensor_name:
+				newDataPoint.data = newDataPoint.data / 10
+
+			if "Throttle Input" in newDataPoint.sensor_name:
+				newDataPoint.data = newDataPoint.data / 10
+
+			if "TSV Voltage" in newDataPoint.sensor_name:
+				newDataPoint.data = newDataPoint.data / 10
+
+			# Log data based on the sample time of the object
+			if timer() % item['sampleTime'] == 0:
+				now = datetime.now().strftime('%H:%M:%S')
+				if item['updated'] != now:
+					# print("OLD: " + str(item['updated']))
+					log_data(newDataPoint, error_list, config_list)
+					# Record the time the datapoint was updated
+					item['updated'] = now
+					# print("NEW: " + item['updated'])
+					print("SENSOR: " + newDataPoint.sensor_name + " -->" + str(newDataPoint.data))
+					# print(newDataPoint.sensor_name + "^^^")
+
+			# update screens
+			update_display_dict(newDataPoint)
+			update_dashboard_dict(newDataPoint)
+
+			#Check if displays need to be updated with a '-'
+			# if timer() % 5 == 0:
+			# 	check_display_dict()
+
+# Main Function that handles reading the CAN network and translating that data
+def receive_can():
+	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
+	#Initialize the error list to zero
+	error_list = errorList()
 
-	# Recieve the first message on the bus a Message or None, based on if data is present on the bus
-	msg = bus.recv(0.5)
+	#Get sensor thresholds from config file
+	config_list = configList()
+	config_list.populate_thresh_list()
 
-	if msg is None:
-		return None
-	else:
+	for msg in bus:
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
 		data = msg.data
 		dataLength = msg.dlc
 
-		# Iterate through the possible data points
-		for item in listOfViewableData:
-
-			#if the data point's address equals the one of the message, make a new datapoint
-			if hex(item['address']) == address:
-
-				newDataPoint = Datapoint()
-				newDataPoint.sensor_id = item['id']
-				newDataPoint.sensor_name = item['description']
-				newDataPoint.system = item['system']
-				newDataPoint.sampleTime = item['sampleTime']
-				newDataPoint.pack = item['pack']
-				offset = int(item['offset'])
-
-				# Handle the byte length on data points
-				if item['byteLength'] > 1:
-
-					formattedData = data[offset]
-
-					# for the length of byte, append to formatted data
-					for i in range(int(item['byteLength'])):
-						if i == (item['byteLength'] - 1):
-							break
-						else:
-							# NUM * 2^8 --> SHIFT LEFT 8
-							formattedData = ((formattedData * 2**8) + data[offset + (i + 1)])
-
-					newDataPoint.data = formattedData
-				else:
-					newDataPoint.data = data[offset]
-
-				# Based on the description, shift the decimal point as necessary
-				shift_decimal_point(newDataPoint)
-
-				return newDataPoint
+		process_can_data(address, data, dataLength)
 
 # Takes data from parse() and stores in db if recording.
 def log_data(datapoint, error_list, config):
@@ -802,37 +860,10 @@ class CanMonitorThread(QtCore.QThread):
 		models.build_db()
 		logging.basicConfig(filename='/home/pi/Desktop/VSCADA/log.log', level=logging.WARNING)
 
-		session["Session"] = models.get_session()
-
-		#Initialize the error list to zero
-		error_list = errorList()
-
-		#Get sensor thresholds from config file
-		config_list = configList()
-		config_list.populate_thresh_list()
-
 		while (True):
-			# Receive a datapoint
-			datapoint = receive()
+			# Receive can datapoint
+			receive_can()
 
-			if datapoint is None:
-				update_scada_table()
-			else:
-				# Log data based on the sample time of the object
-				if timer() % datapoint.sampleTime == 0:
-					now = datetime.now().strftime('%H:%M:%S')
-					for item in listOfViewableData:
-						if item['id'] == datapoint.sensor_id:
-							if item['updated'] != now:
-								# Record the time the datapoint was updated
-								item['updated'] = now
-								log_data(datapoint, error_list, config_list)
-								#print("SENSOR: " + datapoint.sensor_name + " -->" + str(datapoint.data))
-
-				# update screens
-				update_display_dict(datapoint)
-				update_dashboard_dict(datapoint)
-				update_scada_table()
 
 # Thread to update driver display and scan dashboard buttons
 class ButtonMonitorThread(QtCore.QThread):
@@ -848,6 +879,9 @@ class ButtonMonitorThread(QtCore.QThread):
 		writeToScreen(2, make_message_twenty_chars("Motor Temp", '-', False))
 		writeToScreen(3, make_message_twenty_chars("SOC", '-', False))
 		while (True):
+
+			# Update UI
+			update_scada_table()
 
 			######################## WRITE TO SCREEN ########################
 			# Write to the dashboard if a new value has been seen
