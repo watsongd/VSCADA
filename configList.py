@@ -2,7 +2,7 @@ import csv
 import collections
 import os
 
-SensorInfo = collections.namedtuple('sensor', 'name lower_threshold upper_threshold drop_out')
+SensorInfo = collections.namedtuple('sensor', 'sensor_id lower_threshold upper_threshold drop_out log_en csv_en')
 
 class configList(object):
     sensor_thresh_list = []
@@ -26,6 +26,6 @@ class configList(object):
         with open(config_path, newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in reader:
-                sensor = SensorInfo(name=row[0], lower_threshold=float(row[1]), upper_threshold=float(row[2]), drop_out=float(row[3]))
+                sensor = SensorInfo(sensor_id=int(row[0]), lower_threshold=float(row[1]), upper_threshold=float(row[2]), drop_out=float(row[3]), log_en=int(row[4]), csv_en=int(row[5]))
                 self.sensor_thresh_list.append(sensor)
         print (self.sensor_thresh_list)
