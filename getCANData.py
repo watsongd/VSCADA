@@ -298,7 +298,7 @@ def receive():
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
 	# Recieve the first message on the bus a Message or None, based on if data is present on the bus
-	msg = bus.recv(0.0)
+	msg = bus.recv(0.5)
 
 	if msg is None:
 		return None
