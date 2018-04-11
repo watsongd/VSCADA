@@ -293,7 +293,7 @@ def shift_decimal_point(datapoint):
 		datapoint.data = datapoint.data / 10
 
 # Main Function that handles reading the CAN network and translating that data
-def process_can_data(address, data, dataLength):
+def process_can_data(address, data, dataLength, error_list, config_list):
 	# Iterate through the possible data points
 	for item in listOfViewableData:
 
@@ -388,13 +388,20 @@ def receive_can():
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
+	#Initialize the error list to zero
+	error_list = errorList()
+
+	#Get sensor thresholds from config file
+	config_list = configList()
+	config_list.populate_thresh_list()
+
 	for msg in bus:
 		# Set the address, data, and data length for each message
 		address = hex(msg.arbitration_id)
 		data = msg.data
 		dataLength = msg.dlc
 
-		process_can_data(address, data, dataLength)
+		process_can_data(address, data, dataLength, error_list, config_list)
 
 # Takes data from parse() and stores in db if recording.
 def log_data(datapoint, error_list, config):
@@ -853,13 +860,6 @@ class CanMonitorThread(QtCore.QThread):
 
 		models.build_db()
 		logging.basicConfig(filename='/home/pi/Desktop/VSCADA/log.log', level=logging.WARNING)
-
-		#Initialize the error list to zero
-		error_list = errorList()
-
-		#Get sensor thresholds from config file
-		config_list = configList()
-		config_list.populate_thresh_list()
 
 		while (True):
 			# Receive can datapoint
