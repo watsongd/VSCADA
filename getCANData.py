@@ -387,12 +387,6 @@ def process_can_data(address, data, dataLength):
 def receive_can():
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
-	#Initialize the error list to zero
-	error_list = errorList()
-
-	#Get sensor thresholds from config file
-	config_list = configList()
-	config_list.populate_thresh_list()
 
 	for msg in bus:
 		# Set the address, data, and data length for each message
@@ -859,6 +853,13 @@ class CanMonitorThread(QtCore.QThread):
 
 		models.build_db()
 		logging.basicConfig(filename='/home/pi/Desktop/VSCADA/log.log', level=logging.WARNING)
+
+		#Initialize the error list to zero
+		error_list = errorList()
+
+		#Get sensor thresholds from config file
+		config_list = configList()
+		config_list.populate_thresh_list()
 
 		while (True):
 			# Receive can datapoint
