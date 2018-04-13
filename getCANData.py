@@ -1016,6 +1016,13 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		else:
 			self.Brake.setStyleSheet("background: red; color: white")
 
+		if self.REC.isChecked() is true:
+			self.REC.setStyleSheet("background: red; color: white")
+		else:
+			self.REC.setStyleSheet("background: rgb(139, 83, 93); color: white")
+
+
+
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
 	window = Window()
