@@ -420,7 +420,7 @@ def log_data(datapoint, error_list, config):
 					if error_list.get_num_errors(sensor_id) >= max_num_errors:
 						print("CONFIRM CRITICAL ERROR")
 						logging.critical('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s. Droppping out of Drive Mode', session["Session"], elapsed_time, name, data)
-						
+
 						#Drop out call
 						send_throttle_control(1)
 						error1 = str(name) + ' has exceeded threshold. Value: ' + str(data)
@@ -926,8 +926,8 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.setupUi(self)
 
 		#start gui as full screen
-		self.showFullScreen()
-		#self.showMaximized()
+		#self.showFullScreen()
+		self.showMaximized()
 
 		#get update
 		self.gui_update = GuiUpdateThread()
