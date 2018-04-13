@@ -951,7 +951,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		#VSCADA
 		self.VS_Session.display(str(displayDict["VS Session"]))
 		self.VS_Time.display(str(displayDict["VS Time"]))
-
+		self.VS_State.setText(str(displayDict["VS State"]))
 
 		#Motor Controller
 		self.Motor_RPM.display(str(displayDict["Motor RPM"]))
@@ -1018,11 +1018,12 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 
 		if self.REC.isChecked() is True:
 			self.REC.setStyleSheet("background: red; color: white")
-			self.VS_State.setText("Recording")
+
+			record_button = True
 		else:
 			self.REC.setStyleSheet("background: rgb(139, 83, 93); color: white")
-			self.VS_State.setText(str(displayDict["VS State"]))
 
+			record_button = False
 
 
 if __name__ == "__main__":
