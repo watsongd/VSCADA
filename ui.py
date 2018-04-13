@@ -564,7 +564,6 @@ class Ui_Form(object):
         font.setWeight(75)
         self.REC.setFont(font)
         self.REC.setStyleSheet(" background: rgb(139, 83, 93); color: white")
-        self.REC.setCheckable(True)
         self.REC.setObjectName("REC")
         self.horizontalLayout_3.addWidget(self.REC)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
@@ -604,4 +603,3 @@ class Ui_Form(object):
         self.ThrottleIn.setText(_translate("Form", "Throttle(V)"))
         self.Voltage.setText(_translate("Form", "Voltage(V)"))
         self.REC.setText(_translate("Form", "REC"))
-

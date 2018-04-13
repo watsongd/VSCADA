@@ -1016,14 +1016,16 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		else:
 			self.Brake.setStyleSheet("background: red; color: white")
 
-		if self.REC.isChecked() is True:
-			self.REC.setStyleSheet("background: red; color: white")
-
-			record_button = True
-		else:
-			self.REC.setStyleSheet("background: rgb(139, 83, 93); color: white")
-
-			record_button = False
+		if self.REC.clicked() is True:
+			if record_button == False:
+				self.REC.setStyleSheet("background: red; color: white")
+				record_button = True
+				session_timestamp = datetime.now()
+			else:
+				self.REC.setStyleSheet("background: rgb(139, 83, 93); color: white")
+				record_button = False
+				session_timestamp = 1
+				export_data()
 
 
 if __name__ == "__main__":
