@@ -1016,7 +1016,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		else:
 			self.Brake.setStyleSheet("background: red; color: white")
 
-		if self.REC.isChecked() is true:
+		if self.REC.isChecked() is True:
 			self.REC.setStyleSheet("background: red; color: white")
 		else:
 			self.REC.setStyleSheet("background: rgb(139, 83, 93); color: white")
