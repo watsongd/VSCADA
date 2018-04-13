@@ -378,6 +378,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 			# update screens
 			update_display_dict(newDataPoint)
 			update_dashboard_dict(newDataPoint)
+			update_scada_table()
 
 			#Check if displays need to be updated with a '-'
 			# if timer() % 5 == 0:
@@ -881,9 +882,6 @@ class ButtonMonitorThread(QtCore.QThread):
 		writeToScreen(3, make_message_twenty_chars("SOC", '-', False))
 		while (True):
 
-			# Update UI
-			update_scada_table()
-
 			######################## WRITE TO SCREEN ########################
 			# Write to the dashboard if a new value has been seen
 			if write_screen[0]:
@@ -955,6 +953,8 @@ class GuiUpdateThread(QtCore.QThread):
 
 			_time += 1 / _pollFrequency
 
+			# Update UI
+			update_scada_table()
 
 			self.trigger.emit()
 			#self.emit(QtCore.SIGNAL('update()'))
