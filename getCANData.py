@@ -1016,7 +1016,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		else:
 			self.Brake.setStyleSheet("background: red; color: white")
 
-		if self.REC.clicked() is True:
+		if self.REC.pressed() is True:
 			if record_button == False:
 				self.REC.setStyleSheet("background: red; color: white")
 				record_button = True
