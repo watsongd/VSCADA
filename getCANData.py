@@ -1017,7 +1017,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 			self.Brake.setStyleSheet("background: red; color: white")
 
 		if self.REC.isDown() is True:
-			if record_button == False:
+			if record_button is False:
 				self.REC.setStyleSheet("background: red; color: white")
 				record_button = True
 				session_timestamp = datetime.now()
