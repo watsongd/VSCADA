@@ -1,5 +1,6 @@
 import datetime #For sensor readings
 import csv, sys, sqlite3, os
+from shutil import copyfile
 
 # Import from peewee
 from peewee import *
@@ -60,7 +61,7 @@ def export_csv(session):
 
     f = open(flash_drive_path + '/car_data_all.csv', 'w')
 
-    writer = csv.writer(f, delimiter=';')
+    writer = csv.writer(f, deliminter=',')
     #writer.writerows(['Sensor_id', 'Time', 'Data Value', 'Flagged?'])
     writer.writerows(data_all)
 
@@ -71,11 +72,12 @@ def export_csv(session):
 
     g = open(flash_drive_path + '/car_data_session_{}.csv'.format(session), 'w')
 
-    writer = csv.writer(g, delimiter=';')
+    writer = csv.writer(g, deliminter=',')
     #writer.writerows(['Sensor_id', 'Time', 'Data Value', 'Flagged?'])
     writer.writerows(data_session)
 
     g.close()
+    export_log():
     
 
 #Exports data from db to csv files in case of a system failure
@@ -100,14 +102,28 @@ def export_csv_previous(session):
 
         g = open(flash_drive_path + '/car_data_recovery_session_{}.csv'.format(session), 'w')
 
-        writer = csv.writer(g, delimiter=';')
+        writer = csv.writer(g, deliminter=',')
         writer.writerows(['Sensor_id', 'Time', 'Data Value', 'Flagged?'])
         writer.writerows(data_session)
 
         g.close()  
 
         print('Recovered data to: ' + flash_drive_path)
+        export_log();
 
+#Exports data from previous session
+def export_log():
+    session = session - 1
+    print (session)
+    if session >= 0:
+        #Search for text file on fash drive. Get path
+        flash_drive_path = search_flash_drive()
+        if flash_drive_path == '':
+            if not os.path.exists("../VSCADA_CSV_FILES/"):
+                os.makedirs("../VSCADA_CSV_FILES/")
+            flash_drive_path = "/home/pi/Desktop/VSCADA_CSV_FILES/"
+
+     copyfile("/home/pi/Desktop/VSCADA/log.log", flash_drive_path)
 
 #Searches for a USB flash drive that contains the correct text file. If it doesnt return empty str
 def search_flash_drive():

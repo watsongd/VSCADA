@@ -234,7 +234,7 @@ critical_error = False
 write_screen = (False, 0)
 session_timestamp = 0
 min_volt_cell = 0
-throttle_plausibility = 0
+throttle_plausibility = 0 #1 = Plausible: 0 is implausible
 airs_status = 0
 brake_status = 0
 
@@ -950,7 +950,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 	def guiUpdate(self):
 		global record_button
 		global session_timestamp
-		
+
 		_translate = QtCore.QCoreApplication.translate
 
 		#VSCADA
@@ -1005,7 +1005,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		else:
 			self.VS_State.setStyleSheet("background:white;color:black;")
 
-		if throttle_plausibility is 0:
+		if throttle_plausibility is 1:
 			self.TSI_Throttle_V.setStyleSheet("background:white;color:black;")
 		else:
 			self.TSI_Throttle_V.setStyleSheet("background:red;color:white;")
