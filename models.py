@@ -77,7 +77,7 @@ def export_csv(session):
     writer.writerows(data_session)
 
     g.close()
-    export_log():
+    export_log()
     
 
 #Exports data from db to csv files in case of a system failure
@@ -109,7 +109,7 @@ def export_csv_previous(session):
         g.close()  
 
         print('Recovered data to: ' + flash_drive_path)
-        export_log();
+        export_log()
 
 #Exports data from previous session
 def export_log():
