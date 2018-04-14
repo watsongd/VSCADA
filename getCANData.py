@@ -949,6 +949,8 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 
 	def guiUpdate(self):
 		global record_button
+		global session_timestamp
+		
 		_translate = QtCore.QCoreApplication.translate
 
 		#VSCADA
