@@ -946,6 +946,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.gui_update.trigger.emit()
 
 	def guiUpdate(self):
+		global record_button
 		_translate = QtCore.QCoreApplication.translate
 
 		#VSCADA
