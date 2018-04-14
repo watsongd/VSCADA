@@ -123,7 +123,7 @@ def export_log():
                 os.makedirs("../VSCADA_CSV_FILES/")
             flash_drive_path = "/home/pi/Desktop/VSCADA_CSV_FILES/"
 
-     copyfile("/home/pi/Desktop/VSCADA/log.log", flash_drive_path)
+    copyfile("/home/pi/Desktop/VSCADA/log.log", flash_drive_path)
 
 #Searches for a USB flash drive that contains the correct text file. If it doesnt return empty str
 def search_flash_drive():
