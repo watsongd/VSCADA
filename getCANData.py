@@ -348,7 +348,7 @@ def parse():
 						# Record the time the datapoint was updated
 						item['updated'] = now
 						# print("NEW: " + item['updated'])
-						print("SENSOR: " + newDataPoint.sensor_name + " -->" + str(newDataPoint.data))
+						#print("SENSOR: " + newDataPoint.sensor_name + " -->" + str(newDataPoint.data))
 						# print(newDataPoint.sensor_name + "^^^")
 
 				# update screens
@@ -371,7 +371,7 @@ def log_data(datapoint, error_list, config):
 	sensor_name = datapoint.sensor_name
 	pack = datapoint.pack
 	system = datapoint.system
-	sensor_id = datapoint.sensor_id
+	sensor_id = int(datapoint.sensor_id);;;
 
 	#Places Pack number in the name to increase log readability
 	if pack>0:
@@ -398,6 +398,8 @@ def log_data(datapoint, error_list, config):
 	for sensor_info in config.sensor_thresh_list:
 		if sensor_info.sensor_id == sensor_id:
 			#Check thresholds
+
+			print("Sensor ID in list" + str(sensor_id) + ": " + sensor_name)
 			if (sensor_info.lower_threshold == sensor_info.upper_threshold):
 				flag = False
 			elif data > sensor_info.lower_threshold and data < sensor_info.upper_threshold:
