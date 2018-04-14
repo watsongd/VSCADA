@@ -371,7 +371,7 @@ def log_data(datapoint, error_list, config):
 	sensor_name = datapoint.sensor_name
 	pack = datapoint.pack
 	system = datapoint.system
-	sensor_id = int(datapoint.sensor_id);;;
+	sensor_id = int(datapoint.sensor_id)
 
 	#Places Pack number in the name to increase log readability
 	if pack>0:
