@@ -442,7 +442,7 @@ def log_data(datapoint, error_list, config):
 			critical_error = error_list.check_critical_errors()
 
 			#Store in database if record button is true
-			if record_button is True and sensor_info.log_en is True:
+			if (record_button is True and sensor_info.log_en == 1):
 				print("Logged")
 				models.Data.create(sensor_id=sensor_id,sensorName=sensor_name, data=data, time=elapsed_time, system=system, pack=pack, flagged=flag, session_id=session["Session"], csv_out=sensor_info.csv_out)
 
