@@ -384,8 +384,8 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 			update_scada_table()
 
 			#Check if displays need to be updated with a '-'
-			# if timer() % 5 == 0:
-			# 	check_display_dict()
+			if timer() % 5 == 0:
+				check_display_dict()
 
 # Main Function that handles reading the CAN network and translating that data
 def receive_can():
@@ -744,7 +744,6 @@ def update_dashboard_recording():
 			if "SOC" in key:
 				writeToScreen(3, make_message_twenty_chars(key, dashboardDict[key], False))
 
-
 # Updates error dictionary with most recent error message
 def update_error_dict(error):
 	global error_string
@@ -995,8 +994,8 @@ class ButtonMonitorThread(QtCore.QThread):
 			#Close Connection
 			ser.close()
 
-			# if timer() % 5 == 0:
-			# 	check_display_dict()
+			if timer() % 5 == 0:
+				check_display_dict()
 
 
 class GuiUpdateThread(QtCore.QThread):
