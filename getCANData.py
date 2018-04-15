@@ -924,7 +924,7 @@ class UIUpdateThread(QtCore.QThread):
 		while (True):
 			# Update UI
 			update_scada_table()
-			check_display_dict()	
+			# check_display_dict()	
 
 
 # Thread to update driver display and scan dashboard buttons
