@@ -385,8 +385,9 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 			update_scada_table()
 
 			#Check if displays need to be updated with a '-'
-			if timer() % 5 == 0:
+			if timer() % 15 == 0:
 				check_display_dict()
+
 
 # Main Function that handles reading the CAN network and translating that data
 def receive_can():
