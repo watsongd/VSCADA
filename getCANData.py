@@ -375,7 +375,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 					log_data(newDataPoint, error_list, config_list)
 					# Record the time the datapoint was updated
 					item['updated'] = now
-					# print("NEW: " + item['updated'])
+					print("NEW: " + item['updated'])
 					print("SENSOR: " + newDataPoint.sensor_name + " -->" + str(newDataPoint.data))
 					# print(newDataPoint.sensor_name + "^^^")
 
