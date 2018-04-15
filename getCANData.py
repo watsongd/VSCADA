@@ -727,21 +727,22 @@ def update_dashboard_recording():
 			if "SOC" in key:
 				writeToScreen(3, make_message_twenty_chars(key, dashboardDict[key], True))
 	else:
-		if "Motor RPM" in key:
-			# Get the RPM
-			if dashboardDict[key] == '-':
-				rpm = 0
-			else:
-				rpm = dashboardDict[key]
-			# Formula for calculating MPH from RPM
-			mph = float(float(rpm) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
-			writeToScreen(0, make_message_twenty_chars("MPH", fix_decimal_places(mph, 1), False))
-		if "TSV Current" in key:
-			writeToScreen(1, make_message_twenty_chars("Current", dashboardDict[key], False))
-		if "Motor Temp" in key:
-			writeToScreen(2, make_message_twenty_chars(key, dashboardDict[key], False))
-		if "SOC" in key:
-			writeToScreen(3, make_message_twenty_chars(key, dashboardDict[key], False))
+		for key in dashboardDict.keys():
+			if "Motor RPM" in key:
+				# Get the RPM
+				if dashboardDict[key] == '-':
+					rpm = 0
+				else:
+					rpm = dashboardDict[key]
+				# Formula for calculating MPH from RPM
+				mph = float(float(rpm) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
+				writeToScreen(0, make_message_twenty_chars("MPH", fix_decimal_places(mph, 1), False))
+			if "TSV Current" in key:
+				writeToScreen(1, make_message_twenty_chars("Current", dashboardDict[key], False))
+			if "Motor Temp" in key:
+				writeToScreen(2, make_message_twenty_chars(key, dashboardDict[key], False))
+			if "SOC" in key:
+				writeToScreen(3, make_message_twenty_chars(key, dashboardDict[key], False))
 
 
 # Updates error dictionary with most recent error message
