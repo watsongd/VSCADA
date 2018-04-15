@@ -817,6 +817,7 @@ def check_display_dict():
 
 					# check the difference vs the sample time
 					if differenceNUM[1] > (3 * item['sampleTime']):
+						print("here -----------------------------")
 						displayDict[key] = '-'
 
 			# For the ones without a matching description, we need to check every cell for the oldest update time
