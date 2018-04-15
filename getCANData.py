@@ -363,6 +363,9 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 			if "TSV Voltage" in newDataPoint.sensor_name:
 				newDataPoint.data = newDataPoint.data / 10
 
+			if "TSV Current" in newDataPoint.sensor_name:
+				newDataPoint.data = newDataPoint.data / 100
+
 			# Log data based on the sample time of the object
 			if timer() % item['sampleTime'] == 0:
 				now = datetime.now().strftime('%H:%M:%S')
@@ -870,6 +873,19 @@ class CanMonitorThread(QtCore.QThread):
 			receive_can()
 
 
+# Thread to Monitor and Parse CAN bus Data
+class UIUpdateThread(QtCore.QThread):
+
+	def run(self):
+
+		models.build_db()
+		logging.basicConfig(filename='/home/pi/Desktop/VSCADA/log.log', level=logging.WARNING)
+
+		while (True):
+			# Update UI
+			update_scada_table()
+
+
 # Thread to update driver display and scan dashboard buttons
 class ButtonMonitorThread(QtCore.QThread):
 
@@ -988,11 +1004,13 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.gui_update = GuiUpdateThread()
 		self.can_monitor = CanMonitorThread()
 		self.button_monitor = ButtonMonitorThread()
+		self.ui_update = UIUpdateThread()
 
 		#start updating
 		self.gui_update.start()
 		self.can_monitor.start()
 		self.button_monitor.start()
+		self.ui_update.start()
 
 		# Connect the trigger signal to a slot under gui_update
 		self.gui_update.trigger.connect(self.guiUpdate)
