@@ -113,7 +113,6 @@ def export_csv_previous(session):
 
 #Exports data from previous session
 def export_log():
-    session = session - 1
     print (session)
     if session >= 0:
         #Search for text file on fash drive. Get path

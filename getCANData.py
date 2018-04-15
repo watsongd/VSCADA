@@ -51,7 +51,7 @@ class Datapoint(object):
 
 listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 1, "sampleTime": 5, "updated": 0, "id":1, "description": "State"},
 					  {"address": 0x100, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 1, "sampleTime": 5, "updated": 0, "id":2, "description": "Voltage"},
-					  {"address": 0x100, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 1, "sampleTime": 1, "updated": 0,"id":3, "description": "Current"},
+					  {"address": 0x100, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 1, "sampleTime": 1, "updated": 0, "id":3, "description": "Current"},
 					  {"address": 0x100, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 1, "sampleTime": 5, "updated": 0, "id":4, "description": "SOC"},
 					  {"address": 0x101, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 1, "sampleTime": 5, "updated": 0, "id":5, "description": "Columbs"},
 
