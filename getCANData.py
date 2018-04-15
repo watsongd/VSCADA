@@ -706,6 +706,7 @@ def update_dashboard_dict(datapoint):
 			dashboardDict[name] = datapoint.data
 			write_screen = (True, 2)
 
+# Adds stars to the dashboard if we are recording
 def update_dashboard_recording():
 	global record_button
 	if record_button:
@@ -721,10 +722,26 @@ def update_dashboard_recording():
 				writeToScreen(0, make_message_twenty_chars("MPH", fix_decimal_places(mph, 1), True))
 			if "TSV Current" in key:
 				writeToScreen(1, make_message_twenty_chars("Current", dashboardDict[key], True))
-			if "TSV Current" in key:
+			if "Motor Temp" in key:
 				writeToScreen(2, make_message_twenty_chars(key, dashboardDict[key], True))
-			if "TSV Current" in key:
+			if "SOC" in key:
 				writeToScreen(3, make_message_twenty_chars(key, dashboardDict[key], True))
+	else:
+		if "Motor RPM" in key:
+			# Get the RPM
+			if dashboardDict[key] == '-':
+				rpm = 0
+			else:
+				rpm = dashboardDict[key]
+			# Formula for calculating MPH from RPM
+			mph = float(float(rpm) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
+			writeToScreen(0, make_message_twenty_chars("MPH", fix_decimal_places(mph, 1), False))
+		if "TSV Current" in key:
+			writeToScreen(1, make_message_twenty_chars("Current", dashboardDict[key], False))
+		if "Motor Temp" in key:
+			writeToScreen(2, make_message_twenty_chars(key, dashboardDict[key], False))
+		if "SOC" in key:
+			writeToScreen(3, make_message_twenty_chars(key, dashboardDict[key], False))
 
 
 # Updates error dictionary with most recent error message
@@ -908,7 +925,6 @@ class UIUpdateThread(QtCore.QThread):
 		while (True):
 			# Update UI
 			update_scada_table()
-			update_dashboard_recording()
 
 
 # Thread to update driver display and scan dashboard buttons
@@ -948,6 +964,8 @@ class ButtonMonitorThread(QtCore.QThread):
 					elif write_screen[1] == 3 and "SOC" in key:
 						writeToScreen(3, make_message_twenty_chars(key, dashboardDict[key], False))
 				write_screen = (False, 0)
+
+			update_dashboard_recording()
 
 			######################## READ FROM BUTTONS ########################
 			# Open Serial connection for reading
