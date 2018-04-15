@@ -965,8 +965,6 @@ class ButtonMonitorThread(QtCore.QThread):
 						writeToScreen(3, make_message_twenty_chars(key, dashboardDict[key], False))
 				write_screen = (False, 0)
 
-			update_dashboard_recording()
-
 			######################## READ FROM BUTTONS ########################
 			# Open Serial connection for reading
 			ser = serial.Serial(portName, baudRate, timeout=2)
@@ -993,6 +991,8 @@ class ButtonMonitorThread(QtCore.QThread):
 				models.export_csv_previous(session["Session"])
 			#Close Connection
 			ser.close()
+
+			update_dashboard_recording()
 
 
 class GuiUpdateThread(QtCore.QThread):
