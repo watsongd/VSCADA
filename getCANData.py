@@ -384,10 +384,6 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 			update_dashboard_dict(newDataPoint)
 			update_scada_table()
 
-			#Check if displays need to be updated with a '-'
-			if timer() % 15 == 0:
-				check_display_dict()
-
 
 # Main Function that handles reading the CAN network and translating that data
 def receive_can():
@@ -928,6 +924,7 @@ class UIUpdateThread(QtCore.QThread):
 		while (True):
 			# Update UI
 			update_scada_table()
+			check_display_dict()	
 
 
 # Thread to update driver display and scan dashboard buttons
@@ -996,9 +993,6 @@ class ButtonMonitorThread(QtCore.QThread):
 				models.export_csv_previous(session["Session"])
 			#Close Connection
 			ser.close()
-
-			if timer() % 5 == 0:
-				check_display_dict()
 
 
 class GuiUpdateThread(QtCore.QThread):
