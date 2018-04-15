@@ -855,7 +855,7 @@ def check_display_dict():
 
 						# check the difference vs the sample time
 						if differenceNUM[1] > (3 * item['sampleTime']):
-							print("here 2 -----------------------------")
+							print("here 2 ----------------------------- diff: " + str(differenceNUM[1]) + str(differenceNUM[1]) + "3x sampleTime: " + str(3 * item['sampleTime'])")
 							displayDict[key] = '-'
 
 				elif "Temp" in desc:
@@ -891,7 +891,7 @@ def check_display_dict():
 
 						# check the difference vs the sample time
 						if differenceNUM[1] > (3 * item['sampleTime']):
-							print("here 3 -----------------------------")
+							print("here 3 ----------------------------- diff: " + str(differenceNUM[1]) + "3x sampleTime: " + str(3 * item['sampleTime']))
 							displayDict[key] = '-'
 
 # Check if record button has been pressed. Export if stop button is pressed
