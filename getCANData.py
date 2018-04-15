@@ -251,6 +251,7 @@ def timer():
 def send_throttle_control(throttleControl):
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 	msg = msg = can.Message(arbitration_id=0x010, data=[throttleControl], extended_id=False)
+	print("SENT 1 ----------------------------------")
 	bus.send(msg)
 
 # Function to shift the decimal point of CAN data
@@ -406,6 +407,7 @@ def receive_can():
 		dataLength = msg.dlc
 
 		process_can_data(address, data, dataLength, error_list, config_list)
+		send_throttle_control(1)
 
 # Takes data from parse() and stores in db if recording.
 def log_data(datapoint, error_list, config):
