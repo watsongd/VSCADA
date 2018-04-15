@@ -407,7 +407,6 @@ def receive_can():
 		dataLength = msg.dlc
 
 		process_can_data(address, data, dataLength, error_list, config_list)
-		send_throttle_control(1)
 
 # Takes data from parse() and stores in db if recording.
 def log_data(datapoint, error_list, config):
