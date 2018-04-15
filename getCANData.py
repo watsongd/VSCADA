@@ -817,7 +817,7 @@ def check_display_dict():
 
 					# check the difference vs the sample time
 					if differenceNUM[1] > (3 * item['sampleTime']):
-						print("here -----------------------------")
+						print("here 1 -----------------------------")
 						displayDict[key] = '-'
 
 			# For the ones without a matching description, we need to check every cell for the oldest update time
@@ -855,6 +855,7 @@ def check_display_dict():
 
 						# check the difference vs the sample time
 						if differenceNUM[1] > (3 * item['sampleTime']):
+							print("here 2 -----------------------------")
 							displayDict[key] = '-'
 
 				elif "Temp" in desc:
@@ -890,6 +891,7 @@ def check_display_dict():
 
 						# check the difference vs the sample time
 						if differenceNUM[1] > (3 * item['sampleTime']):
+							print("here 3 -----------------------------")
 							displayDict[key] = '-'
 
 # Check if record button has been pressed. Export if stop button is pressed
