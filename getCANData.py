@@ -192,9 +192,9 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x0F2, "offset": 5, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":118, "description": "Brake Press"}, #1 if pressed, 0 if not
 					  {"address": 0x0F2, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":119, "description": "AIRS Status"}, #1 if closed, 0 if open
 					  {"address": 0x0F3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":120, "description": "TSV Voltage"},
-					  {"address": 0x0F3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 1, "updated": 0, "id":120, "description": "TSV Current"},
-					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":121, "description": "TSI Temp"},
-					  {"address": 0x0F3, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":122, "description": "Throttle Plausibility"}]
+					  {"address": 0x0F3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 1, "updated": 0, "id":121, "description": "TSV Current"},
+					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":122, "description": "TSI Temp"},
+					  {"address": 0x0F3, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":123, "description": "Throttle Plausibility"}]
 
 
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
@@ -234,7 +234,7 @@ critical_error = False
 write_screen = (False, 0)
 session_timestamp = 0
 min_volt_cell = 0
-throttle_plausibility = 0
+throttle_plausibility = 0 #1 = Plausible: 0 is implausible
 airs_status = 0
 brake_status = 0
 
@@ -416,7 +416,7 @@ def log_data(datapoint, error_list, config):
 	sensor_name = datapoint.sensor_name
 	pack = datapoint.pack
 	system = datapoint.system
-	sensor_id = datapoint.sensor_id
+	sensor_id = int(datapoint.sensor_id)
 
 	#Places Pack number in the name to increase log readability
 	if pack>0:
@@ -441,8 +441,10 @@ def log_data(datapoint, error_list, config):
 		elapsed_time = datetimeDiff.strftime('%M:%S')
 
 	for sensor_info in config.sensor_thresh_list:
-		if sensor_info.name == sensor_name:
+		if sensor_info.sensor_id == sensor_id:
 			#Check thresholds
+
+			#print("Sensor ID in list" + str(sensor_id) + ": " + sensor_name)
 			if (sensor_info.lower_threshold == sensor_info.upper_threshold):
 				flag = False
 			elif data > sensor_info.lower_threshold and data < sensor_info.upper_threshold:
@@ -465,6 +467,7 @@ def log_data(datapoint, error_list, config):
 					if error_list.get_num_errors(sensor_id) >= max_num_errors:
 						print("CONFIRM CRITICAL ERROR")
 						logging.critical('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s. Droppping out of Drive Mode', session["Session"], elapsed_time, name, data)
+
 						#Drop out call
 						send_throttle_control(1)
 						error1 = str(name) + ' has exceeded threshold. Value: ' + str(data)
@@ -484,9 +487,9 @@ def log_data(datapoint, error_list, config):
 			critical_error = error_list.check_critical_errors()
 
 			#Store in database if record button is true
-			if record_button is True:
+			if (record_button is True and sensor_info.log_en == 1):
 				print("Logged")
-				models.Data.create(sensor_id=sensor_id,sensorName=sensor_name, data=data, time=elapsed_time, system=system, pack=pack, flagged=flag, session_id=session["Session"])
+				models.Data.create(sensor_id=sensor_id,sensorName=sensor_name, data=data, time=elapsed_time, system=system, pack=pack, flagged=flag, session_id=session["Session"], csv_out=sensor_info.csv_en)
 
 # Fix the number of decimal places to what you want
 def fix_decimal_places(decimalValue, desiredDecimalPlaces):
@@ -978,8 +981,8 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.setupUi(self)
 
 		#start gui as full screen
-		self.showFullScreen()
-		#self.showMaximized()
+		#self.showFullScreen()
+		self.showMaximized()
 
 		#get update
 		self.gui_update = GuiUpdateThread()
@@ -998,6 +1001,9 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.gui_update.trigger.emit()
 
 	def guiUpdate(self):
+		global record_button
+		global session_timestamp
+
 		_translate = QtCore.QCoreApplication.translate
 
 		#VSCADA
@@ -1052,21 +1058,33 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		else:
 			self.VS_State.setStyleSheet("background:white;color:black;")
 
-		if throttle_plausibility is 0:
+		if throttle_plausibility is 1:
 			self.TSI_Throttle_V.setStyleSheet("background:white;color:black;")
 		else:
 			self.TSI_Throttle_V.setStyleSheet("background:red;color:white;")
 
 		if airs_status is 0:
-			self.lineEdit.setStyleSheet("background: lightgreen; color: darkgreen")
+			self.Airs.setStyleSheet("background: lightgreen; color: darkgreen")
 		else:
-			self.lineEdit.setStyleSheet("background: red; color: white")
+			self.Airs.setStyleSheet("background: red; color: white")
 
 
 		if brake_status is 0:
-			self.lineEdit_2.setStyleSheet("background: lightgreen; color: darkgreen")
+			self.Brake.setStyleSheet("background: lightgreen; color: darkgreen")
 		else:
-			self.lineEdit_2.setStyleSheet("background: red; color: white")
+			self.Brake.setStyleSheet("background: red; color: white")
+
+		if self.REC.isDown() is True:
+			if record_button is False:
+				self.REC.setStyleSheet("background: red; color: white")
+				record_button = True
+				session_timestamp = datetime.now()
+			else:
+				self.REC.setStyleSheet("background: rgb(139, 83, 93); color: white")
+				record_button = False
+				session_timestamp = 1
+				export_data()
+
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)

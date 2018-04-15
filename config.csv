@@ -1,42 +1,123 @@
-State,0,0,0
-Voltage,0,0,0
-Current,0,0,0
-SOC,0,0,0
-Columbs,0,0,0
-Cell 1 Status,0,0,0
-Cell 2 Status,0,0,0
-Cell 3 Status,0,0,0
-Cell 4 Status,0,0,0
-Cell 5 Status,0,0,0
-Cell 6 Status,0,0,0
-Cell 7 Status,0,0,0
-Cell 1 Voltage,2.7,3.6,0
-Cell 2 Voltage,2.7,3.6,0
-Cell 3 Voltage,2.7,3.6,0
-Cell 4 Voltage,2.7,3.6,0
-Cell 5 Voltage,2.7,3.6,0
-Cell 6 Voltage,2.7,3.6,0
-Cell 7 Voltage,2.7,3.6,0
-Cell 1 Temp,0,60,0
-Cell 2 Temp,0,60,0
-Cell 3 Temp,0,60,0
-Cell 4 Temp,0,60,0
-Cell 5 Temp,0,60,0
-Cell 6 Temp,0,60,0
-Cell 7 Temp,0,60,0
-Motor RPM,0,0,0
-Motor Temp,0,90,0
-Controller Temp,0,0,0
-RMS Current,0,0,0
-Capacitor Voltage,0,0,0
-Stator Frequency,0,0,0
-Controller Fault Primary,0,0,0
-Controller Fault Secondary,0,0,0
-Throttle Input,0,0,0
-Brake Input,0,0,0
-TSV Current,0,0,0
-TSV Voltage,0,0,0
-TSI Temp,0,90,0
-Brake,0,0,0
-IMD,0,0,0
-TSI State,0,0,0
+1,0,0,0,1,1,State
+2,0,0,0,1,1,Voltage
+3,0,0,0,0,0,
+4,0,0,0,0,0,
+5,0,0,0,0,0,
+6,0,0,0,1,1,Status
+7,0,0,0,1,1,Status
+8,0,0,0,1,1,Status
+9,0,0,0,1,1,Status
+10,0,0,0,1,1,Status
+11,0,0,0,1,1,Status
+12,0,0,0,1,1,Status
+13,2.7,3.6,0,1,1,Voltage
+14,2.7,3.6,0,1,1,Voltage
+15,2.7,3.6,0,1,1,Voltage
+16,2.7,3.6,0,1,1,Voltage
+17,2.7,3.6,0,1,1,Voltage
+18,2.7,3.6,0,1,1,Voltage
+19,2.7,3.6,0,1,1,Voltage
+20,0,60,0,1,1,Temp
+21,0,60,0,1,1,Temp
+22,0,60,0,1,1,Temp
+23,0,60,0,1,1,Temp
+24,0,60,0,1,1,Temp
+25,0,60,0,1,1,Temp
+26,0,60,0,1,1,Temp
+27,0,0,0,1,1,State
+28,0,0,0,1,1,Voltage
+29,0,0,0,0,0,
+30,0,0,0,0,0,
+31,0,0,0,0,0,
+32,0,0,0,1,1,Status
+33,0,0,0,1,1,Status
+34,0,0,0,1,1,Status
+35,0,0,0,1,1,Status
+36,0,0,0,1,1,Status
+37,0,0,0,1,1,Status
+38,0,0,0,1,1,Status
+39,2.7,3.6,0,1,1,Voltage
+40,2.7,3.6,0,1,1,Voltage
+41,2.7,3.6,0,1,1,Voltage
+42,2.7,3.6,0,1,1,Voltage
+43,2.7,3.6,0,1,1,Voltage
+44,2.7,3.6,0,1,1,Voltage
+45,2.7,3.6,0,1,1,Voltage
+46,0,60,0,1,1,Temp
+47,0,60,0,1,1,Temp
+48,0,60,0,1,1,Temp
+49,0,60,0,1,1,Temp
+50,0,60,0,1,1,Temp
+51,0,60,0,1,1,Temp
+52,0,60,0,1,0,Temp
+53,0,0,0,1,1,Status
+54,0,0,0,1,1,Voltage
+55,0,0,0,0,0,
+56,0,0,0,0,0,
+57,0,0,0,0,0,
+58,0,0,0,1,1,Status
+59,0,0,0,1,1,Status
+60,0,0,0,1,1,Status
+61,0,0,0,1,1,Status
+62,0,0,0,1,1,Status
+63,0,0,0,1,1,Status
+64,0,0,0,1,1,Status
+65,2.7,3.6,0,1,1,Voltage
+66,2.7,3.6,0,1,1,Voltage
+67,2.7,3.6,0,1,1,Voltage
+68,2.7,3.6,0,1,1,Voltage
+69,2.7,3.6,0,1,1,Voltage
+70,2.7,3.6,0,1,1,Voltage
+71,2.7,3.6,0,1,1,Voltage
+72,0,60,0,1,1,Temp
+73,0,60,0,1,1,Temp
+74,0,60,0,1,1,Temp
+75,0,60,0,1,1,Temp
+76,0,60,0,1,0,Temp
+77,0,60,0,1,0,Temp
+78,0,60,0,1,0,Temp
+79,0,0,0,1,1,State
+80,0,0,0,1,1,Voltage
+81,0,0,0,0,0,
+82,0,0,0,0,0,
+83,0,0,0,0,0,
+84,0,0,0,1,1,Status
+85,0,0,0,1,1,Status
+86,0,0,0,1,1,Status
+87,0,0,0,1,1,Status
+88,0,0,0,1,1,Status
+89,0,0,0,1,1,Status
+90,0,0,0,1,1,Status
+91,2.7,3.6,0,1,1,Voltage
+92,2.7,3.6,0,1,1,Voltage
+93,2.7,3.6,0,1,1,Voltage
+94,2.7,3.6,0,1,1,Voltage
+95,2.7,3.6,0,1,1,Voltage
+96,2.7,3.6,0,1,1,Voltage
+97,0,0,0,0,0,Voltage
+98,0,60,0,1,1,Temp
+99,0,60,0,1,1,Temp
+100,0,60,0,1,1,Temp
+101,0,60,0,1,1,Temp
+102,0,60,0,1,1,Temp
+103,0,60,0,1,1,Temp
+104,0,0,0,1,1,Temp
+105,0,0,0,1,1,Motor RPM
+106,0,0,0,1,1,Motor Temp
+107,0,90,0,1,1,Control. Temp
+108,0,0,0,0,0,
+109,0,0,0,1,1,Cap Voltage
+110,0,0,0,0,0,
+111,0,0,0,1,1,Fault
+112,0,0,0,0,0,
+113,0,0,0,1,1,Throttle Input
+114,0,0,0,0,0,
+115,0,0,0,1,1,TSI State
+116,0,0,0,1,0,IMD
+117,0,0,0,1,1,Throttle Voltage
+118,0,0,0,1,1,Brake Press
+119,0,0,0,1,1,AIRS Status
+120,0,0,0,1,1,TSV Voltage
+121,0,0,0,1,1,TSV Current
+122,0,0,0,1,1,TSI Temp
+123,0,0,0,1,1,Throttle Plaus.
