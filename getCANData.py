@@ -194,7 +194,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x0F3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":120, "description": "TSV Voltage"},
 					  {"address": 0x0F3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 1, "updated": 0, "id":121, "description": "TSV Current"},
 					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":122, "description": "TSI Temp"},
-					  {"address": 0x0F3, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":123, "description": "Throttle Plausibility"}]
+					  {"address": 0x0F3, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "sampleTime": 5, "updated": 0, "id":123, "description": "Throttle Plausibility"}]#1 is plausable, 0 implausable
 
 
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
@@ -364,7 +364,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 				newDataPoint.data = newDataPoint.data / 10
 
 			if "TSV Current" in newDataPoint.sensor_name:
-				newDataPoint.data = newDataPoint.data / 100
+				newDataPoint.data = newDataPoint.data / 1000
 
 			# Log data based on the sample time of the object
 			if timer() % item['sampleTime'] == 0:
