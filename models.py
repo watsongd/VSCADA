@@ -113,13 +113,11 @@ def export_csv_previous(session):
 
 #Exports data from previous session
 def export_log():
-    print (session)
-    if session >= 0:
-        #Search for text file on fash drive. Get path
-        flash_drive_path = search_flash_drive()
-        if flash_drive_path == '':
-            if not os.path.exists("../VSCADA_CSV_FILES/"):
-                os.makedirs("../VSCADA_CSV_FILES/")
+    #Search for text file on fash drive. Get path
+    flash_drive_path = search_flash_drive()
+    if flash_drive_path == '':
+        if not os.path.exists("../VSCADA_CSV_FILES/"):
+            os.makedirs("../VSCADA_CSV_FILES/")
             flash_drive_path = "/home/pi/Desktop/VSCADA_CSV_FILES/"
 
     copyfile("/home/pi/Desktop/VSCADA/log.log", flash_drive_path)
