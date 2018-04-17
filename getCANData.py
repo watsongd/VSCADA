@@ -446,25 +446,29 @@ def log_data(datapoint, error_list, config):
 		if sensor_info.sensor_id == sensor_id:
 			#Check thresholds
 
-			#If the thresholds are the same in the config file 
+			#If the thresholds are the same in the config file sensor will not be flagged
 			if (sensor_info.lower_threshold == sensor_info.upper_threshold):
 				flag = False
+
+			#Sensor data is within allowable range
 			elif data > sensor_info.lower_threshold and data < sensor_info.upper_threshold:
-				#Sensor data is within allowable range
 				flag = False
+
+				#Sensor is in range so we can reset the error count
 				error_list.reset_num_errors(sensor_id)
+			
+			#Sensor data is not within allowable range. Flag and check if drop out of drive mode needed
 			else:
-				#Sensor data is not within allowable range. Flag and check if drop out of drive mode needed
 				flag = True
-				print (str(sensor_info.lower_threshold) + ',' + str(sensor_info.upper_threshold) + ',' + str(data))
+				
 				#Do not need to drop out
 				if sensor_info.drop_out == 0:
 					logging.warning('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s', session["Session"], elapsed_time, name, data)
 					error1 = str(name) + ' has exceeded threshold. Value: ' + str(data)
 					update_error_dict(error1)
+				
 				#Need to drop out
 				elif sensor_info.drop_out == 1:
-					#DROP OUT CALL HERE
 					#Need to see value over threshold four times before dropping out
 					if error_list.get_num_errors(sensor_id) >= max_num_errors:
 						print("CONFIRM CRITICAL ERROR")
@@ -480,6 +484,7 @@ def log_data(datapoint, error_list, config):
 						#Now that the error has been seen enough times it is set to critical.
 						error_list.set_critical_error(sensor_id)
 
+					#Error has been seen a few times already but it is not necesarily a critical error
 					else:
 						logging.critical('Session: %d Time: %s : %s has exceeded the given threshold. Value: %s', session["Session"], elapsed_time, name, data)
 						error1 = str(name) + ' has exceeded threshold. Value: ' + str(data)
@@ -893,13 +898,13 @@ def check_display_dict():
 
 # Check if record button has been pressed. Export if stop button is pressed
 def export_data():
-	session_id = session["Session"]
-	#Increment session
-	session["Session"] = session["Session"] + 1
-	print("New session{}".format(session["Session"]))
 	#Exports data exactly one time after stop button is pressed
 	models.export_csv(session_id)
 	print("Exported Data {}".format(session_id)
+
+	#Increment session
+	session["Session"] = session["Session"] + 1
+	print("New session{}".format(session["Session"]))
 
 # Thread to Monitor and Parse CAN bus Data
 class CanMonitorThread(QtCore.QThread):
