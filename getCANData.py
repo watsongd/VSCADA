@@ -441,11 +441,12 @@ def log_data(datapoint, error_list, config):
 		datetimeDiff = datetime.strptime(str(differenceNUM), '(%M, %S)')
 		elapsed_time = datetimeDiff.strftime('%M:%S')
 
+	#Runs through config list
 	for sensor_info in config.sensor_thresh_list:
 		if sensor_info.sensor_id == sensor_id:
 			#Check thresholds
 
-			#print("Sensor ID in list" + str(sensor_id) + ": " + sensor_name)
+			#If the thresholds are the same in the config file 
 			if (sensor_info.lower_threshold == sensor_info.upper_threshold):
 				flag = False
 			elif data > sensor_info.lower_threshold and data < sensor_info.upper_threshold:
@@ -892,13 +893,13 @@ def check_display_dict():
 
 # Check if record button has been pressed. Export if stop button is pressed
 def export_data():
-	#Exports data exactly one time after stop button is pressed
-	models.export_csv(session["Session"])
-	print("Exported Data {}".format(session["Session"]))
-
+	session_id = session["Session"]
 	#Increment session
 	session["Session"] = session["Session"] + 1
 	print("New session{}".format(session["Session"]))
+	#Exports data exactly one time after stop button is pressed
+	models.export_csv(session_id)
+	print("Exported Data {}".format(session_id)
 
 # Thread to Monitor and Parse CAN bus Data
 class CanMonitorThread(QtCore.QThread):

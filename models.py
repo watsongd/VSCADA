@@ -9,7 +9,7 @@ from playhouse.dataset import DataSet
 #Connect  to sqlite3 database
 db = SqliteDatabase('/home/pi/Desktop/car_data.db')
 
-#Table for Pack1 Data
+#Table for Data
 class Data(Model):
     sensor_id  = IntegerField()
     sensorName = CharField()
