@@ -384,7 +384,6 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 			update_dashboard_dict(newDataPoint)
 			update_scada_table()
 
-
 # Main Function that handles reading the CAN network and translating that data
 def receive_can():
 	session["Session"] = models.get_session()
@@ -900,7 +899,7 @@ def check_display_dict():
 def export_data():
 	#Exports data exactly one time after stop button is pressed
 	models.export_csv(session_id)
-	print("Exported Data {}".format(session_id)
+	print("Exported Data {}".format(session_id))
 
 	#Increment session
 	session["Session"] = session["Session"] + 1
