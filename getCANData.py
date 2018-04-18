@@ -369,7 +369,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 
 			# Log data based on the sample time of the object
 			if item['system'] == 'MC':
-				if (item['sampleTime'] * 4) == item['count']:					
+				if (item['sampleTime'] * 4) >= item['count']:					
 					now = datetime.now().strftime('%H:%M:%S')
 					log_data(newDataPoint, error_list, config_list)
 					item['updated'] = now
@@ -377,7 +377,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 				else:
 					item['count'] = item['count'] + 1
 			else:
-				if item['sampleTime'] == item['count']:					
+				if item['sampleTime'] >= item['count']:					
 					now = datetime.now().strftime('%H:%M:%S')
 					log_data(newDataPoint, error_list, config_list)
 					item['updated'] = now
