@@ -898,8 +898,8 @@ def check_display_dict():
 # Check if record button has been pressed. Export if stop button is pressed
 def export_data():
 	#Exports data exactly one time after stop button is pressed
-	models.export_csv(session_id)
-	print("Exported Data {}".format(session_id))
+	models.export_csv(session["Session"])
+	print("Exported Data {}".format(session["Session"]))
 
 	#Increment session
 	session["Session"] = session["Session"] + 1
