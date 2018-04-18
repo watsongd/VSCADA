@@ -303,6 +303,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 
 			newDataPoint = Datapoint()
 			newDataPoint.sensor_id = item['id']
+			newDataPoint.count = item['count']
 			newDataPoint.sensor_name = item['description']
 			newDataPoint.system = item['system']
 			newDataPoint.sampleTime = item['sampleTime']
@@ -368,22 +369,22 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 				newDataPoint.data = newDataPoint.data / 1000
 
 			# Log data based on the sample time of the object
-			if item['system'] == 'MC':
-				if (item['sampleTime'] * 4) >= item['count']:					
+			if newDataPoint.system == 'MC':
+				if (newDataPoint.sampleTime * 4) >= newDataPoint.count:					
 					now = datetime.now().strftime('%H:%M:%S')
 					log_data(newDataPoint, error_list, config_list)
 					item['updated'] = now
 					item['count'] = 0
 				else:
-					item['count'] = item['count'] + 1
+					item['count'] = newDataPoint.count + 1
 			else:
-				if item['sampleTime'] >= item['count']:					
+				if newDataPoint.sampleTime >= newDataPoint.count:					
 					now = datetime.now().strftime('%H:%M:%S')
 					log_data(newDataPoint, error_list, config_list)
 					item['updated'] = now
 					item['count'] = 0
 				else:
-					item['count'] = item['count'] + 1
+					item['count'] = newDataPoint.count + 1
 
 			# update screens
 			update_display_dict(newDataPoint)
