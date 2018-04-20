@@ -51,7 +51,7 @@ class Datapoint(object):
 
 listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":1, "description": "State"},
 					  {"address": 0x100, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":2, "description": "Voltage"},
-					  {"address": 0x100, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 1, "updated": 0, "id":3, "description": "Current"},
+					  {"address": 0x100, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 1,  "updated": 0, "id":3, "description": "Current"},
 					  {"address": 0x100, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":4, "description": "SOC"},
 					  {"address": 0x101, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":5, "description": "Columbs"},
 
@@ -113,7 +113,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 
 					  {"address": 0x300, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":53, "description": "State"},
 					  {"address": 0x300, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":54, "description": "Voltage"},
-					  {"address": 0x300, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 1, "updated": 0, "id":55, "description": "Current"},
+					  {"address": 0x300, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 1,  "updated": 0, "id":55, "description": "Current"},
 					  {"address": 0x300, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":56, "description": "SOC"},
 					  {"address": 0x301, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":57, "description": "Columbs"},
 
@@ -144,7 +144,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 
 					  {"address": 0x400, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":79, "description": "State"},
 					  {"address": 0x400, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":80, "description": "Voltage"},
-					  {"address": 0x400, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 1, "updated": 0, "id":81, "description": "Current"},
+					  {"address": 0x400, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 1,  "updated": 0, "id":81, "description": "Current"},
 					  {"address": 0x400, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":82, "description": "SOC"},
 					  {"address": 0x401, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":83, "description": "Columbs"},
 
@@ -174,27 +174,27 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 					  {"address": 0x406, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":1045, "description": "Safety Loop"},
 
 
-					  {"address": 0x601, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "count": 0, "sampleTime": 1, "updated": 0, "id":105, "description": "Motor RPM"},
+					  {"address": 0x601, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "count": 0, "sampleTime": 1,  "updated": 0, "id":105, "description": "Motor RPM"},
 					  {"address": 0x601, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "sampleTime": 15, "updated": 0, "id":106, "description": "Motor Temp"},
 					  {"address": 0x601, "offset": 3, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "sampleTime": 15, "updated": 0, "id":107, "description": "Controller Temp"},
-					  {"address": 0x601, "offset": 4, "byteLength": 2, "system": "MC", "pack": 0, "count": 0, "sampleTime": 1, "updated": 0, "id":108, "description": "RMS Current"},
-					  {"address": 0x601, "offset": 6, "byteLength": 2, "system": "MC", "pack": 0, "count": 0, "sampleTime": 5, "updated": 0, "id":109, "description": "Capacitor Voltage"},
+					  {"address": 0x601, "offset": 4, "byteLength": 2, "system": "MC", "pack": 0, "count": 0, "sampleTime": 1,  "updated": 0, "id":108, "description": "RMS Current"},
+					  {"address": 0x601, "offset": 6, "byteLength": 2, "system": "MC", "pack": 0, "count": 0, "sampleTime": 5,  "updated": 0, "id":109, "description": "Capacitor Voltage"},
 					  {"address": 0x602, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "count": 0, "sampleTime": 30, "updated": 0, "id":110, "description": "Stator Frequency"},
 					  {"address": 0x602, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "sampleTime": 15, "updated": 0, "id":111, "description": "Controller Fault Primary"},
 					  {"address": 0x602, "offset": 3, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "sampleTime": 15, "updated": 0, "id":112, "description": "Controller Fault Secondary"},
-					  {"address": 0x602, "offset": 4, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "sampleTime": 1, "updated": 0, "id":113, "description": "Throttle Input"},
-					  {"address": 0x602, "offset": 5, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "sampleTime": 1, "updated": 0, "id":114, "description": "Brake Input"},
+					  {"address": 0x602, "offset": 4, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "sampleTime": 1,  "updated": 0, "id":113, "description": "Throttle Input"},
+					  {"address": 0x602, "offset": 5, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "sampleTime": 1,  "updated": 0, "id":114, "description": "Brake Input"},
 
 
-					  {"address": 0x0F2, "offset": 0, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 5, "updated": 0, "id":115, "description": "TSI State"},
+					  {"address": 0x0F2, "offset": 0, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 5,  "updated": 0, "id":115, "description": "TSI State"},
 					  {"address": 0x0F2, "offset": 1, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 15, "updated": 0, "id":116, "description": "IMD"}, #IMD needs multiplied by 10
-					  {"address": 0x0F2, "offset": 3, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 5, "updated": 0, "id":117, "description": "Throttle Voltage"}, #Needs multiplied by 10
-					  {"address": 0x0F2, "offset": 5, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 5, "updated": 0, "id":118, "description": "Brake Press"}, #1 if pressed, 0 if not
-					  {"address": 0x0F2, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 5, "updated": 0, "id":119, "description": "AIRS Status"}, #1 if closed, 0 if open
+					  {"address": 0x0F2, "offset": 3, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 5,  "updated": 0, "id":117, "description": "Throttle Voltage"}, #Needs multiplied by 10
+					  {"address": 0x0F2, "offset": 5, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 5,  "updated": 0, "id":118, "description": "Brake Press"}, #1 if pressed, 0 if not
+					  {"address": 0x0F2, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 5,  "updated": 0, "id":119, "description": "AIRS Status"}, #1 if closed, 0 if open
 					  {"address": 0x0F3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 15, "updated": 0, "id":120, "description": "TSV Voltage"},
-					  {"address": 0x0F3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 1, "updated": 0, "id":121, "description": "TSV Current"},
+					  {"address": 0x0F3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 1,  "updated": 0, "id":121, "description": "TSV Current"},
 					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 15, "updated": 0, "id":122, "description": "TSI Temp"},
-					  {"address": 0x0F3, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 5, "updated": 0, "id":123, "description": "Throttle Plausibility"}]#1 is plausable, 0 implausable
+					  {"address": 0x0F3, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 5,  "updated": 0, "id":123, "description": "Throttle Plausibility"}]#1 is plausable, 0 implausable
 
 
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
