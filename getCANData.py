@@ -219,6 +219,12 @@ session = {"Session":0}
 #Strings for error messages on GLV Display
 errorDict = {"Error1": "LEV SCADA", "Error2": "-", "Error3": "-", "Error4": "-"}
 
+# Dictionary for keeping track of the minimum cell voltage and maximum temp for each pack
+packList =[{"pack": 1, "minCellVolt": 5, "maxCellTemp": 0},
+		   {"pack": 2, "minCellVolt": 5, "maxCellTemp": 0},
+		   {"pack": 3, "minCellVolt": 5, "maxCellTemp": 0},
+	 	   {"pack": 4, "minCellVolt": 5, "maxCellTemp": 0}]
+
 #Variables for storing
 global record_button
 global write_screen
@@ -360,7 +366,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 				newDataPoint.data = newDataPoint.data / 10
 
 			if "Throttle Input" in newDataPoint.sensor_name:
-				newDataPoint.data = newDataPoint.data / 10
+				newDataPoint.data = newDataPoint.data / 38.55
 
 			if "TSV Voltage" in newDataPoint.sensor_name:
 				newDataPoint.data = newDataPoint.data / 10
@@ -385,6 +391,8 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 					item['count'] = 0
 				else:
 					item['count'] = newDataPoint.count + 1
+
+			print("SENSOR: " + str(newDataPoint.sensor_name) + " VALUE: " + str(newDataPoint.data))
 
 			# update screens
 			update_display_dict(newDataPoint)
@@ -966,7 +974,7 @@ class ButtonMonitorThread(QtCore.QThread):
 						else:
 							rpm = dashboardDict[key]
 						# Formula for calculating MPH from RPM
-						mph = float(float(rpm) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
+						mph = float(float(rpm) * (1/pi) * (pi * (21/12)) * (60/1) * (1/5280))
 
 						writeToScreen(0, make_message_twenty_chars("MPH", fix_decimal_places(mph, 1), record_button))
 					elif write_screen[1] == 1 and "Current" in key:
