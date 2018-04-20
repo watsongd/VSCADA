@@ -366,7 +366,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 				newDataPoint.data = newDataPoint.data / 10
 
 			if "Throttle Input" in newDataPoint.sensor_name:
-				newDataPoint.data = newDataPoint.data / 38.55
+				newDataPoint.data = newDataPoint.data / 10
 
 			if "TSV Voltage" in newDataPoint.sensor_name:
 				newDataPoint.data = newDataPoint.data / 10
