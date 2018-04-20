@@ -626,7 +626,11 @@ def update_display_dict(datapoint):
 
 				# If the data is coming from the same cell, update the value
 				if cell == min_volt_cell:
-					displayDict[name] = fix_decimal_places(datapoint.data, 3)
+					if datapoint.data > 4:
+						pass
+					else:
+						min_volt_cell = cell
+						displayDict[name] = fix_decimal_places(datapoint.data, 3)
 
 				# Otherwise, take the lowest
 				elif lowestCellVolt > datapoint.data:
