@@ -211,7 +211,7 @@ displayDict = {"Voltage 1": '-', "Voltage 2": '-', "Voltage 3": '-', "Voltage 4"
 			   "TSI IMD": '-', "TSI Current": '-', "TSI Throt Volt": '-',
 			   "VS State": '-  ', "VS Session": '-', "VS Time": '-'}
 
-dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC": "-"}
+dashboardDict = {"Motor RPM": "-", "TSV Current": "-", "Motor Temp": "-", "SOC": "-", "Pack Current": "-"}
 
 #Session is just an int that keeps track of when recording starts. If recording stops, the current session is exported and the session increments
 session = {"Session":0}
@@ -705,7 +705,10 @@ def make_message_twenty_chars(sensorName, data, recording):
 # Updates the dashboard dictionary that stores data that appears for the driver
 def update_dashboard_dict(datapoint):
 	global write_screen
-	name = datapoint.sensor_name
+	if datapoint.pack == 4 and datapoint.sensor_name == "Current":
+		name = "Pack Current"
+	else:
+		name = datapoint.sensor_name
 
 	if name in dashboardDict:
 		# for state of charge, we want to display the charge of the pack with the lowest value
@@ -727,6 +730,8 @@ def update_dashboard_dict(datapoint):
 		elif "Motor Temp" in name:
 			dashboardDict[name] = datapoint.data
 			write_screen = (True, 2)
+		elif "Pack Current" in name:
+			dashboardDict[name] = datapoint.data
 
 # Adds stars to the dashboard if we are recording
 def update_dashboard_recording():
@@ -982,11 +987,11 @@ class ButtonMonitorThread(QtCore.QThread):
 
 						writeToScreen(0, make_message_twenty_chars("MPH", fix_decimal_places(mph, 1), record_button))
 					elif write_screen[1] == 1 and "Current" in key:
-						writeToScreen(1, make_message_twenty_chars("Current", dashboardDict[key], False))
+						writeToScreen(1, make_message_twenty_chars(("TSI_C: " + str(dashboardDict[key]) + " TSV_C"), dashboardDict["Pack Current"], record_button))
 					elif write_screen[1] == 2 and "Motor Temp" in key:
-						writeToScreen(2, make_message_twenty_chars(key, dashboardDict[key], False))
+						writeToScreen(2, make_message_twenty_chars(key, dashboardDict[key], record_button))
 					elif write_screen[1] == 3 and "SOC" in key:
-						writeToScreen(3, make_message_twenty_chars(key, dashboardDict[key], False))
+						writeToScreen(3, make_message_twenty_chars(key, dashboardDict[key], record_button))
 				write_screen = (False, 0)
 
 			update_dashboard_recording()
