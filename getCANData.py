@@ -263,11 +263,10 @@ def send_throttle_control(throttleControl):
 	print("SENT 1 ----------------------------------")
 	bus.send(msg)
 
-def twos_comp(val, bits):
-    """compute the 2's complement of int value val"""
-    if (val & (1 << (bits - 1))) != 0: # if sign bit is set e.g., 8bit: 128-255
-        val = val - (1 << bits)        # compute negative value
-    return val
+def twos_comp(val_str, bits):
+    val = int(val_str, 2)
+    b = val.to_bytes(bytes, byteorder=sys.byteorder, signed=False)                                                          
+    return int.from_bytes(b, byteorder=sys.byteorder, signed=True)
 
 # Function to shift the decimal point of CAN data
 def shift_decimal_point(datapoint):
@@ -390,7 +389,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 
 			if newDataPoint.pack > 0 and newDataPoint.sensor_name == "Current":
 				if newDataPoint.data > 100000:
-					newDataPoint.data = twos_comp(newDataPoint.data, newDataPoint.byte_length)
+					newDataPoint.data = twos_comp(str(newDataPoint.data), newDataPoint.byte_length)
 				else:
 					pass
 
