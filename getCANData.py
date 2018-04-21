@@ -390,7 +390,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 
 			if newDataPoint.pack > 0 and newDataPoint.sensor_name == "Current":
 				if newDataPoint.data > 100000:
-					newDataPoint.data = twos_comp((newDataPoint.data * newDataPoint.scalar), (newDataPoint.byte_length * 8))
+					newDataPoint.data = twos_comp((newDataPoint.data * newDataPoint.scalar), (newDataPoint.byte_length * 8)) / 1000
 				else:
 					pass
 
