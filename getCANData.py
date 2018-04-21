@@ -49,152 +49,152 @@ class Datapoint(object):
 		sampleTime = 15
 		pack = None
 
-listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":1, "description": "State"},
-					  {"address": 0x100, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":2, "description": "Voltage"},
-					  {"address": 0x100, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 1,  "updated": 0, "id":3, "description": "Current"},
-					  {"address": 0x100, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":4, "description": "SOC"},
-					  {"address": 0x101, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":5, "description": "Columbs"},
+listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":1, "description": "State"},
+					  {"address": 0x100, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "scalar": 1000, "sampleTime": 15, "updated": 0, "id":2, "description": "Voltage"},
+					  {"address": 0x100, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 1, "count": 0, "scalar": 1000, "sampleTime": 1,  "updated": 0, "id":3, "description": "Current"},
+					  {"address": 0x100, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":4, "description": "SOC"},
+					  {"address": 0x101, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 1, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":5, "description": "Columbs"},
 
-					  {"address": 0x101, "offset": 4, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":6, "description": "Cell 1 Status"},
-					  {"address": 0x101, "offset": 5, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":7, "description": "Cell 2 Status"},
-					  {"address": 0x101, "offset": 6, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":8, "description": "Cell 3 Status"},
-					  {"address": 0x101, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":9, "description": "Cell 4 Status"},
-					  {"address": 0x102, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":10, "description": "Cell 5 Status"},
-					  {"address": 0x102, "offset": 1, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":11, "description": "Cell 6 Status"},
-					  {"address": 0x102, "offset": 2, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":12, "description": "Cell 7 Status"},
+					  {"address": 0x101, "offset": 4, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":6, "description": "Cell 1 Status"},
+					  {"address": 0x101, "offset": 5, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":7, "description": "Cell 2 Status"},
+					  {"address": 0x101, "offset": 6, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":8, "description": "Cell 3 Status"},
+					  {"address": 0x101, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":9, "description": "Cell 4 Status"},
+					  {"address": 0x102, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":10, "description": "Cell 5 Status"},
+					  {"address": 0x102, "offset": 1, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":11, "description": "Cell 6 Status"},
+					  {"address": 0x102, "offset": 2, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":12, "description": "Cell 7 Status"},
 
-					  {"address": 0x102, "offset": 5, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":13, "description": "Cell 1 Voltage"},
-					  {"address": 0x102, "offset": 3, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":14, "description": "Cell 2 Voltage"},
-					  {"address": 0x103, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":15, "description": "Cell 3 Voltage"},
-					  {"address": 0x103, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":16, "description": "Cell 4 Voltage"},
-					  {"address": 0x103, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":17, "description": "Cell 5 Voltage"},
-					  {"address": 0x103, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":18, "description": "Cell 6 Voltage"},
-					  {"address": 0x104, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":19, "description": "Cell 7 Voltage"},
+					  {"address": 0x102, "offset": 5, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":13, "description": "Cell 1 Voltage"},
+					  {"address": 0x102, "offset": 3, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":14, "description": "Cell 2 Voltage"},
+					  {"address": 0x103, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":15, "description": "Cell 3 Voltage"},
+					  {"address": 0x103, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":16, "description": "Cell 4 Voltage"},
+					  {"address": 0x103, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":17, "description": "Cell 5 Voltage"},
+					  {"address": 0x103, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":18, "description": "Cell 6 Voltage"},
+					  {"address": 0x104, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":19, "description": "Cell 7 Voltage"},
 
-					  {"address": 0x104, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":20, "description": "Cell 1 Temp"},
-					  {"address": 0x104, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":21, "description": "Cell 2 Temp"},
-					  {"address": 0x104, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":22, "description": "Cell 3 Temp"},
-					  {"address": 0x105, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":23, "description": "Cell 4 Temp"},
-					  {"address": 0x105, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":24, "description": "Cell 5 Temp"},
-					  {"address": 0x105, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "sampleTime": 15, "updated": 0, "id":25, "description": "Cell 6 Temp"},
-					  {"address": 0x105, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":26, "description": "Cell 7 Temp"},
-
-
-					  {"address": 0x200, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":27, "description": "State"},
-					  {"address": 0x200, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":28, "description": "Voltage"},
-					  {"address": 0x200, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 1,  "updated": 0, "id":29, "description": "Current"},
-					  {"address": 0x200, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":30, "description": "SOC"},
-					  {"address": 0x201, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":31, "description": "Columbs"},
-
-					  {"address": 0x201, "offset": 4, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":32, "description": "Cell 1 Status"},
-					  {"address": 0x201, "offset": 5, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":33, "description": "Cell 2 Status"},
-					  {"address": 0x201, "offset": 6, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":34, "description": "Cell 3 Status"},
-					  {"address": 0x201, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":35, "description": "Cell 4 Status"},
-					  {"address": 0x202, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":36, "description": "Cell 5 Status"},
-					  {"address": 0x202, "offset": 1, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":37, "description": "Cell 6 Status"},
-					  {"address": 0x202, "offset": 2, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":38, "description": "Cell 7 Status"},
-
-					  {"address": 0x202, "offset": 5, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":39, "description": "Cell 1 Voltage"},
-					  {"address": 0x202, "offset": 3, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":40, "description": "Cell 2 Voltage"},
-					  {"address": 0x203, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":41, "description": "Cell 3 Voltage"},
-					  {"address": 0x203, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":42, "description": "Cell 4 Voltage"},
-					  {"address": 0x203, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":43, "description": "Cell 5 Voltage"},
-					  {"address": 0x203, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":44, "description": "Cell 6 Voltage"},
-					  {"address": 0x204, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":45, "description": "Cell 7 Voltage"},
-
-					  {"address": 0x204, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":46, "description": "Cell 1 Temp"},
-					  {"address": 0x204, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":47, "description": "Cell 2 Temp"},
-					  {"address": 0x204, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":48, "description": "Cell 3 Temp"},
-					  {"address": 0x205, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":49, "description": "Cell 4 Temp"},
-					  {"address": 0x205, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":50, "description": "Cell 5 Temp"},
-					  {"address": 0x205, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":51, "description": "Cell 6 Temp"},
-					  {"address": 0x205, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "sampleTime": 15, "updated": 0, "id":52, "description": "Cell 7 Temp"},
+					  {"address": 0x104, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":20, "description": "Cell 1 Temp"},
+					  {"address": 0x104, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":21, "description": "Cell 2 Temp"},
+					  {"address": 0x104, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":22, "description": "Cell 3 Temp"},
+					  {"address": 0x105, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":23, "description": "Cell 4 Temp"},
+					  {"address": 0x105, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":24, "description": "Cell 5 Temp"},
+					  {"address": 0x105, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":25, "description": "Cell 6 Temp"},
+					  {"address": 0x105, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":26, "description": "Cell 7 Temp"},
 
 
-					  {"address": 0x300, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":53, "description": "State"},
-					  {"address": 0x300, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":54, "description": "Voltage"},
-					  {"address": 0x300, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 1,  "updated": 0, "id":55, "description": "Current"},
-					  {"address": 0x300, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":56, "description": "SOC"},
-					  {"address": 0x301, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":57, "description": "Columbs"},
+					  {"address": 0x200, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":27, "description": "State"},
+					  {"address": 0x200, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 1000, "sampleTime": 15, "updated": 0, "id":28, "description": "Voltage"},
+					  {"address": 0x200, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 2, "count": 0, "scalar": 1000, "sampleTime": 1,  "updated": 0, "id":29, "description": "Current"},
+					  {"address": 0x200, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":30, "description": "SOC"},
+					  {"address": 0x201, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 2, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":31, "description": "Columbs"},
 
-					  {"address": 0x301, "offset": 4, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":58, "description": "Cell 1 Status"},
-					  {"address": 0x301, "offset": 5, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":59, "description": "Cell 2 Status"},
-					  {"address": 0x301, "offset": 6, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":60, "description": "Cell 3 Status"},
-					  {"address": 0x301, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":61, "description": "Cell 4 Status"},
-					  {"address": 0x302, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":62, "description": "Cell 5 Status"},
-					  {"address": 0x302, "offset": 1, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":63, "description": "Cell 6 Status"},
-					  {"address": 0x302, "offset": 2, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":64, "description": "Cell 7 Status"},
+					  {"address": 0x201, "offset": 4, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":32, "description": "Cell 1 Status"},
+					  {"address": 0x201, "offset": 5, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":33, "description": "Cell 2 Status"},
+					  {"address": 0x201, "offset": 6, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":34, "description": "Cell 3 Status"},
+					  {"address": 0x201, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":35, "description": "Cell 4 Status"},
+					  {"address": 0x202, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":36, "description": "Cell 5 Status"},
+					  {"address": 0x202, "offset": 1, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":37, "description": "Cell 6 Status"},
+					  {"address": 0x202, "offset": 2, "byteLength": 1, "system": "TSV", "pack": 2, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":38, "description": "Cell 7 Status"},
 
-					  {"address": 0x302, "offset": 5, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":65, "description": "Cell 1 Voltage"},
-					  {"address": 0x302, "offset": 3, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":66, "description": "Cell 2 Voltage"},
-					  {"address": 0x303, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":67, "description": "Cell 3 Voltage"},
-					  {"address": 0x303, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":68, "description": "Cell 4 Voltage"},
-					  {"address": 0x303, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":69, "description": "Cell 5 Voltage"},
-					  {"address": 0x303, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":70, "description": "Cell 6 Voltage"},
-					  {"address": 0x304, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":71, "description": "Cell 7 Voltage"},
+					  {"address": 0x202, "offset": 5, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":39, "description": "Cell 1 Voltage"},
+					  {"address": 0x202, "offset": 3, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":40, "description": "Cell 2 Voltage"},
+					  {"address": 0x203, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":41, "description": "Cell 3 Voltage"},
+					  {"address": 0x203, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":42, "description": "Cell 4 Voltage"},
+					  {"address": 0x203, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":43, "description": "Cell 5 Voltage"},
+					  {"address": 0x203, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":44, "description": "Cell 6 Voltage"},
+					  {"address": 0x204, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":45, "description": "Cell 7 Voltage"},
 
-					  {"address": 0x304, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":72, "description": "Cell 1 Temp"},
-					  {"address": 0x304, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":73, "description": "Cell 2 Temp"},
-					  {"address": 0x304, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":74, "description": "Cell 3 Temp"},
-					  {"address": 0x305, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":75, "description": "Cell 4 Temp"},
-					  {"address": 0x305, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":76, "description": "Cell 5 Temp"},
-					  {"address": 0x305, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":77, "description": "Cell 6 Temp"},
-					  {"address": 0x305, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "sampleTime": 15, "updated": 0, "id":78, "description": "Cell 7 Temp"},
-
-
-					  {"address": 0x400, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":79, "description": "State"},
-					  {"address": 0x400, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":80, "description": "Voltage"},
-					  {"address": 0x400, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 1,  "updated": 0, "id":81, "description": "Current"},
-					  {"address": 0x400, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":82, "description": "SOC"},
-					  {"address": 0x401, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":83, "description": "Columbs"},
-
-					  {"address": 0x401, "offset": 4, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":84, "description": "Cell 1 Status"},
-					  {"address": 0x401, "offset": 5, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":85, "description": "Cell 2 Status"},
-					  {"address": 0x401, "offset": 6, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":86, "description": "Cell 3 Status"},
-					  {"address": 0x401, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":87, "description": "Cell 4 Status"},
-					  {"address": 0x402, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":88, "description": "Cell 5 Status"},
-					  {"address": 0x402, "offset": 1, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":89, "description": "Cell 6 Status"},
-					  {"address": 0x402, "offset": 2, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":90, "description": "Cell 7 Status"},
-
-					  {"address": 0x402, "offset": 5, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":91, "description": "Cell 1 Voltage"},
-					  {"address": 0x402, "offset": 3, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":92, "description": "Cell 2 Voltage"},
-					  {"address": 0x403, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":93, "description": "Cell 3 Voltage"},
-					  {"address": 0x403, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":94, "description": "Cell 4 Voltage"},
-					  {"address": 0x403, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":95, "description": "Cell 5 Voltage"},
-					  {"address": 0x403, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":96, "description": "Cell 6 Voltage"},
-					  {"address": 0x404, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":97, "description": "Cell 7 Voltage"},
-
-					  {"address": 0x404, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":98, "description": "Cell 1 Temp"},
-					  {"address": 0x404, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":99, "description": "Cell 2 Temp"},
-					  {"address": 0x404, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":100, "description": "Cell 3 Temp"},
-					  {"address": 0x405, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":101, "description": "Cell 4 Temp"},
-					  {"address": 0x405, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":102, "description": "Cell 5 Temp"},
-					  {"address": 0x405, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":103, "description": "Cell 6 Temp"},
-					  {"address": 0x405, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":104, "description": "Cell 7 Temp"},
-					  {"address": 0x406, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "sampleTime": 15, "updated": 0, "id":1045, "description": "Safety Loop"},
+					  {"address": 0x204, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":46, "description": "Cell 1 Temp"},
+					  {"address": 0x204, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":47, "description": "Cell 2 Temp"},
+					  {"address": 0x204, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":48, "description": "Cell 3 Temp"},
+					  {"address": 0x205, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":49, "description": "Cell 4 Temp"},
+					  {"address": 0x205, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":50, "description": "Cell 5 Temp"},
+					  {"address": 0x205, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":51, "description": "Cell 6 Temp"},
+					  {"address": 0x205, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 2, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":52, "description": "Cell 7 Temp"},
 
 
-					  {"address": 0x601, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "count": 0, "sampleTime": 1,  "updated": 0, "id":105, "description": "Motor RPM"},
-					  {"address": 0x601, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "sampleTime": 15, "updated": 0, "id":106, "description": "Motor Temp"},
-					  {"address": 0x601, "offset": 3, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "sampleTime": 15, "updated": 0, "id":107, "description": "Controller Temp"},
-					  {"address": 0x601, "offset": 4, "byteLength": 2, "system": "MC", "pack": 0, "count": 0, "sampleTime": 1,  "updated": 0, "id":108, "description": "RMS Current"},
-					  {"address": 0x601, "offset": 6, "byteLength": 2, "system": "MC", "pack": 0, "count": 0, "sampleTime": 5,  "updated": 0, "id":109, "description": "Capacitor Voltage"},
-					  {"address": 0x602, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "count": 0, "sampleTime": 30, "updated": 0, "id":110, "description": "Stator Frequency"},
-					  {"address": 0x602, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "sampleTime": 15, "updated": 0, "id":111, "description": "Controller Fault Primary"},
-					  {"address": 0x602, "offset": 3, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "sampleTime": 15, "updated": 0, "id":112, "description": "Controller Fault Secondary"},
-					  {"address": 0x602, "offset": 4, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "sampleTime": 1,  "updated": 0, "id":113, "description": "Throttle Input"},
-					  {"address": 0x602, "offset": 5, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "sampleTime": 1,  "updated": 0, "id":114, "description": "Brake Input"},
+					  {"address": 0x300, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":53, "description": "State"},
+					  {"address": 0x300, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "scalar": 1000, "sampleTime": 15, "updated": 0, "id":54, "description": "Voltage"},
+					  {"address": 0x300, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 3, "count": 0, "scalar": 1000, "sampleTime": 1,  "updated": 0, "id":55, "description": "Current"},
+					  {"address": 0x300, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":56, "description": "SOC"},
+					  {"address": 0x301, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 3, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":57, "description": "Columbs"},
+
+					  {"address": 0x301, "offset": 4, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":58, "description": "Cell 1 Status"},
+					  {"address": 0x301, "offset": 5, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":59, "description": "Cell 2 Status"},
+					  {"address": 0x301, "offset": 6, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":60, "description": "Cell 3 Status"},
+					  {"address": 0x301, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":61, "description": "Cell 4 Status"},
+					  {"address": 0x302, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":62, "description": "Cell 5 Status"},
+					  {"address": 0x302, "offset": 1, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":63, "description": "Cell 6 Status"},
+					  {"address": 0x302, "offset": 2, "byteLength": 1, "system": "TSV", "pack": 3, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":64, "description": "Cell 7 Status"},
+
+					  {"address": 0x302, "offset": 5, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":65, "description": "Cell 1 Voltage"},
+					  {"address": 0x302, "offset": 3, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":66, "description": "Cell 2 Voltage"},
+					  {"address": 0x303, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":67, "description": "Cell 3 Voltage"},
+					  {"address": 0x303, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":68, "description": "Cell 4 Voltage"},
+					  {"address": 0x303, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":69, "description": "Cell 5 Voltage"},
+					  {"address": 0x303, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":70, "description": "Cell 6 Voltage"},
+					  {"address": 0x304, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":71, "description": "Cell 7 Voltage"},
+
+					  {"address": 0x304, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":72, "description": "Cell 1 Temp"},
+					  {"address": 0x304, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":73, "description": "Cell 2 Temp"},
+					  {"address": 0x304, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":74, "description": "Cell 3 Temp"},
+					  {"address": 0x305, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":75, "description": "Cell 4 Temp"},
+					  {"address": 0x305, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":76, "description": "Cell 5 Temp"},
+					  {"address": 0x305, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":77, "description": "Cell 6 Temp"},
+					  {"address": 0x305, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 3, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":78, "description": "Cell 7 Temp"},
 
 
-					  {"address": 0x0F2, "offset": 0, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 5,  "updated": 0, "id":115, "description": "TSI State"},
-					  {"address": 0x0F2, "offset": 1, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 15, "updated": 0, "id":116, "description": "IMD"}, #IMD needs multiplied by 10
-					  {"address": 0x0F2, "offset": 3, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 5,  "updated": 0, "id":117, "description": "Throttle Voltage"}, #Needs multiplied by 10
-					  {"address": 0x0F2, "offset": 5, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 5,  "updated": 0, "id":118, "description": "Brake Press"}, #1 if pressed, 0 if not
-					  {"address": 0x0F2, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 5,  "updated": 0, "id":119, "description": "AIRS Status"}, #1 if closed, 0 if open
-					  {"address": 0x0F3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 15, "updated": 0, "id":120, "description": "TSV Voltage"},
-					  {"address": 0x0F3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 1,  "updated": 0, "id":121, "description": "TSV Current"},
-					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 15, "updated": 0, "id":122, "description": "TSI Temp"},
-					  {"address": 0x0F3, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "sampleTime": 5,  "updated": 0, "id":123, "description": "Throttle Plausibility"}]#1 is plausable, 0 implausable
+					  {"address": 0x400, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":79, "description": "State"},
+					  {"address": 0x400, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "scalar": 1000, "sampleTime": 15, "updated": 0, "id":80, "description": "Voltage"},
+					  {"address": 0x400, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 4, "count": 0, "scalar": 1000, "sampleTime": 1,  "updated": 0, "id":81, "description": "Current"},
+					  {"address": 0x400, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":82, "description": "SOC"},
+					  {"address": 0x401, "offset": 0, "byteLength": 4, "system": "TSV", "pack": 4, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":83, "description": "Columbs"},
+
+					  {"address": 0x401, "offset": 4, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":84, "description": "Cell 1 Status"},
+					  {"address": 0x401, "offset": 5, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":85, "description": "Cell 2 Status"},
+					  {"address": 0x401, "offset": 6, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":86, "description": "Cell 3 Status"},
+					  {"address": 0x401, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":87, "description": "Cell 4 Status"},
+					  {"address": 0x402, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":88, "description": "Cell 5 Status"},
+					  {"address": 0x402, "offset": 1, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":89, "description": "Cell 6 Status"},
+					  {"address": 0x402, "offset": 2, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":90, "description": "Cell 7 Status"},
+
+					  {"address": 0x402, "offset": 5, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":91, "description": "Cell 1 Voltage"},
+					  {"address": 0x402, "offset": 3, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":92, "description": "Cell 2 Voltage"},
+					  {"address": 0x403, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":93, "description": "Cell 3 Voltage"},
+					  {"address": 0x403, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":94, "description": "Cell 4 Voltage"},
+					  {"address": 0x403, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":95, "description": "Cell 5 Voltage"},
+					  {"address": 0x403, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":96, "description": "Cell 6 Voltage"},
+					  {"address": 0x404, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":97, "description": "Cell 7 Voltage"},
+
+					  {"address": 0x404, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":98, "description": "Cell 1 Temp"},
+					  {"address": 0x404, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":99, "description": "Cell 2 Temp"},
+					  {"address": 0x404, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":100, "description": "Cell 3 Temp"},
+					  {"address": 0x405, "offset": 0, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":101, "description": "Cell 4 Temp"},
+					  {"address": 0x405, "offset": 2, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":102, "description": "Cell 5 Temp"},
+					  {"address": 0x405, "offset": 4, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":103, "description": "Cell 6 Temp"},
+					  {"address": 0x405, "offset": 6, "byteLength": 2, "system": "TSV", "pack": 4, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":104, "description": "Cell 7 Temp"},
+					  {"address": 0x406, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 4, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":1045, "description": "Safety Loop"},
+
+
+					  {"address": 0x601, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 1,  "updated": 0, "id":105, "description": "Motor RPM"},
+					  {"address": 0x601, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":106, "description": "Motor Temp"},
+					  {"address": 0x601, "offset": 3, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":107, "description": "Controller Temp"},
+					  {"address": 0x601, "offset": 4, "byteLength": 2, "system": "MC", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 1,  "updated": 0, "id":108, "description": "RMS Current"},
+					  {"address": 0x601, "offset": 6, "byteLength": 2, "system": "MC", "pack": 0, "count": 0, "scalar": 10, "sampleTime": 5,  "updated": 0, "id":109, "description": "Capacitor Voltage"},
+					  {"address": 0x602, "offset": 0, "byteLength": 2, "system": "MC", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 30, "updated": 0, "id":110, "description": "Stator Frequency"},
+					  {"address": 0x602, "offset": 2, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":111, "description": "Controller Fault Primary"},
+					  {"address": 0x602, "offset": 3, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":112, "description": "Controller Fault Secondary"},
+					  {"address": 0x602, "offset": 4, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "scalar": 10, "sampleTime": 1,  "updated": 0, "id":113, "description": "Throttle Input"},
+					  {"address": 0x602, "offset": 5, "byteLength": 1, "system": "MC", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 1,  "updated": 0, "id":114, "description": "Brake Input"},
+
+
+					  {"address": 0x0F2, "offset": 0, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 5,  "updated": 0, "id":115, "description": "TSI State"},
+					  {"address": 0x0F2, "offset": 1, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":116, "description": "IMD"}, #IMD needs multiplied by 10
+					  {"address": 0x0F2, "offset": 3, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "scalar": 10, "sampleTime": 5,  "updated": 0, "id":117, "description": "Throttle Voltage"}, #Needs multiplied by 10
+					  {"address": 0x0F2, "offset": 5, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 5,  "updated": 0, "id":118, "description": "Brake Press"}, #1 if pressed, 0 if not
+					  {"address": 0x0F2, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 5,  "updated": 0, "id":119, "description": "AIRS Status"}, #1 if closed, 0 if open
+					  {"address": 0x0F3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":120, "description": "TSV Voltage"},
+					  {"address": 0x0F3, "offset": 2, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "scalar": 1000, "sampleTime": 1,  "updated": 0, "id":121, "description": "TSV Current"},
+					  {"address": 0x0F3, "offset": 4, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 15, "updated": 0, "id":122, "description": "TSI Temp"},
+					  {"address": 0x0F3, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 5,  "updated": 0, "id":123, "description": "Throttle Plausibility"}]#1 is plausable, 0 implausable
 
 
 TSVPackState = {0: "Boot", 1: "Charging", 2: "Charged", 3: "Low Current Output", 4: "Fault", 5: "Dead", 6: "Ready"}
@@ -310,6 +310,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 			newDataPoint = Datapoint()
 			newDataPoint.sensor_id = item['id']
 			newDataPoint.count = item['count']
+			newDataPoint.scalar = item['scalar']
 			newDataPoint.sensor_name = item['description']
 			newDataPoint.system = item['system']
 			newDataPoint.sampleTime = item['sampleTime']
@@ -333,22 +334,8 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 			else:
 				newDataPoint.data = data[offset]
 
-			# Based on the description, shift the decimal point as necessary
-			if newDataPoint.pack > 0:
-				if "Voltage" in newDataPoint.sensor_name:
-					if "Cell" in newDataPoint.sensor_name:
-						# mV --> V
-						newDataPoint.data = newDataPoint.data / 1000
-					else:
-						newDataPoint.data = newDataPoint.data / 10
-
-				elif "Current" in newDataPoint.sensor_name:
-					# mA --> A
-					newDataPoint.data = newDataPoint.data / 1000
-
-				elif "Temp" in newDataPoint.sensor_name:
-					if "Cell" in newDataPoint.sensor_name:
-						newDataPoint.data = newDataPoint.data / 10
+			# Based on the scalar, shift the decimal point as necessary
+			newDataPoint.data = newDataPoint.data / newDataPoint.scalar
 
 			if "State" in newDataPoint.sensor_name:
 				if "TSI" in newDataPoint.sensor_name:
@@ -356,23 +343,44 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 				else:
 					newDataPoint.data = TSVPackState[newDataPoint.data]
 
-			if "Capacitor Voltage" in newDataPoint.sensor_name:
-				newDataPoint.data = newDataPoint.data / 10
+			####### OLD WAY (BEFORE SCALAR WAS IN DICT) #######
+			# if newDataPoint.pack > 0:
+				# if "Voltage" in newDataPoint.sensor_name:
+				# 	if "Cell" in newDataPoint.sensor_name:
+				# 		# mV --> V
+				# 		newDataPoint.data = newDataPoint.data / 1000
+				# 	else:
+				# 		newDataPoint.data = newDataPoint.data / 10
 
-			if "IMD" in newDataPoint.sensor_name:
-				newDataPoint.data = newDataPoint.data / 10
+				# elif "Current" in newDataPoint.sensor_name:
+				# 	# mA --> A
+				# 	newDataPoint.data = newDataPoint.data / 1000
 
-			if "Throttle Voltage" in newDataPoint.sensor_name:
-				newDataPoint.data = newDataPoint.data / 10
+				# elif "Temp" in newDataPoint.sensor_name:
+				# 	if "Cell" in newDataPoint.sensor_name:
+				# 		newDataPoint.data = newDataPoint.data / 10
 
-			if "Throttle Input" in newDataPoint.sensor_name:
-				newDataPoint.data = newDataPoint.data / 10
+			# if "Capacitor Voltage" in newDataPoint.sensor_name:
+			# 	newDataPoint.data = newDataPoint.data / 10
 
-			if "TSV Voltage" in newDataPoint.sensor_name:
-				newDataPoint.data = newDataPoint.data / 10
+			# if "IMD" in newDataPoint.sensor_name:
+			# 	newDataPoint.data = newDataPoint.data / 10
 
-			if "TSV Current" in newDataPoint.sensor_name:
-				newDataPoint.data = newDataPoint.data / 1000
+			# if "Throttle Voltage" in newDataPoint.sensor_name:
+			# 	newDataPoint.data = newDataPoint.data / 10
+
+			# if "Throttle Input" in newDataPoint.sensor_name:
+			# 	newDataPoint.data = newDataPoint.data / 10
+
+			# if "TSV Voltage" in newDataPoint.sensor_name:
+			# 	newDataPoint.data = newDataPoint.data / 10
+
+			# if "TSV Current" in newDataPoint.sensor_name:
+			# 	newDataPoint.data = newDataPoint.data / 1000
+
+			if newDataPoint.pack > 0 and newDataPoint.sensor_name == "Current":
+				if newDataPoint.data > 100000:
+					newDataPoint.data = (newDataPoint.data - 2**24) * -1
 
 			# Log data based on the sample time of the object
 			if newDataPoint.system == 'MC':
@@ -548,6 +556,7 @@ def update_display_dict(datapoint):
 	global airs_status
 	global brake_status
 
+	########## STATUS INDICATORS ###########
 	if datapoint.sensor_name == "Throttle Plausibility":
 		throttle_plausibility = datapoint.data
 	if datapoint.sensor_name == "AIRS Status":
@@ -563,6 +572,8 @@ def update_display_dict(datapoint):
 				name = "Min Cell Volt " + str(datapoint.pack)
 			elif "Temp" in datapoint.sensor_name:
 				name = "Temp " + str(datapoint.pack)
+			elif "Current" in datapoint.sensor_name:
+				name = "TSI Current"
 			else:
 				name = "DONT CARE"
 		else:
@@ -574,11 +585,6 @@ def update_display_dict(datapoint):
 		########## TSI TABLE ###########
 		if "IMD" in datapoint.sensor_name:
 			name = "TSI " + datapoint.sensor_name
-		elif "Current" in datapoint.sensor_name:
-			if datapoint.pack > 0:
-				name = "TSI Current"
-			else:
-				name = "DONT CARE"
 		elif "Throttle Voltage" in datapoint.sensor_name:
 			name = "TSI Throt Volt"
 
@@ -970,7 +976,7 @@ class ButtonMonitorThread(QtCore.QThread):
 		global session_timestamp
 		# Write initially to the screen
 		writeToScreen(0, make_message_twenty_chars("MPH", '-', False))
-		writeToScreen(1, make_message_twenty_chars("Current", '-', False))
+		writeToScreen(1, make_message_twenty_chars(("A: - B"), '-', record_button))
 		writeToScreen(2, make_message_twenty_chars("Motor Temp", '-', False))
 		writeToScreen(3, make_message_twenty_chars("SOC", '-', False))
 		while (True):
@@ -978,26 +984,8 @@ class ButtonMonitorThread(QtCore.QThread):
 			######################## WRITE TO SCREEN ########################
 			# Write to the dashboard if a new value has been seen
 			if write_screen[0]:
-				for key in dashboardDict.keys():
-					if write_screen[1] == 0 and "Motor RPM" in key:
-						# Get the RPM
-						if dashboardDict[key] == '-':
-							rpm = 0
-						else:
-							rpm = dashboardDict[key]
-						# Formula for calculating MPH from RPM
-						mph = float(rpm * (21/12) * (60/5280))
-
-						writeToScreen(0, make_message_twenty_chars("MPH", fix_decimal_places(mph, 1), record_button))
-					elif write_screen[1] == 1 and "Current" in key:
-						writeToScreen(1, make_message_twenty_chars(("A: " + str(dashboardDict["TSV Current"]) + " B"), dashboardDict["Pack Current"], record_button))
-					elif write_screen[1] == 2 and "Motor Temp" in key:
-						writeToScreen(2, make_message_twenty_chars(key, dashboardDict[key], record_button))
-					elif write_screen[1] == 3 and "SOC" in key:
-						writeToScreen(3, make_message_twenty_chars(key, dashboardDict[key], record_button))
+				update_dashboard_recording()
 				write_screen = (False, 0)
-
-			update_dashboard_recording()
 
 			######################## READ FROM BUTTONS ########################
 			# Open Serial connection for reading
