@@ -556,14 +556,6 @@ def update_display_dict(datapoint):
 	global airs_status
 	global brake_status
 
-	########## STATUS INDICATORS ###########
-	if datapoint.sensor_name == "Throttle Plausibility":
-		throttle_plausibility = datapoint.data
-	if datapoint.sensor_name == "AIRS Status":
-		airs_status = datapoint.data
-	if datapoint.sensor_name == "Brake Press":
-		brake_status = datapoint.data
-
 	# Handle data from the packs
 	if datapoint.pack > 0:
 
@@ -581,6 +573,14 @@ def update_display_dict(datapoint):
 
 	# Handle data from other subsystems
 	else:
+
+		########## STATUS INDICATORS ###########
+		if datapoint.sensor_name == "Throttle Plausibility":
+			throttle_plausibility = datapoint.data
+		if datapoint.sensor_name == "AIRS Status":
+			airs_status = datapoint.data
+		if datapoint.sensor_name == "Brake Press":
+			brake_status = datapoint.data
 
 		########## TSI TABLE ###########
 		if "IMD" in datapoint.sensor_name:
