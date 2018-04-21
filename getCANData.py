@@ -44,8 +44,11 @@ class Datapoint(object):
 	def __init__(self):
 		sensor_id = 0
 		sensor_name = ""
+		count = 0
+		byte_length = 0
 		data = 0
 		system = ""
+		scalar = 1
 		sampleTime = 15
 		pack = None
 
@@ -260,6 +263,12 @@ def send_throttle_control(throttleControl):
 	print("SENT 1 ----------------------------------")
 	bus.send(msg)
 
+def twos_comp(val, bits):
+    """compute the 2's complement of int value val"""
+    if (val & (1 << (bits - 1))) != 0: # if sign bit is set e.g., 8bit: 128-255
+        val = val - (1 << bits)        # compute negative value
+    return val
+
 # Function to shift the decimal point of CAN data
 def shift_decimal_point(datapoint):
 	if datapoint.pack > 0:
@@ -309,6 +318,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 
 			newDataPoint = Datapoint()
 			newDataPoint.sensor_id = item['id']
+			newDataPoint.byte_length = item['byteLength']
 			newDataPoint.count = item['count']
 			newDataPoint.scalar = item['scalar']
 			newDataPoint.sensor_name = item['description']
@@ -380,7 +390,9 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 
 			if newDataPoint.pack > 0 and newDataPoint.sensor_name == "Current":
 				if newDataPoint.data > 100000:
-					newDataPoint.data = (newDataPoint.data - 2**24) * -1
+					newDataPoint.data = twos_comp(newDataPoint.data, newDataPoint.byte_length)
+				else:
+					pass
 
 			# Log data based on the sample time of the object
 			if newDataPoint.system == 'MC':
