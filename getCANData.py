@@ -574,8 +574,9 @@ def update_display_dict(datapoint):
 		########## TSI TABLE ###########
 		if "IMD" in datapoint.sensor_name:
 			name = "TSI " + datapoint.sensor_name
-		elif "TSV" and "Current" in datapoint.sensor_name:
-			name = "TSI Current"
+		elif "Current" in datapoint.sensor_name:
+			if datapoint.pack > 0:
+				name = "TSI Current"
 		elif "Throttle Voltage" in datapoint.sensor_name:
 			name = "TSI Throt Volt"
 
@@ -732,6 +733,7 @@ def update_dashboard_dict(datapoint):
 			write_screen = (True, 2)
 		elif "Pack Current" in name:
 			dashboardDict[name] = datapoint.data
+			write_screen = (True, 1)
 
 # Adds stars to the dashboard if we are recording
 def update_dashboard_recording():
@@ -983,11 +985,11 @@ class ButtonMonitorThread(QtCore.QThread):
 						else:
 							rpm = dashboardDict[key]
 						# Formula for calculating MPH from RPM
-						mph = float(float(rpm) * (21/12) * (60/5280))
+						mph = float(rpm * (21/12) * (60/5280))
 
 						writeToScreen(0, make_message_twenty_chars("MPH", fix_decimal_places(mph, 1), record_button))
 					elif write_screen[1] == 1 and "Current" in key:
-						writeToScreen(1, make_message_twenty_chars(("TSI_C: " + str(dashboardDict[key]) + " TSV_C"), dashboardDict["Pack Current"], record_button))
+						writeToScreen(1, make_message_twenty_chars(("TSI_C: " + str(dashboardDict["TSV Current"]) + " TSV_C"), dashboardDict["Pack Current"], record_button))
 					elif write_screen[1] == 2 and "Motor Temp" in key:
 						writeToScreen(2, make_message_twenty_chars(key, dashboardDict[key], record_button))
 					elif write_screen[1] == 3 and "SOC" in key:
