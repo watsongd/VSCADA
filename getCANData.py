@@ -577,13 +577,10 @@ def update_display_dict(datapoint):
 		########## STATUS INDICATORS ###########
 		if datapoint.sensor_name == "Throttle Plausibility":
 			throttle_plausibility = int(datapoint.data)
-			print("////////////////////////////////////////////////////////")
 		if datapoint.sensor_name == "AIRS Status":
 			airs_status = int(datapoint.data)
-			print("////////////////////////////////////////////////////////")
 		if datapoint.sensor_name == "Brake Press":
 			brake_status = int(datapoint.data)
-			print("////////////////////////////////////////////////////////")
 
 		########## TSI TABLE ###########
 		if "IMD" in datapoint.sensor_name:
@@ -1111,10 +1108,10 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.Temp2.display(str(fix_decimal_places(displayDict["Temp 2"], 1)))#°C
 		self.Temp3.display(str(fix_decimal_places(displayDict["Temp 3"], 1)))#°C
 		self.Temp4.display(str(fix_decimal_places(displayDict["Temp 4"], 1)))#°C
-		self.SOC1.display(str(displayDict["SOC 1"]))
-		self.SOC2.display(str(displayDict["SOC 2"]))
-		self.SOC3.display(str(displayDict["SOC 3"]))
-		self.SOC4.display(str(displayDict["SOC 4"]))
+		self.SOC1.display(str(fix_decimal_places(displayDict["SOC 1"], 0)))
+		self.SOC2.display(str(fix_decimal_places(displayDict["SOC 2"], 0)))
+		self.SOC3.display(str(fix_decimal_places(displayDict["SOC 3"], 0)))
+		self.SOC4.display(str(fix_decimal_places(displayDict["SOC 4"], 0)))
 		self.State1.setText(str(displayDict["State 1"]))
 		self.State2.setText(str(displayDict["State 2"]))
 		self.State3.setText(str(displayDict["State 3"]))
