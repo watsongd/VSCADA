@@ -749,7 +749,7 @@ def update_dashboard_recording():
 				else:
 					rpm = dashboardDict[key]
 				# Formula for calculating MPH from RPM
-				mph = float(float(rpm) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
+				mph = float(rpm * (21/12) * (60/5280))
 				writeToScreen(0, make_message_twenty_chars("MPH", fix_decimal_places(mph, 1), True))
 			if "Current" in key:
 				writeToScreen(1, make_message_twenty_chars(("A: " + str(dashboardDict["TSV Current"]) + " B"), dashboardDict["Pack Current"], record_button))
@@ -766,7 +766,7 @@ def update_dashboard_recording():
 				else:
 					rpm = dashboardDict[key]
 				# Formula for calculating MPH from RPM
-				mph = float(float(rpm) * (pi / 1) * (pi * (21/1)) * (1/12) * (60/1) * (1/5280))
+				mph = float(rpm * (21/12) * (60/5280))
 				writeToScreen(0, make_message_twenty_chars("MPH", fix_decimal_places(mph, 1), False))
 			if "Current" in key:
 				writeToScreen(1, make_message_twenty_chars(("A: " + str(dashboardDict["TSV Current"]) + " B"), dashboardDict["Pack Current"], record_button))
@@ -980,14 +980,13 @@ class ButtonMonitorThread(QtCore.QThread):
 			if write_screen[0]:
 				for key in dashboardDict.keys():
 					if write_screen[1] == 0 and "Motor RPM" in key:
-
 						# Get the RPM
 						if dashboardDict[key] == '-':
 							rpm = 0
 						else:
 							rpm = dashboardDict[key]
 						# Formula for calculating MPH from RPM
-						mph = float(rpm * (21/12) * (60/5280)) / 10
+						mph = float(rpm * (21/12) * (60/5280))
 
 						writeToScreen(0, make_message_twenty_chars("MPH", fix_decimal_places(mph, 1), record_button))
 					elif write_screen[1] == 1 and "Current" in key:
