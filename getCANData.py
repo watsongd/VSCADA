@@ -577,6 +577,8 @@ def update_display_dict(datapoint):
 		elif "Current" in datapoint.sensor_name:
 			if datapoint.pack > 0:
 				name = "TSI Current"
+			else:
+				name = "DONT CARE"
 		elif "Throttle Voltage" in datapoint.sensor_name:
 			name = "TSI Throt Volt"
 
