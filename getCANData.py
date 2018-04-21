@@ -540,7 +540,8 @@ def fix_decimal_places(decimalValue, desiredDecimalPlaces):
 
 	if dataString == '-':
 		return dataString
-
+	elif desiredDecimalPlaces == 0:
+		return str(int(decimalValue))
 	else:
 		# Make sure the new data has three decimal places
 		decimalPlaces = Decimal(dataString).as_tuple().exponent * -1
