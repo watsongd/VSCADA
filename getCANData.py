@@ -576,11 +576,14 @@ def update_display_dict(datapoint):
 
 		########## STATUS INDICATORS ###########
 		if datapoint.sensor_name == "Throttle Plausibility":
-			throttle_plausibility = datapoint.data
+			throttle_plausibility = int(datapoint.data)
+			print("////////////////////////////////////////////////////////")
 		if datapoint.sensor_name == "AIRS Status":
-			airs_status = datapoint.data
+			airs_status = int(datapoint.data)
+			print("////////////////////////////////////////////////////////")
 		if datapoint.sensor_name == "Brake Press":
-			brake_status = datapoint.data
+			brake_status = int(datapoint.data)
+			print("////////////////////////////////////////////////////////")
 
 		########## TSI TABLE ###########
 		if "IMD" in datapoint.sensor_name:
