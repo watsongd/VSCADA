@@ -1044,8 +1044,8 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.VS_State.setText(str(displayDict["VS State"]))
 
 		#Motor Controller
-		self.Motor_RPM.display(str(displayDict["Motor RPM"]))
-		self.Motor_Temp.display(str(displayDict["Motor Temp"]))
+		self.Motor_RPM.display(str(fix_decimal_places(displayDict["Motor RPM"], 0)))
+		self.Motor_Temp.display(str(fix_decimal_places(displayDict["Motor Temp"], 0)))
 		self.Motor_Throttle.display(str(displayDict["MC Throt Input"]))
 
 		#TSI
@@ -1077,7 +1077,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		#MC
 		self.MC_Vol.display(str(fix_decimal_places(displayDict["MC Voltage"], 1)))
 		self.MC_Temp.display(str(fix_decimal_places(displayDict["MC Temp"], 1)))
-		self.MC_State.setText(str(displayDict["MC State"]))
+		self.MC_State.setText(str(fix_decimal_places(displayDict["MC State"], 0)))
 		#TSI
 		self.TSI_Vol.display(str(fix_decimal_places(displayDict["TS Voltage"], 1)))
 		self.TSI_Temp.display(str(fix_decimal_places(displayDict["TS Temp"], 1)))
