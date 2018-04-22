@@ -374,7 +374,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 				else:
 					item['count'] = newDataPoint.count + 1
 
-			print("SENSOR: " + str(newDataPoint.sensor_name) + " VALUE: " + str(newDataPoint.data))
+			#print("SENSOR: " + str(newDataPoint.sensor_name) + " VALUE: " + str(newDataPoint.data))
 
 			# update screens
 			update_display_dict(newDataPoint)
