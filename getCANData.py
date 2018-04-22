@@ -291,7 +291,7 @@ def shift_decimal_point(datapoint):
 		datapoint.data = datapoint.data / 10
 
 	if "Throttle Voltage" in datapoint.sensor_name:
-		datapoint.data = datapoint.data / 10
+		datapoint.data = datapoint.data / 100
 
 	if "Throttle Input" in datapoint.sensor_name:
 		datapoint.data = datapoint.data / 10
