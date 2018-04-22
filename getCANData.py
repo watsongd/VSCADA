@@ -1004,6 +1004,8 @@ class ButtonMonitorThread(QtCore.QThread):
 			elif readButtons == right:
 				print("Right")
 				models.export_csv_previous(session["Session"])
+			elif readButtons == left:
+				send_throttle_control(1)
 			#Close Connection
 			ser.close()
 
