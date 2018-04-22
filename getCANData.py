@@ -235,6 +235,7 @@ global session_timestamp
 global error_string
 global critical_error
 global min_volt_cell
+global max_temp_cell
 global throttle_plausibility
 global airs_status
 global brake_status
@@ -243,6 +244,7 @@ critical_error = False
 write_screen = (False, 0)
 session_timestamp = 0
 min_volt_cell = 0
+max_temp_cell = 0
 throttle_plausibility = 0 #1 = Plausible: 0 is implausible
 airs_status = 0
 brake_status = 0
@@ -263,50 +265,12 @@ def send_throttle_control(throttleControl):
 	print("SENT 1 ----------------------------------")
 	bus.send(msg)
 
+# Function to perform twos complement on an int
 def twos_comp(val, bits):
     """compute the 2's complement of int value val"""
     if (val & (1 << (bits - 1))) != 0: # if sign bit is set e.g., 8bit: 128-255
         val = val - (1 << bits)        # compute negative value
     return val 
-
-# Function to shift the decimal point of CAN data
-def shift_decimal_point(datapoint):
-	if datapoint.pack > 0:
-		if "Voltage" in datapoint.sensor_name:
-			if "Cell" in datapoint.sensor_name:
-				# mV --> V
-				datapoint.data = datapoint.data / 1000
-			else:
-				datapoint.data = datapoint.data / 10
-
-		elif "Current" in datapoint.sensor_name:
-			# mA --> A
-			datapoint.data = datapoint.data / 1000
-
-		elif "Temp" in datapoint.sensor_name:
-			if "Cell" in datapoint.sensor_name:
-				datapoint.data = datapoint.data / 10
-
-	if "State" in datapoint.sensor_name:
-		if "TSI" in datapoint.sensor_name:
-			datapoint.data = TSIPackState[datapoint.data]
-		else:
-			datapoint.data = TSVPackState[datapoint.data]
-
-	if "Capacitor Voltage" in datapoint.sensor_name:
-		datapoint.data = datapoint.data / 10
-
-	if "IMD" in datapoint.sensor_name:
-		datapoint.data = datapoint.data / 10
-
-	if "Throttle Voltage" in datapoint.sensor_name:
-		datapoint.data = datapoint.data / 10
-
-	if "Throttle Input" in datapoint.sensor_name:
-		datapoint.data = datapoint.data / 10
-
-	if "TSV Voltage" in datapoint.sensor_name:
-		datapoint.data = datapoint.data / 10
 
 # Main Function that handles reading the CAN network and translating that data
 def process_can_data(address, data, dataLength, error_list, config_list):
@@ -345,54 +309,13 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 				newDataPoint.data = data[offset]
 
 			# Based on the scalar, shift the decimal point as necessary
-			newDataPoint.data = newDataPoint.data / newDataPoint.scalar
+			newDataPoint.data = twos_comp(int(newDataPoint.data * newDataPoint.scalar), int(newDataPoint.byte_length * 8)) / newDataPoint.scalar
 
 			if "State" in newDataPoint.sensor_name:
 				if "TSI" in newDataPoint.sensor_name:
 					newDataPoint.data = TSIPackState[newDataPoint.data]
 				else:
 					newDataPoint.data = TSVPackState[newDataPoint.data]
-
-			####### OLD WAY (BEFORE SCALAR WAS IN DICT) #######
-			# if newDataPoint.pack > 0:
-				# if "Voltage" in newDataPoint.sensor_name:
-				# 	if "Cell" in newDataPoint.sensor_name:
-				# 		# mV --> V
-				# 		newDataPoint.data = newDataPoint.data / 1000
-				# 	else:
-				# 		newDataPoint.data = newDataPoint.data / 10
-
-				# elif "Current" in newDataPoint.sensor_name:
-				# 	# mA --> A
-				# 	newDataPoint.data = newDataPoint.data / 1000
-
-				# elif "Temp" in newDataPoint.sensor_name:
-				# 	if "Cell" in newDataPoint.sensor_name:
-				# 		newDataPoint.data = newDataPoint.data / 10
-
-			# if "Capacitor Voltage" in newDataPoint.sensor_name:
-			# 	newDataPoint.data = newDataPoint.data / 10
-
-			# if "IMD" in newDataPoint.sensor_name:
-			# 	newDataPoint.data = newDataPoint.data / 10
-
-			# if "Throttle Voltage" in newDataPoint.sensor_name:
-			# 	newDataPoint.data = newDataPoint.data / 10
-
-			# if "Throttle Input" in newDataPoint.sensor_name:
-			# 	newDataPoint.data = newDataPoint.data / 10
-
-			# if "TSV Voltage" in newDataPoint.sensor_name:
-			# 	newDataPoint.data = newDataPoint.data / 10
-
-			# if "TSV Current" in newDataPoint.sensor_name:
-			# 	newDataPoint.data = newDataPoint.data / 1000
-
-			if newDataPoint.pack > 0 and newDataPoint.sensor_name == "Current":
-				if newDataPoint.data > 100000:
-					newDataPoint.data = str(twos_comp(int(newDataPoint.data * newDataPoint.scalar), int(newDataPoint.byte_length * 8)) / 1000)
-				else:
-					pass
 
 			# Log data based on the sample time of the object
 			if newDataPoint.system == 'MC':
@@ -565,6 +488,7 @@ def fix_decimal_places(decimalValue, desiredDecimalPlaces):
 # Updates the display dictionary that stores data that appears on the GLV screen
 def update_display_dict(datapoint):
 	global min_volt_cell
+	global max_temp_cell
 	global throttle_plausibility
 	global airs_status
 	global brake_status
@@ -667,19 +591,36 @@ def update_display_dict(datapoint):
 
 		elif "Temp " in name:
 
+			# find which cell has the minimum voltage
+			for char in datapoint.sensor_name:
+				if char.isdigit():
+					cell = int(char)
+					break
+
 			# If its the first entry, directly input
 			if displayDict[name] == '-':
+				max_temp_cell = cell
 				displayDict[name] = datapoint.data
 
 			else:
-				maxTemp = float(displayDict[name])
+				maxCellTemp = float(displayDict[name])
 
-				# Otherwise, take the highest
-				if maxTemp < datapoint.data:
+				# If the data is coming from the same cell, update the value
+				if cell == max_temp_cell:
 					if datapoint.data > 150:
 						pass
 					else:
+						max_temp_cell = cell
 						displayDict[name] = fix_decimal_places(datapoint.data, 1)
+
+				# Otherwise, take the lowest
+				elif maxCellTemp < datapoint.data:
+					if datapoint.data > 150:
+						pass
+					else:
+						max_temp_cell = cell
+						displayDict[name] = fix_decimal_places(datapoint.data, 1)
+
 				else:
 					displayDict[name] = displayDict[name]
 		else:
