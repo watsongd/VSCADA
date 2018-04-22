@@ -1046,7 +1046,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		#Motor Controller
 		self.Motor_RPM.display(str(fix_decimal_places(displayDict["Motor RPM"], 0)))
 		self.Motor_Temp.display(str(fix_decimal_places(displayDict["Motor Temp"], 0)))
-		self.Motor_Throttle.display(str(displayDict["MC Throt Input"]))
+		self.Motor_Throttle.display(str(fix_decimal_places(displayDict["MC Throt Input"], 2)))
 
 		#TSI
 		self.TSI_IMD.display(str(displayDict["TSI IMD"]))
