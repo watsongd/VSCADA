@@ -261,8 +261,8 @@ def timer():
 # Function to send a signal to the TSI when we need to drop out drive mode
 def send_throttle_control(throttleControl):
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
-	msg = msg = can.Message(arbitration_id=0x010, data=[throttleControl], extended_id=False)
-	print("SENT 1 ----------------------------------")
+	msg = can.Message(arbitration_id=0x010, data=[throttleControl], extended_id=False)
+	print("SENT 1 ---------------------------------------------------------------------")
 	bus.send(msg)
 
 # Function to shift the decimal point of CAN data
