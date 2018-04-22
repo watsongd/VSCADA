@@ -572,7 +572,7 @@ def update_display_dict(datapoint):
 
 				# If the data is coming from the same cell, update the value
 				if cell == min_volt_cell:
-					if datapoint.data > 4.5:
+					if datapoint.data > 4.5 or datapoint.data > 0.5:
 						pass
 					else:
 						min_volt_cell = cell
@@ -580,7 +580,7 @@ def update_display_dict(datapoint):
 
 				# Otherwise, take the lowest
 				elif lowestCellVolt > datapoint.data:
-					if datapoint.data > 4.5:
+					if datapoint.data > 4.5 or datapoint.data > 0.5:
 						pass
 					else:
 						min_volt_cell = cell
