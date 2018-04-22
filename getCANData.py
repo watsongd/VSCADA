@@ -309,7 +309,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 				newDataPoint.data = data[offset]
 
 			# Based on the scalar, shift the decimal point as necessary
-			newDataPoint.data = twos_comp(int(newDataPoint.data * newDataPoint.scalar), int(newDataPoint.byte_length * 8)) / newDataPoint.scalar
+			newDataPoint.data = twos_comp(int(newDataPoint.data), int(newDataPoint.byte_length * 8)) / newDataPoint.scalar
 
 			if "State" in newDataPoint.sensor_name:
 				if "TSI" in newDataPoint.sensor_name:
