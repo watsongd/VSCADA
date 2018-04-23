@@ -261,9 +261,48 @@ def timer():
 # Function to send a signal to the TSI when we need to drop out drive mode
 def send_throttle_control(throttleControl):
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
-	msg = msg = can.Message(arbitration_id=0x010, data=[throttleControl], extended_id=False)
-	print("SENT 1 ----------------------------------")
+	msg = can.Message(arbitration_id=0x010, data=[throttleControl], extended_id=False)
+	print("SENT 1 ---------------------------------------------------------------------")
 	bus.send(msg)
+
+# Function to shift the decimal point of CAN data
+def shift_decimal_point(datapoint):
+	if datapoint.pack > 0:
+		if "Voltage" in datapoint.sensor_name:
+			if "Cell" in datapoint.sensor_name:
+				# mV --> V
+				datapoint.data = datapoint.data / 1000
+			else:
+				datapoint.data = datapoint.data / 10
+
+		elif "Current" in datapoint.sensor_name:
+			# mA --> A
+			datapoint.data = datapoint.data / 1000
+
+		elif "Temp" in datapoint.sensor_name:
+			if "Cell" in datapoint.sensor_name:
+				datapoint.data = datapoint.data / 10
+
+	if "State" in datapoint.sensor_name:
+		if "TSI" in datapoint.sensor_name:
+			datapoint.data = TSIPackState[datapoint.data]
+		else:
+			datapoint.data = TSVPackState[datapoint.data]
+
+	if "Capacitor Voltage" in datapoint.sensor_name:
+		datapoint.data = datapoint.data / 10
+
+	if "IMD" in datapoint.sensor_name:
+		datapoint.data = datapoint.data / 10
+
+	if "Throttle Voltage" in datapoint.sensor_name:
+		datapoint.data = datapoint.data / 100
+
+	if "Throttle Input" in datapoint.sensor_name:
+		datapoint.data = datapoint.data / 10
+
+	if "TSV Voltage" in datapoint.sensor_name:
+		datapoint.data = datapoint.data / 10
 
 # Function to perform twos complement on an int
 def twos_comp(val, bits):
@@ -335,7 +374,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 				else:
 					item['count'] = newDataPoint.count + 1
 
-			print("SENSOR: " + str(newDataPoint.sensor_name) + " VALUE: " + str(newDataPoint.data))
+			#print("SENSOR: " + str(newDataPoint.sensor_name) + " VALUE: " + str(newDataPoint.data))
 
 			# update screens
 			update_display_dict(newDataPoint)
@@ -965,6 +1004,8 @@ class ButtonMonitorThread(QtCore.QThread):
 			elif readButtons == right:
 				print("Right")
 				models.export_csv_previous(session["Session"])
+			elif readButtons == left:
+				send_throttle_control(1)
 			#Close Connection
 			ser.close()
 
