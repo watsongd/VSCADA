@@ -189,7 +189,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 
 					  {"address": 0x0F2, "offset": 0, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 5,  "updated": 0, "id":115, "description": "TSI State"},
 					  {"address": 0x0F2, "offset": 1, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":116, "description": "IMD"}, #IMD needs multiplied by 10
-					  {"address": 0x0F2, "offset": 3, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "scalar": 10, "sampleTime": 5,  "updated": 0, "id":117, "description": "Throttle Voltage"}, #Needs multiplied by 10
+					  {"address": 0x0F2, "offset": 3, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "scalar": 100, "sampleTime": 5,  "updated": 0, "id":117, "description": "Throttle Voltage"}, #Needs multiplied by 10
 					  {"address": 0x0F2, "offset": 5, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 5,  "updated": 0, "id":118, "description": "Brake Press"}, #1 if pressed, 0 if not
 					  {"address": 0x0F2, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 5,  "updated": 0, "id":119, "description": "AIRS Status"}, #1 if closed, 0 if open
 					  {"address": 0x0F3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":120, "description": "TSV Voltage"},
@@ -555,8 +555,6 @@ def update_display_dict(datapoint):
 				name = "Temp " + str(datapoint.pack)
 			else:
 				name = "DONT CARE"
-		elif "Current" in datapoint.sensor_name:
-				name = "TSI Current"
 		else:
 			name = datapoint.sensor_name + " " + str(datapoint.pack)
 
@@ -576,7 +574,8 @@ def update_display_dict(datapoint):
 			name = "TSI " + datapoint.sensor_name
 		elif "Throttle Voltage" in datapoint.sensor_name:
 			name = "TSI Throt Volt"
-			datapoint.data = datapoint.data/10; 
+		elif "TSV Current" in datapoint.sensor_name:
+			name = "TSI Current"
 
 		########## MC TABLE ##########
 		elif "Motor RPM" in datapoint.sensor_name:
@@ -1133,7 +1132,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 
 		#TSI
 		self.TSI_IMD.display(str(displayDict["TSI IMD"]))
-		self.TSI_Throttle_V.display(str(displayDict["TSI Throt Volt"]))
+		self.TSI_Throttle_V.display(str(fix_decimal_places(displayDict["TSI Throt Volt"], 2)))
 		self.TSI_Current.display(str(fix_decimal_places(displayDict["TSI Current"], 2)))
 
 		#L table
