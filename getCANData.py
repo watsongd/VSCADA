@@ -766,8 +766,10 @@ def update_dashboard_dict(datapoint):
 			dashboardDict[name] = datapoint.data
 			write_screen = (True, 1)
 
-# Adds stars to the dashboard if we are recording
 def update_dashboard_recording():
+	"""Updates the drivers display and adds stars to the dashboard if we are recording
+
+    """
 	global record_button
 	if record_button:
 		for key in dashboardDict.keys():
@@ -804,8 +806,13 @@ def update_dashboard_recording():
 			if "SOC" in key:
 				writeToScreen(3, make_message_twenty_chars(key, dashboardDict[key], False))
 
-# Updates error dictionary with most recent error message
 def update_error_dict(error):
+	"""Updates error dictionary with most recent error message
+
+    Args:
+        error (str): new error message
+
+    """
 	global error_string
 	errorDict["Error1"] = errorDict["Error2"]
 	errorDict["Error2"] = errorDict["Error3"]
@@ -814,8 +821,10 @@ def update_error_dict(error):
 	error_string = str(errorDict["Error1"]) + '\n' + str(errorDict["Error2"]) + '\n' + str(errorDict["Error3"]) + '\n' + str(errorDict["Error4"])
 	print(error_string)
 
-# Check the frequency with which things are being updated
 def check_display_dict():
+	"""Check the frequency with which things are being updated, and remove old data from the table
+
+    """
 	for key in displayDict.keys():
 
 		#get the last character in the key
@@ -952,8 +961,10 @@ def check_display_dict():
 							print(str(item['description']) + "----------------------------- diff: " + str(differenceNUM[1]) + " 3x sampleTime: " + str(3 * item['sampleTime']))
 							displayDict[key] = '-'
 
-# Check if record button has been pressed. Export if stop button is pressed
 def export_data():
+	"""Check if record button has been pressed. Export if stop button is pressed
+
+    """
 	#Exports data exactly one time after stop button is pressed
 	models.export_csv(session["Session"])
 	print("Exported Data {}".format(session["Session"]))
