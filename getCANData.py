@@ -351,7 +351,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 
 			# Log data based on the sample time of the object
 			if newDataPoint.system == 'MC':
-				if (newDataPoint.sampleTime * 4) >= newDataPoint.count:					
+				if (newDataPoint.sampleTime * 4) <= newDataPoint.count:					
 					now = datetime.now().strftime('%H:%M:%S')
 					log_data(newDataPoint, error_list, config_list)
 					item['updated'] = now
@@ -359,7 +359,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 				else:
 					item['count'] = newDataPoint.count + 1
 			else:
-				if newDataPoint.sampleTime >= newDataPoint.count:					
+				if newDataPoint.sampleTime <= newDataPoint.count:					
 					now = datetime.now().strftime('%H:%M:%S')
 					log_data(newDataPoint, error_list, config_list)
 					item['updated'] = now
@@ -367,7 +367,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 				else:
 					item['count'] = newDataPoint.count + 1
 
-			#print("SENSOR: " + str(newDataPoint.sensor_name) + " VALUE: " + str(newDataPoint.data))
+			print("SENSOR: " + str(newDataPoint.sensor_name) + " VALUE: " + str(newDataPoint.data) + " COUNT: " + str(item['count']))
 
 			# update screens
 			update_display_dict(newDataPoint)
@@ -576,6 +576,7 @@ def update_display_dict(datapoint):
 			name = "TSI " + datapoint.sensor_name
 		elif "Throttle Voltage" in datapoint.sensor_name:
 			name = "TSI Throt Volt"
+			datapoint.data = datapoint.data/10; 
 
 		########## MC TABLE ##########
 		elif "Motor RPM" in datapoint.sensor_name:
