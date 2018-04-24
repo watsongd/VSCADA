@@ -1133,7 +1133,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		#TSI
 		self.TSI_IMD.display(str(displayDict["TSI IMD"]))
 		self.TSI_Throttle_V.display(str(fix_decimal_places(displayDict["TSI Throt Volt"], 2)))
-		self.TSI_Current.display(str(fix_decimal_places(displayDict["TSI Current"], 2)))
+		self.TSI_Current.display(str(fix_decimal_places(displayDict["TSI Current"], 1)))
 
 		#L table
 		self.Voltage1.display(str(fix_decimal_places(displayDict["Voltage 1"], 1)))
