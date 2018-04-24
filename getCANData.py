@@ -37,8 +37,6 @@ _pollFrequency = 3.0
 #global time counter
 _time = 0
 
-# testNow = datetime.now().strftime('%H:%M:%S')
-
 class Datapoint(object):
 
 	def __init__(self):
@@ -191,7 +189,7 @@ listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system":
 
 					  {"address": 0x0F2, "offset": 0, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 5,  "updated": 0, "id":115, "description": "TSI State"},
 					  {"address": 0x0F2, "offset": 1, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":116, "description": "IMD"}, #IMD needs multiplied by 10
-					  {"address": 0x0F2, "offset": 3, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "scalar": 10, "sampleTime": 5,  "updated": 0, "id":117, "description": "Throttle Voltage"}, #Needs multiplied by 10
+					  {"address": 0x0F2, "offset": 3, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "scalar": 100, "sampleTime": 5,  "updated": 0, "id":117, "description": "Throttle Voltage"}, #Needs multiplied by 10
 					  {"address": 0x0F2, "offset": 5, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 5,  "updated": 0, "id":118, "description": "Brake Press"}, #1 if pressed, 0 if not
 					  {"address": 0x0F2, "offset": 6, "byteLength": 1, "system": "TSI", "pack": 0, "count": 0, "scalar": 1, "sampleTime": 5,  "updated": 0, "id":119, "description": "AIRS Status"}, #1 if closed, 0 if open
 					  {"address": 0x0F3, "offset": 0, "byteLength": 2, "system": "TSI", "pack": 0, "count": 0, "scalar": 10, "sampleTime": 15, "updated": 0, "id":120, "description": "TSV Voltage"},
@@ -251,69 +249,64 @@ brake_status = 0
 
 error_string = errorDict["Error1"] + '\n' + errorDict["Error2"] + '\n' + errorDict["Error3"] + '\n' + errorDict["Error4"]
 
-# Simple timer function that returns the number of seconds in now()
 def timer():
+	"""Simple timer function that returns the number of seconds in now()
+
+    Returns:
+        int: number of seconds in datetime.now()
+
+    .. _PEP 484:
+        https://www.python.org/dev/peps/pep-0484/
+
+    """
 	now = datetime.now()
 	nowSeconds = datetime.strftime(now, '%s')
 	intSeconds = int(nowSeconds) % 60
 	return intSeconds
 
-# Function to send a signal to the TSI when we need to drop out drive mode
 def send_throttle_control(throttleControl):
+	"""Function to send a signal to the TSI when we need to drop out drive mode
+
+    Args:
+        throttleControl (int): The value we are sending.
+
+    Returns:
+        int: The return value. True for success, False otherwise.
+
+    """
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 	msg = can.Message(arbitration_id=0x010, data=[throttleControl], extended_id=False)
-	print("SENT 1 ---------------------------------------------------------------------")
 	bus.send(msg)
 
-# Function to shift the decimal point of CAN data
-def shift_decimal_point(datapoint):
-	if datapoint.pack > 0:
-		if "Voltage" in datapoint.sensor_name:
-			if "Cell" in datapoint.sensor_name:
-				# mV --> V
-				datapoint.data = datapoint.data / 1000
-			else:
-				datapoint.data = datapoint.data / 10
-
-		elif "Current" in datapoint.sensor_name:
-			# mA --> A
-			datapoint.data = datapoint.data / 1000
-
-		elif "Temp" in datapoint.sensor_name:
-			if "Cell" in datapoint.sensor_name:
-				datapoint.data = datapoint.data / 10
-
-	if "State" in datapoint.sensor_name:
-		if "TSI" in datapoint.sensor_name:
-			datapoint.data = TSIPackState[datapoint.data]
-		else:
-			datapoint.data = TSVPackState[datapoint.data]
-
-	if "Capacitor Voltage" in datapoint.sensor_name:
-		datapoint.data = datapoint.data / 10
-
-	if "IMD" in datapoint.sensor_name:
-		datapoint.data = datapoint.data / 10
-
-	if "Throttle Voltage" in datapoint.sensor_name:
-		datapoint.data = datapoint.data / 100
-
-	if "Throttle Input" in datapoint.sensor_name:
-		datapoint.data = datapoint.data / 10
-
-	if "TSV Voltage" in datapoint.sensor_name:
-		datapoint.data = datapoint.data / 10
-
-# Function to perform twos complement on an int
 def twos_comp(val, bits):
-    """compute the 2's complement of int value val"""
+    """compute the 2's complement of int value val
+
+    Args:
+        val (int): The value we are converting to 2's complement.
+        bits (int): number of bits in the val (8 * numBytes)
+
+    Returns:
+        int: computes the 2's complement value
+
+    """
     if (val & (1 << (bits - 1))) != 0: # if sign bit is set e.g., 8bit: 128-255
         val = val - (1 << bits)        # compute negative value
     return val 
 
-# Main Function that handles reading the CAN network and translating that data
 def process_can_data(address, data, dataLength, error_list, config_list):
-	# Iterate through the possible data points
+	"""compute the 2's complement of int value val
+
+    Args:
+        address (int): address of the CAN packet.
+        data (int): data in the CAN packet
+        dataLength (int): number of bytes of data
+        error_list (errorList()): 
+        config_list (configList()): 
+
+    Returns:
+        creates datapoints and updates values on the display
+
+    """
 	for item in listOfViewableData:
 
 		#if the data point's address equals the one of the message, make a new datapoint
@@ -381,8 +374,9 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 			update_dashboard_dict(newDataPoint)
 			update_scada_table()
 
-# Main Function that handles reading the CAN network and translating that data
 def receive_can():
+	"""retrieves packets from the CAN bus and passes them on to be processed
+    """
 	session["Session"] = models.get_session()
 	bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
 
@@ -401,9 +395,15 @@ def receive_can():
 
 		process_can_data(address, data, dataLength, error_list, config_list)
 
-# Takes data from parse() and stores in db if recording.
 def log_data(datapoint, error_list, config):
+	"""Puts datapoints into the db
 
+    Args:
+        datapoint (Datapoint): the data of one sensor
+        error_list (errorList()): 
+        config (configList()): 
+
+    """
 	global record_button
 	global session_timestamp
 	global error_string
@@ -494,9 +494,17 @@ def log_data(datapoint, error_list, config):
 				print("Logged")
 				models.Data.create(sensor_id=sensor_id,sensorName=sensor_name, data=data, time=elapsed_time, system=system, pack=pack, flagged=flag, session_id=session["Session"], csv_out=sensor_info.csv_en)
 
-# Fix the number of decimal places to what you want
 def fix_decimal_places(decimalValue, desiredDecimalPlaces):
+	"""Fix the number of decimal places to what you want
 
+    Args:
+        decimalValue (float): value we want change the number of decimal places
+        desiredDecimalPlaces (int): number of decimal places we want
+
+    Returns:
+        str: value with the desired number of decimal places
+
+    """
 	# Data as a String
 	dataString = str(decimalValue)
 
@@ -524,8 +532,13 @@ def fix_decimal_places(decimalValue, desiredDecimalPlaces):
 
 		return dataString
 
-# Updates the display dictionary that stores data that appears on the GLV screen
 def update_display_dict(datapoint):
+	"""Updates the display dictionary that stores data that appears on the GLV screen
+
+    Args:
+        datapoint (Datapoint): data we want to show on the display
+
+    """
 	global min_volt_cell
 	global max_temp_cell
 	global throttle_plausibility
@@ -666,8 +679,10 @@ def update_display_dict(datapoint):
 		else:
 			displayDict[name] = datapoint.data
 
-# Updates VSCADA indepent of CAN data
 def update_scada_table():
+	"""Updates the VSCADA table on the display indepent of CAN data
+
+    """
 	global record_button
 	global session_timestamp
 
@@ -692,8 +707,18 @@ def update_scada_table():
 		datetimeDiff = datetime.strptime(str(differenceNUM), '(%M, %S)')
 		displayDict["VS Time"] = datetimeDiff.strftime('%M:%S')
 
-# In order to write to the dashboard display, the message needs to be 20 chars, so this funct will handle that
 def make_message_twenty_chars(sensorName, data, recording):
+	"""In order to write to the dashboard display, the message needs to be 20 chars, so this funct will handle that
+
+    Args:
+        sensorName (str): name of sensor
+        data (str or float): value we want displayed
+        recording (bool): boolean value based on whether or not we are currently recording
+
+    Returns:
+    	twentyChars (str): str that is twenty characters long to be displayed
+
+    """
 	twentyChars = "" + sensorName + ": " +str(data)
 	while len(twentyChars) < 20:
 		if recording == False:
@@ -705,8 +730,13 @@ def make_message_twenty_chars(sensorName, data, recording):
 				twentyChars = twentyChars + " "
 	return twentyChars
 
-# Updates the dashboard dictionary that stores data that appears for the driver
 def update_dashboard_dict(datapoint):
+	"""Updates the dashboard dictionary with data that appears for the driver
+
+    Args:
+        datapoint (Datapoint): new data we are updating
+
+    """
 	global write_screen
 	if datapoint.pack == 4 and datapoint.sensor_name == "Current":
 		name = "Pack Current"
@@ -737,8 +767,10 @@ def update_dashboard_dict(datapoint):
 			dashboardDict[name] = datapoint.data
 			write_screen = (True, 1)
 
-# Adds stars to the dashboard if we are recording
 def update_dashboard_recording():
+	"""Updates the drivers display and adds stars to the dashboard if we are recording
+
+    """
 	global record_button
 	if record_button:
 		for key in dashboardDict.keys():
@@ -775,8 +807,13 @@ def update_dashboard_recording():
 			if "SOC" in key:
 				writeToScreen(3, make_message_twenty_chars(key, dashboardDict[key], False))
 
-# Updates error dictionary with most recent error message
 def update_error_dict(error):
+	"""Updates error dictionary with most recent error message
+
+    Args:
+        error (str): new error message
+
+    """
 	global error_string
 	errorDict["Error1"] = errorDict["Error2"]
 	errorDict["Error2"] = errorDict["Error3"]
@@ -785,8 +822,10 @@ def update_error_dict(error):
 	error_string = str(errorDict["Error1"]) + '\n' + str(errorDict["Error2"]) + '\n' + str(errorDict["Error3"]) + '\n' + str(errorDict["Error4"])
 	print(error_string)
 
-# Check the frequency with which things are being updated
 def check_display_dict():
+	"""Check the frequency with which things are being updated, and remove old data from the table
+
+    """
 	for key in displayDict.keys():
 
 		#get the last character in the key
@@ -923,8 +962,10 @@ def check_display_dict():
 							print(str(item['description']) + "----------------------------- diff: " + str(differenceNUM[1]) + " 3x sampleTime: " + str(3 * item['sampleTime']))
 							displayDict[key] = '-'
 
-# Check if record button has been pressed. Export if stop button is pressed
 def export_data():
+	"""Check if record button has been pressed. Export if stop button is pressed
+
+    """
 	#Exports data exactly one time after stop button is pressed
 	models.export_csv(session["Session"])
 	print("Exported Data {}".format(session["Session"]))
@@ -1093,7 +1134,7 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		#TSI
 		self.TSI_IMD.display(str(displayDict["TSI IMD"]))
 		self.TSI_Throttle_V.display(str(displayDict["TSI Throt Volt"]))
-		self.TSI_Current.display(str(fix_decimal_places(displayDict["TSI Current"], 1)))
+		self.TSI_Current.display(str(fix_decimal_places(displayDict["TSI Current"], 2)))
 
 		#L table
 		self.Voltage1.display(str(fix_decimal_places(displayDict["Voltage 1"], 1)))
