@@ -659,6 +659,8 @@ def find_min_cell_volt(packNumber):
 		if item['pack'] == packNumber and "Cell" in item['description'] and "Voltage" in item['description']:
 			if item['displayValue'] > 4.5 or item['displayValue'] < 0.1:
 				pass
+			elif item['displayValue'] == '-':
+				pass
 			else:
 				listOfCellVoltages.append(item['displayValue'])
 	return min(listOfCellVoltages)
@@ -669,6 +671,8 @@ def find_max_cell_temp(packNumber):
 	for item in listOfViewableData:
 		if item['pack'] == packNumber and "Cell" in item['description'] and "Temp" in item['description']:
 			if item['displayValue'] > 150 or item['displayValue'] < 0.1:
+				pass
+			elif item['displayValue'] == '-':
 				pass
 			else:
 				listOfCellTemps.append(item['displayValue'])
