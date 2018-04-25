@@ -295,7 +295,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
         creates datapoints and updates values on the display
 
     """
-    global airs_status
+	global airs_status
 	global brake_status
 	global throttle_plausibility
     
