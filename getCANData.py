@@ -622,23 +622,23 @@ def check_display_values():
     """
 	# Iterate through the viewable data
 	for item in listOfViewableData:
-	# check if has ever been updated before, if not, just set to '-'
-	if item['updated'] == 0:
-		pass
-	else:
-		# check the last time that dict was updated
-		now = datetime.now()
-		lastUpdated = datetime.strptime(str(item['updated']), '%H:%M:%S')
+		# check if has ever been updated before, if not, just set to '-'
+		if item['updated'] == 0:
+			pass
+		else:
+			# check the last time that dict was updated
+			now = datetime.now()
+			lastUpdated = datetime.strptime(str(item['updated']), '%H:%M:%S')
 
-		# get the difference in times
-		differenceDT = now - lastUpdated
+			# get the difference in times
+			differenceDT = now - lastUpdated
 
-		# get the difference in numbers rather than a datetime timedelta object
-		differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
+			# get the difference in numbers rather than a datetime timedelta object
+			differenceNUM = divmod(differenceDT.days * 86400 + differenceDT.seconds, 60)
 
-		# check the difference vs the sample time
-		if differenceNUM[1] > (3 * item['sampleTime']):
-			item['displayValue'] = '-'
+			# check the difference vs the sample time
+			if differenceNUM[1] > (3 * item['sampleTime']):
+				item['displayValue'] = '-'
 
 def export_data():
 	"""Check if record button has been pressed. Export if stop button is pressed
