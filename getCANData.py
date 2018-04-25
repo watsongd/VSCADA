@@ -360,12 +360,12 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 					item['count'] = newDataPoint.count + 1
 
 			########## STATUS INDICATORS ###########
-			if datapoint.sensor_name == "Throttle Plausibility":
-				throttle_plausibility = int(datapoint.data)
-			if datapoint.sensor_name == "AIRS Status":
-				airs_status = int(datapoint.data)
-			if datapoint.sensor_name == "Brake Press":
-				brake_status = int(datapoint.data)
+			if newDataPoint.sensor_name == "Throttle Plausibility":
+				throttle_plausibility = int(newDataPoint.data)
+			if newDataPoint.sensor_name == "AIRS Status":
+				airs_status = int(newDataPoint.data)
+			if newDataPoint.sensor_name == "Brake Press":
+				brake_status = int(newDataPoint.data)
 
 			print("SENSOR: " + str(newDataPoint.sensor_name) + " VALUE: " + str(newDataPoint.data) + " COUNT: " + str(item['count']))
 
