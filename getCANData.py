@@ -663,7 +663,10 @@ def find_min_cell_volt(packNumber):
 				pass
 			else:
 				listOfCellVoltages.append(item['displayValue'])
-	return min(listOfCellVoltages)
+	if listOfCellVoltages == []:
+		return '-'
+	else:
+		return min(listOfCellVoltages)
 
 #Comment this funct
 def find_max_cell_temp(packNumber):
@@ -676,15 +679,24 @@ def find_max_cell_temp(packNumber):
 				pass
 			else:
 				listOfCellTemps.append(item['displayValue'])
-	return max(listOfCellTemps)
+	if listOfCellTemps == []:
+		return '-'
+	else:
+		return max(listOfCellTemps)
 
 #Comment this funct
 def find_min_soc():
 	listOfSOCs = []
 	for item in listOfViewableData:
 		if "SOC" in item['description']:
-			listOfSOCs.append(item['displayValue'])
-	return min(listOfSOCs)
+			if item['displayValue'] == '-':
+				pass
+			else:
+				listOfSOCs.append(item['displayValue'])
+	if listOfSOCs == []:
+		return '-'
+	else:
+		return min(listOfSOCs)
 
 # Thread to Monitor and Parse CAN bus Data
 class CanMonitorThread(QtCore.QThread):
