@@ -307,6 +307,11 @@ def process_can_data(address, data, dataLength, error_list, config_list):
         creates datapoints and updates values on the display
 
     """
+
+    global airs_status
+    global brake_status
+    global throttle_plausibility
+    
 	for item in listOfViewableData:
 
 		#if the data point's address equals the one of the message, make a new datapoint
