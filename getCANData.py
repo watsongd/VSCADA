@@ -678,7 +678,7 @@ def find_max_cell_temp(packNumber):
 def find_min_soc():
 	listOfSOCs = []
 	for item in listOfViewableData:
-		"SOC" in item['description']:
+		if "SOC" in item['description']:
 			listOfSOCs.append(item['displayValue'])
 	return min(listOfSOCs)
 
