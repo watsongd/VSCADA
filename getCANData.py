@@ -676,7 +676,7 @@ def find_max_cell_temp(packNumber):
 				pass
 			else:
 				listOfCellTemps.append(item['displayValue'])
-	return max(listOfCellVoltages)
+	return max(listOfCellTemps)
 
 #Comment this funct
 def find_min_soc():
