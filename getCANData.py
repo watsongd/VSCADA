@@ -50,7 +50,7 @@ class Datapoint(object):
 		sampleTime = 15
 		pack = None
 
-listOfViewableData = [{"address": 0x100, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "data": 0, "displayValue": '-', "scalar": 1, "sampleTime": 15, "updated": 0, "id":1, "description": "State"},
+listOfCANSensors = [{"address": 0x100, "offset": 0, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "data": 0, "displayValue": '-', "scalar": 1, "sampleTime": 15, "updated": 0, "id":1, "description": "State"},
 					  {"address": 0x100, "offset": 1, "byteLength": 2, "system": "TSV", "pack": 1, "count": 0, "data": 0, "displayValue": '-', "scalar": 10, "sampleTime": 15, "updated": 0, "id":2, "description": "Voltage"},
 					  {"address": 0x100, "offset": 3, "byteLength": 4, "system": "TSV", "pack": 1, "count": 0, "data": 0, "displayValue": '-', "scalar": 1000, "sampleTime": 1,  "updated": 0, "id":3, "description": "Current"},
 					  {"address": 0x100, "offset": 7, "byteLength": 1, "system": "TSV", "pack": 1, "count": 0, "data": 0, "displayValue": '-', "scalar": 1, "sampleTime": 15, "updated": 0, "id":4, "description": "SOC"},
@@ -299,7 +299,7 @@ def process_can_data(address, data, dataLength, error_list, config_list):
 	global brake_status
 	global throttle_plausibility
     
-	for item in listOfViewableData:
+	for item in listOfCANSensors:
 
 		#if the data point's address equals the one of the message, make a new datapoint
 		if hex(item['address']) == address:
@@ -593,16 +593,16 @@ def update_dashboard_recording():
     """
 	global record_button
 	# Get the RPM
-	if listOfViewableData[105 - 1]['displayValue'] == '-':
+	if listOfCANSensors[105 - 1]['displayValue'] == '-':
 		rpm = 0
 		mph = '-'
 	else:
-		rpm = listOfViewableData[105 - 1]['displayValue']
+		rpm = listOfCANSensors[105 - 1]['displayValue']
 		# Formula for calculating MPH from RPM
 		mph = float(rpm * (21/12) * (60/5280))
 	writeToScreen(0, make_message_twenty_chars("MPH", fix_decimal_places(mph, 1), record_button))
-	writeToScreen(1, make_message_twenty_chars(("A: " + fix_decimal_places(listOfViewableData[121 - 1]['displayValue'], 1) + " B"), fix_decimal_places(listOfViewableData[3 - 1]['displayValue'], 1), record_button))
-	writeToScreen(2, make_message_twenty_chars("Motor Temp", fix_decimal_places(listOfViewableData[106 - 1]['displayValue'], 0), record_button))
+	writeToScreen(1, make_message_twenty_chars(("A: " + fix_decimal_places(listOfCANSensors[121 - 1]['displayValue'], 1) + " B"), fix_decimal_places(listOfCANSensors[3 - 1]['displayValue'], 1), record_button))
+	writeToScreen(2, make_message_twenty_chars("Motor Temp", fix_decimal_places(listOfCANSensors[106 - 1]['displayValue'], 0), record_button))
 	writeToScreen(3, make_message_twenty_chars("SOC", fix_decimal_places(find_min_soc(), 0), record_button))
 
 def update_error_dict(error):
@@ -625,7 +625,7 @@ def check_display_values():
 
     """
 	# Iterate through the viewable data
-	for item in listOfViewableData:
+	for item in listOfCANSensors:
 		# check if has ever been updated before, if not, just set to '-'
 		if item['updated'] == 0:
 			pass
@@ -656,10 +656,15 @@ def export_data():
 	session["Session"] = session["Session"] + 1
 	print("New session{}".format(session["Session"]))
 
-# Comment this funct
 def find_min_cell_volt(packNumber):
+	"""Finds the min cell voltage of a particular pack
+
+    Args:
+        packNumber (int): Number of pack we want the min cell voltage of
+
+    """
 	listOfCellVoltages = []
-	for item in listOfViewableData:
+	for item in listOfCANSensors:
 		if item['pack'] == packNumber and "Cell" in item['description'] and "Voltage" in item['description']:
 			if item['displayValue'] == '-':
 				pass
@@ -672,10 +677,15 @@ def find_min_cell_volt(packNumber):
 	else:
 		return min(listOfCellVoltages)
 
-#Comment this funct
 def find_max_cell_temp(packNumber):
+	"""Finds the max cell temp of a particular pack
+
+    Args:
+        packNumber (int): Number of pack we want the max cell temp of
+
+    """
 	listOfCellTemps = []
-	for item in listOfViewableData:
+	for item in listOfCANSensors:
 		if item['pack'] == packNumber and "Cell" in item['description'] and "Temp" in item['description']:	
 			if item['displayValue'] == '-':
 				pass
@@ -688,10 +698,12 @@ def find_max_cell_temp(packNumber):
 	else:
 		return max(listOfCellTemps)
 
-#Comment this funct
 def find_min_soc():
+	"""Finds the lowest SOC out of tall four packs
+
+    """
 	listOfSOCs = []
-	for item in listOfViewableData:
+	for item in listOfCANSensors:
 		if "SOC" in item['description']:
 			if item['displayValue'] == '-':
 				pass
@@ -853,44 +865,44 @@ class Window(QtWidgets.QWidget, ui.Ui_Form):
 		self.VS_State.setText(str(displayDict["VS State"]))
 
 		#Motor Controller
-		self.Motor_RPM.display(fix_decimal_places(listOfViewableData[105 - 1]['displayValue'], 0))# Motor RPM
-		self.Motor_Temp.display(fix_decimal_places(listOfViewableData[106 - 1]['displayValue'], 0))# Motor Temp
-		self.Motor_Throttle.display(fix_decimal_places(listOfViewableData[113 - 1]['displayValue'], 2))# MC Throttle input
+		self.Motor_RPM.display(fix_decimal_places(listOfCANSensors[105 - 1]['displayValue'], 0))# Motor RPM
+		self.Motor_Temp.display(fix_decimal_places(listOfCANSensors[106 - 1]['displayValue'], 0))# Motor Temp
+		self.Motor_Throttle.display(fix_decimal_places(listOfCANSensors[113 - 1]['displayValue'], 2))# MC Throttle input
 
 		#TSI
-		self.TSI_IMD.display(fix_decimal_places(listOfViewableData[116 - 1]['displayValue'], 1))# TSI IMD
-		self.TSI_Throttle_V.display(fix_decimal_places(listOfViewableData[117 - 1]['displayValue'], 2))# TSI Throttle Voltage
-		self.TSI_Current.display(fix_decimal_places(listOfViewableData[121 - 1]['displayValue'], 1))# TSI Current
+		self.TSI_IMD.display(fix_decimal_places(listOfCANSensors[116 - 1]['displayValue'], 1))# TSI IMD
+		self.TSI_Throttle_V.display(fix_decimal_places(listOfCANSensors[117 - 1]['displayValue'], 2))# TSI Throttle Voltage
+		self.TSI_Current.display(fix_decimal_places(listOfCANSensors[121 - 1]['displayValue'], 1))# TSI Current
 
 		#L table
-		self.Voltage1.display(fix_decimal_places(listOfViewableData[2 - 1]['displayValue'], 1))#  Voltage P1
-		self.Voltage2.display(fix_decimal_places(listOfViewableData[28 - 1]['displayValue'], 1))# Voltage P2
-		self.Voltage3.display(fix_decimal_places(listOfViewableData[54 - 1]['displayValue'], 1))# Voltage P3
-		self.Voltage4.display(fix_decimal_places(listOfViewableData[80 - 1]['displayValue'], 1))# Voltage P4
+		self.Voltage1.display(fix_decimal_places(listOfCANSensors[2 - 1]['displayValue'], 1))#  Voltage P1
+		self.Voltage2.display(fix_decimal_places(listOfCANSensors[28 - 1]['displayValue'], 1))# Voltage P2
+		self.Voltage3.display(fix_decimal_places(listOfCANSensors[54 - 1]['displayValue'], 1))# Voltage P3
+		self.Voltage4.display(fix_decimal_places(listOfCANSensors[80 - 1]['displayValue'], 1))# Voltage P4
 		self.Temp1.display(fix_decimal_places(find_max_cell_temp(1), 1))# Max Temp P1
 		self.Temp2.display(fix_decimal_places(find_max_cell_temp(2), 1))# Max Temp P1
 		self.Temp3.display(fix_decimal_places(find_max_cell_temp(3), 1))# Max Temp P1
 		self.Temp4.display(fix_decimal_places(find_max_cell_temp(4), 1))# Max Temp P1
-		self.SOC1.display(fix_decimal_places(listOfViewableData[4 - 1]['displayValue'], 0))#  SOC P1
-		self.SOC2.display(fix_decimal_places(listOfViewableData[30 - 1]['displayValue'], 0))# SOC P2
-		self.SOC3.display(fix_decimal_places(listOfViewableData[56 - 1]['displayValue'], 0))# SOC P3
-		self.SOC4.display(fix_decimal_places(listOfViewableData[82 - 1]['displayValue'], 0))# SOC P4
-		self.State1.setText(str(listOfViewableData[1 - 1]['displayValue']))#  State P1
-		self.State2.setText(str(listOfViewableData[27 - 1]['displayValue']))# State P2
-		self.State3.setText(str(listOfViewableData[53 - 1]['displayValue']))# State P3
-		self.State4.setText(str(listOfViewableData[79 - 1]['displayValue']))# State P4
+		self.SOC1.display(fix_decimal_places(listOfCANSensors[4 - 1]['displayValue'], 0))#  SOC P1
+		self.SOC2.display(fix_decimal_places(listOfCANSensors[30 - 1]['displayValue'], 0))# SOC P2
+		self.SOC3.display(fix_decimal_places(listOfCANSensors[56 - 1]['displayValue'], 0))# SOC P3
+		self.SOC4.display(fix_decimal_places(listOfCANSensors[82 - 1]['displayValue'], 0))# SOC P4
+		self.State1.setText(str(listOfCANSensors[1 - 1]['displayValue']))#  State P1
+		self.State2.setText(str(listOfCANSensors[27 - 1]['displayValue']))# State P2
+		self.State3.setText(str(listOfCANSensors[53 - 1]['displayValue']))# State P3
+		self.State4.setText(str(listOfCANSensors[79 - 1]['displayValue']))# State P4
 		self.MiniCellV1.display(fix_decimal_places(find_min_cell_volt(1), 3))# Min Cell Volt P1
 		self.MiniCellV2.display(fix_decimal_places(find_min_cell_volt(2), 3))# Min Cell Volt P2
 		self.MiniCellV3.display(fix_decimal_places(find_min_cell_volt(3), 3))# Min Cell Volt P3
 		self.MiniCellV4.display(fix_decimal_places(find_min_cell_volt(4), 3))# Min Cell Volt P4
 		#MC
-		self.MC_Vol.display(fix_decimal_places(listOfViewableData[109 - 1]['displayValue'], 1))#   MC Voltage
-		self.MC_Temp.display(fix_decimal_places(listOfViewableData[107 - 1]['displayValue'], 1))#  MC Temp
-		self.MC_State.setText(fix_decimal_places(listOfViewableData[111 - 1]['displayValue'], 0))# MC State
+		self.MC_Vol.display(fix_decimal_places(listOfCANSensors[109 - 1]['displayValue'], 1))#   MC Voltage
+		self.MC_Temp.display(fix_decimal_places(listOfCANSensors[107 - 1]['displayValue'], 1))#  MC Temp
+		self.MC_State.setText(fix_decimal_places(listOfCANSensors[111 - 1]['displayValue'], 0))# MC State
 		#TSI
-		self.TSI_Vol.display(fix_decimal_places(listOfViewableData[120 - 1]['displayValue'], 1))# TS Voltage
-		self.TSI_Temp.display(fix_decimal_places(listOfViewableData[122 - 1]['displayValue'], 1))# TS Temp
-		self.TSI_State.setText(str(listOfViewableData[115 - 1]['displayValue']))
+		self.TSI_Vol.display(fix_decimal_places(listOfCANSensors[120 - 1]['displayValue'], 1))# TS Voltage
+		self.TSI_Temp.display(fix_decimal_places(listOfCANSensors[122 - 1]['displayValue'], 1))# TS Temp
+		self.TSI_State.setText(str(listOfCANSensors[115 - 1]['displayValue']))
 		#LOG
 		self.Log.setPlainText(error_string)
 
